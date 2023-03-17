@@ -1,0 +1,48 @@
+@startuml
+    left to right direction
+    actor Gość as g
+    actor Administartor as a
+    actor Zarządca as z
+    actor Właściciel as w
+    actor System as s
+    
+    rectangle MOW {
+    usecase "Wprowadzenie wartości odczytu z węzła cieplnego" as MOW1
+    usecase "Wprowadzenie współczynnika podziału \n użycia  dostarczonego ciepła \n na ogrzanie lokali i wody" as MOW2
+    usecase "Dodanie budynku" as MOW3
+    usecase "Dodanie lokalu w budynku" as MOW4
+    usecase "Modyfikacja lokalu w budynku" as MOW5
+    usecase "Wprowadzenie wartości \n koszyu ciepła dostarczonego \n do węzła ciepłowniczego" as MOW6
+    usecase "Okresowe odłączenie \n budynku od węzła ciepłowniczego" as MOW7
+
+    usecase "Bilans kosztu zużytego \n ciepła na ogrzanie powierzchni lokalu \n względem wpłaconych zaliczek" as MOW8
+    usecase "Bilans kosztu zużytego \n ciepła na ogrzanie części wspólnej \n względem wpłaconych zaliczek" as MOW9
+    usecase "Bilans kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zalliczek" as MOW10
+
+    usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania cześci wspólnej" as MOW11
+    usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW12
+    usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania wody" as MOW13
+
+    usecase "Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW14    
+    usecase "Wprowadzenie predykcji zużycia \n wodomierza ciepłej wody \n dla nowego lokalu" as MOW15
+
+    usecase "Bilans kosztu zużytego ciepła" as MOW16
+    usecase "Oblicz wielkość zaliczki" as MOW17
+  }
+
+    MOW16 ..> MOW8 : includes
+    MOW16 ..> MOW9 : includes
+    MOW16 ..> MOW10 : includes
+
+    MOW17 ..> MOW11: includes
+    MOW17 ..> MOW12: includes
+    MOW17 ..> MOW13: includes
+
+    MOW3 <.. MOW4: extends
+
+
+    z -- MOW3
+
+
+
+@enduml
