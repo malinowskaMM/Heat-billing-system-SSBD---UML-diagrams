@@ -1,6 +1,6 @@
 @startuml
  
-HeatDistributionCentre "1" *-- "many" Building
+HeatDistributionCentre "1" o-- "many" Building
 Building "1" *-- "1" Area
 Place "many" -- "1" Owner
 Manager -- HeatDistributionCentre
@@ -32,7 +32,6 @@ class CommunalArea {
 }
 
 class Place {
-area: Float
 hotWaterConnection: Boolean
 centralHeatingConnection: Boolean
 }
