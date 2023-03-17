@@ -1,9 +1,15 @@
 @startuml
  
 HeatDistributionCentre "1" *-- "many" Building
-Building "1" *-- "many" Place
+Building "1" *-- "1" Area
 Place "many" -- "1" Owner
 Manager -- HeatDistributionCentre
+Area <|-- Place
+Area <|-- CommunalArea
+User <|-- Owner
+User <|-- Manager
+Payoff -- Owner
+
 
 
 class HeatDistributionCentre {
@@ -13,22 +19,62 @@ consumptionCost: Float
 
 class Building {
 area: Float
-communalArea: Float
+address: String
+hotWaterConnection: Boolean
+centralHeatingConnection: Boolean
+}
+
+class Area {
+area: Float
+}
+
+class CommunalArea {
 }
 
 class Place {
 area: Float
 hotWaterConnection: Boolean
-hotWaterConsumption: Float
 centralHeatingConnection: Boolean
+}
+
+class Payoff {
+hotWaterConsumption: Float
 disconnectionTime: Integer
 }
 
 class Owner {
+name: String
+surname: String
+
 }
 
 class Manager {
 }
+
+class User {
+id: String
+username: String
+password: String
+}
+
+note right of HeatDistributionCentre 
+monthly billing period
+end note
+
+note right of Building
+Building can have following types of connection:
+  - hot water connection,
+  - central heating connection,
+  - hot water connection and central heating connection.
+end note
+  
+note top of Place
+Place can have following types of connection:
+  - hot water connection,
+  - central heating connection,
+  - hot water connection and central heating connection,
+  - no connection.
+end note
 
 
 
