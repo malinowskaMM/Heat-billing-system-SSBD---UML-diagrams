@@ -1,0 +1,35 @@
+@startuml
+ 
+HeatDistributionCentre "1" *-- "many" Building
+Building "1" *-- "many" Place
+Place "many" -- "1" Owner
+Manager -- HeatDistributionCentre
+
+
+class HeatDistributionCentre {
+consumption: Float
+consumptionCost: Float
+}
+
+class Building {
+area: Float
+communalArea: Float
+}
+
+class Place {
+area: Float
+hotWaterConnection: Boolean
+hotWaterConsumption: Float
+centralHeatingConnection: Boolean
+disconnectionTime: Integer
+}
+
+class Owner {
+}
+
+class Manager {
+}
+
+
+
+@enduml
