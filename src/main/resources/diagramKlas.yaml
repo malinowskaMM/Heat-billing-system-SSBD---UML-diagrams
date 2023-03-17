@@ -1,64 +1,123 @@
 @startuml
- 
-HeatDistributionCentre "1" *-- "many" Building
-Building "1" *-- "1" Area
-Place "many" -- "1" Owner
-Manager -- HeatDistributionCentre
-Area <|-- Place
-Area <|-- CommunalArea
-User <|-- Owner
-User <|-- Manager
-Payoff -- Owner
-
+  
+  User "1" -- "many" HotWaterEntry
+  User -- Role
+  User -- HeatDistributionCentre
+  Building "1" *-- "many" Place
+  Building "many" --o "1" HeatDistributionCentre
+  Place "1" -- "many" MonthPayoff
+  Place "many" -- "1" User
+  Place "1" -- "many" Advance
+  Place "1" o-- "many" AnnualBalance
+  Place "1" o-- "many" HotWaterEntry
+  Advance  -- "0..1" HotWaterAdvance
+  Advance -- "1" HeatingPlaceAndCommunalAreaAdvance
+  MonthPayoff -- User
+  PastQuarterHotWaterPayoff -- Place
 
 
 class HeatDistributionCentre {
+date: LocalDate
 consumption: Float
 consumptionCost: Float
+heatingAreaFactor: Float
+hotWaterFactorAggregate: Float
+addBuilding(building: Building): void
 }
 
+
 class Building {
-area: Float
+totalArea: Float
+communalAreaAggregate: Float
 address: String
 hotWaterConnection: Boolean
 centralHeatingConnection: Boolean
+connectHotWater(flag: Boolean): void
+connectCentralHeating(flag: Boolean): void
+addPlace(place: Place): void
 }
 
-class Area {
-area: Float
-}
-
-class CommunalArea {
-}
 
 class Place {
 area: Float
 hotWaterConnection: Boolean
 centralHeatingConnection: Boolean
+predictedHotWaterConsumption: Float
+updateArea(): void
 }
 
-class Payoff {
+class HotWaterEntry {
+date: LocalDate
+entryValue: Float
+update(value: Float): void
+}
+
+
+class MonthPayoff {
+payoffDate: LocalDate
+disconnection: Boolean
+waterHeatingUnitCost: Float
+centralHeatingUnitCost: Float
 hotWaterConsumption: Float
-disconnectionTime: Integer
+calculatePayoff(): Float
 }
 
-class Owner {
-name: String
-surname: String
-
+class Advance {
+date: LocalDate
+calculateTotalAdvance(): Float
 }
 
-class Manager {
+class HotWaterAdvance {
+HotWaterAdvanceValue: Float
+calculateAdvance(): Float
 }
 
-class User {
+class HeatingPlaceAndCommunalAreaAdvance {
+HeatingPlaceAdvanceValue: Float
+HeatingCommunalAreaAdvanceValue: Float
+advanceChangeFactor: Float
+calculateAdvance(): Float
+}
+
+
+class PastQuarterHotWaterPayoff {
+avgConsumption: Float
+daysNumberInQuarter: Integer
+}
+
+class AnnualBalance {
+year: Integer
+balanceHotWater: Float
+balanceHeatingPlace: Float
+balanceHeatingCommunalArea: Float
+totalHotWaterCost: Float
+totalHeatingPlaceCost: Float
+totalHeatingCommunalAreaCost: Float
+updateBalance(hotWater: Float, heatingPlace: Float, heatingCommunalArea: Float): void
+updateTotalCost(hotWater: Float, heatingPlace: Float, heatingCommunalArea: Float): void
+}
+
+enum Role {
+MANAGER
+OWNER
+}
+
+ class User {
 id: String
 username: String
 password: String
+name: String
+surname: String
+insertHotWaterEntry(value: Float): void
 }
 
-note right of HeatDistributionCentre 
-monthly billing period
+note left of HeatingPlaceAndCommunalAreaAdvance
+advanceChangeFactor is inserted once per quarter
+end note
+
+note left of HeatDistributionCentre 
+Monthly billing period
+hotWaterFactorAggregate = 100% - heatingAreaFactor
 end note
 
 note right of Building
@@ -66,16 +125,15 @@ Building can have following types of connection:
   - hot water connection,
   - central heating connection,
   - hot water connection and central heating connection.
+communalAreaAggregate = totalArea - sum(Place.area)
 end note
   
-note top of Place
+note left of Place
 Place can have following types of connection:
   - hot water connection,
   - central heating connection,
   - hot water connection and central heating connection,
   - no connection.
 end note
-
-
 
 @enduml
