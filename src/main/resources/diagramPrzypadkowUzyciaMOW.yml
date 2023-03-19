@@ -11,11 +11,10 @@
     usecase "Wprowadzenie wartości odczytu \n z węzła cieplnego" as MOW1
     usecase "Wprowadzenie współczynnika podziału \n użycia  dostarczonego ciepła \n na ogrzanie lokali i wody" as MOW2
     usecase "Modyfikacja lokalu w budynku" as MOW5
-    usecase "Wprowadzenie wartości \n koszyu ciepła dostarczonego \n do węzła ciepłowniczego" as MOW6
+    usecase "Wprowadzenie wartości \n kosztu ciepła dostarczonego \n do węzła ciepłowniczego" as MOW6
     usecase "Okresowe odłączenie \n budynku od węzła ciepłowniczego" as MOW7
 
-    usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania cześci wspólnej" as MOW11
-    usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW12
+    usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania powierzchni lokalu \n z uwzględnieniem części wspólnej" as MOW12
     usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania wody" as MOW13
 
     usecase "Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW14
@@ -24,22 +23,26 @@
     usecase "Bilans kosztu zużytego ciepła" as MOW16
     usecase "Bilans kosztu zużytego \n ciepła na ogrzanie powierzchni lokalu \n względem wpłaconych zaliczek" as MOW8
     usecase "Bilans kosztu zużytego \n ciepła na ogrzanie części wspólnej \n względem wpłaconych zaliczek" as MOW9
-    usecase "Bilans kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zalliczek" as MOW10
+    usecase "Bilans kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zaliczek" as MOW10
 
     usecase "Oblicz wielkość zaliczki" as MOW17
+
+    usecase "Wprowadź współczynnik modyfikacji wielkości zaliczki" as MOW18
   }
 
     MOW16 ..> MOW8 : includes
     MOW16 ..> MOW9 : includes
     MOW16 ..> MOW10 : includes
 
-    MOW17 ..> MOW11: includes
     MOW17 ..> MOW12: includes
     MOW17 ..> MOW13: includes
+    MOW17 <.. MOW18: extends
 
     MOW3 <.. MOW4: extends
 
+
     s -down- MOW17
+    s -down- MOW16
     z -- MOW1
     z -- MOW2
     z -- MOW3
@@ -50,4 +53,7 @@
     w -up- MOW14
     z -up- MOW14
     w -up- MOW15
+    z -- MOW18
+    
+  
 @enduml
