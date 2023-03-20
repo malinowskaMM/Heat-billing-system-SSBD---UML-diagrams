@@ -1,34 +1,36 @@
 @startuml
   
-  User "1" -- "many" HotWaterEntry
-  User -- Role
-  User -- HeatDistributionCentre
+  Account "1" -- "many" HotWaterEntry
+  Account -- Role
+  Account -- HeatDistributionCentre
   Building "1" *-- "many" Place
   Building "many" --o "1" HeatDistributionCentre
   Place "1" -- "many" MonthPayoff
-  Place "many" -- "1" User
+  Place "many" -- "1" Account
   Place "1" -- "many" Advance
   Place "1" o-- "many" AnnualBalance
   Place "1" o-- "many" HotWaterEntry
   Advance  -- "0..1" HotWaterAdvance
   Advance -- "1" HeatingPlaceAndCommunalAreaAdvance
-  MonthPayoff -- User
+  MonthPayoff -- Account
   PastQuarterHotWaterPayoff -- Place
+  Account <|-- Owner
+  Account <|-- Manager
 
 
 class HeatDistributionCentre {
 date: LocalDate
-consumption: Float
-consumptionCost: Float
-heatingAreaFactor: Float
-hotWaterFactorAggregate: Float
+consumption: BigDecimal
+consumptionCost: BigDecimal
+heatingAreaFactor: BigDecimal
+hotWaterFactorAggregate: BigDecimal
 addBuilding(building: Building): void
 }
 
 
 class Building {
-totalArea: Float
-communalAreaAggregate: Float
+totalArea: BigDecimal
+communalAreaAggregate: BigDecimal
 address: String
 hotWaterConnection: Boolean
 centralHeatingConnection: Boolean
@@ -39,62 +41,62 @@ addPlace(place: Place): void
 
 
 class Place {
-area: Float
+area: BigDecimal
 hotWaterConnection: Boolean
 centralHeatingConnection: Boolean
 predictedHotWaterConsumption: Float
-updateArea(): void
+updateArea(area: BigDecimal): void
 }
 
 class HotWaterEntry {
 date: LocalDate
-entryValue: Float
-update(value: Float): void
+entryValue: BigDecimal
+update(value: BigDecimal): void
 }
 
 
 class MonthPayoff {
 payoffDate: LocalDate
 disconnection: Boolean
-waterHeatingUnitCost: Float
-centralHeatingUnitCost: Float
-hotWaterConsumption: Float
-calculatePayoff(): Float
+waterHeatingUnitCost: BigDecimal
+centralHeatingUnitCost: BigDecimal
+hotWaterConsumption: BigDecimal
+calculatePayoff(): BigDecimal
 }
 
 class Advance {
 date: LocalDate
-calculateTotalAdvance(): Float
+calculateTotalAdvance(): BigDecimal
 }
 
 class HotWaterAdvance {
-HotWaterAdvanceValue: Float
-calculateAdvance(): Float
+hotWaterAdvanceValue: BigDecimal
+calculateAdvance(): BigDecimal
 }
 
 class HeatingPlaceAndCommunalAreaAdvance {
-HeatingPlaceAdvanceValue: Float
-HeatingCommunalAreaAdvanceValue: Float
+heatingPlaceAdvanceValue: BigDecimal
+heatingCommunalAreaAdvanceValue: BigDecimal
 advanceChangeFactor: Float
-calculateAdvance(): Float
+calculateAdvance(): BigDecimal
 }
 
 
 class PastQuarterHotWaterPayoff {
-avgConsumption: Float
+averageConsumption: BigDecimal
 daysNumberInQuarter: Integer
 }
 
 class AnnualBalance {
 year: Integer
-balanceHotWater: Float
-balanceHeatingPlace: Float
-balanceHeatingCommunalArea: Float
-totalHotWaterCost: Float
-totalHeatingPlaceCost: Float
-totalHeatingCommunalAreaCost: Float
-updateBalance(hotWater: Float, heatingPlace: Float, heatingCommunalArea: Float): void
-updateTotalCost(hotWater: Float, heatingPlace: Float, heatingCommunalArea: Float): void
+balanceHotWater: BigDecimal
+balanceHeatingPlace: BigDecimal
+balanceHeatingCommunalArea: BigDecimal
+totalHotWaterCost: BigDecimal
+totalHeatingPlaceCost: BigDecimal
+totalHeatingCommunalAreaCost: BigDecimal
+updateBalance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
+updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 }
 
 enum Role {
@@ -102,13 +104,21 @@ MANAGER
 OWNER
 }
 
- class User {
+ class Account {
 id: String
 username: String
 password: String
 name: String
 surname: String
-insertHotWaterEntry(value: Float): void
+insertHotWaterEntry(value: BigDecimal): void
+}
+
+class Manager {
+
+}
+
+class Owner {
+
 }
 
 note left of HeatingPlaceAndCommunalAreaAdvance
