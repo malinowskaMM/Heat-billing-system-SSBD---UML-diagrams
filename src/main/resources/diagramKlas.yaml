@@ -1,93 +1,156 @@
 @startuml
   
-  Account "1" -- "many" HotWaterEntry
-  Account -- Role
-  Account -- HeatDistributionCentre
+  Owner "1" -- "many" HotWaterEntry
+  Manager "1" -- "many" HotWaterEntry
+  Manager "many" -- "1" HeatDistributionCentrePayoff
   Building "1" *-- "many" Place
-  Building "many" --o "1" HeatDistributionCentre
+  Building "many" -- "many" HeatDistributionCentrePayoff
   Place "1" -- "many" MonthPayoff
   Place "many" -- "1" Account
   Place "1" -- "many" Advance
-  Place "1" o-- "many" AnnualBalance
-  Place "1" o-- "many" HotWaterEntry
-  Advance  -- "0..1" HotWaterAdvance
-  Advance -- "1" HeatingPlaceAndCommunalAreaAdvance
-  MonthPayoff -- Account
+  Place "1" -- "many" AnnualBalance
+  Place "1" -- "many" HotWaterEntry
+  Advance "1"  *-- "0..1" HotWaterAdvance
+  Advance "1" *-- "1" HeatingPlaceAndCommunalAreaAdvance
+  MonthPayoff "many" -- "1" Account
   PastQuarterHotWaterPayoff -- Place
   Account <|-- Owner
   Account <|-- Manager
 
 
-class HeatDistributionCentre {
+class HeatDistributionCentrePayoff {
+id: Integer
 date: LocalDate
 consumption: BigDecimal
 consumptionCost: BigDecimal
 heatingAreaFactor: BigDecimal
-hotWaterFactorAggregate: BigDecimal
+
 addBuilding(building: Building): void
+
+getId(): Integer
+getDate(): LocalDate
+getConsumption(): BigDecimal
+getConsumptionCost(): BigDecimal
+getHeatingAreaFactor(): BigDecimal
 }
 
 
 class Building {
+id: Integer
 totalArea: BigDecimal
 communalAreaAggregate: BigDecimal
 address: String
 hotWaterConnection: Boolean
 centralHeatingConnection: Boolean
-connectHotWater(flag: Boolean): void
-connectCentralHeating(flag: Boolean): void
+
 addPlace(place: Place): void
+
+getId(): Integer
+getTotalArea(): BigDecimal
+getCommunalAreaAggregate(): BigDecimal
+getAddress(): String
+getHotWaterConnection(): Boolean
+getCentralHeatingConnection(): Boolean
+
+setHotWaterConnection(flag: Boolean): Boolean
+setCentralHeatingConnection(flag: Boolean): Boolean
 }
 
 
 class Place {
+id: Integer
 area: BigDecimal
 hotWaterConnection: Boolean
 centralHeatingConnection: Boolean
-predictedHotWaterConsumption: Float
-updateArea(area: BigDecimal): void
+predictedHotWaterConsumption: BigDecimal
+
+getId(): Integer
+getArea(): BigDecimal
+getHotWaterConnection(): Boolean
+getCentralHeatingConnection(): Boolean
+getPredictedHotWaterConsumption(): BigDecimal
+
+setArea(area: BigDecimal): void
+setHotWaterConnection(flag: Boolean): void
+setCentralHeatingConnection(flag: Boolean): void
+setPredictedHotWaterConsumption(predictedConsumption: BigDecimal): void
 }
 
 class HotWaterEntry {
+id: Integer
 date: LocalDate
 entryValue: BigDecimal
-update(value: BigDecimal): void
+
+getId(): Integer
+getDate(): LocalDate
+getEntryValue(): BigDecimal
+
+setEntryValue(date: LocalDate, value: BigDecimal): void
 }
 
 
 class MonthPayoff {
+id: Integer
 payoffDate: LocalDate
 disconnection: Boolean
 waterHeatingUnitCost: BigDecimal
 centralHeatingUnitCost: BigDecimal
 hotWaterConsumption: BigDecimal
-calculatePayoff(): BigDecimal
+
+getId(): Integer
+getPayoffDate(): LocalDate
+getDisconnection(): Boolean
+getWaterHeatingUnitCost(): BigDecimal
+getCentralHeatingUnitCost(): BigDecimal
+getHotWaterConsumption(): BigDecimal
 }
 
 class Advance {
+id: Integer
 date: LocalDate
+
 calculateTotalAdvance(): BigDecimal
+
+getId(): Integer
+getDate(): LocalDate
 }
 
 class HotWaterAdvance {
+id: Integer
 hotWaterAdvanceValue: BigDecimal
 calculateAdvance(): BigDecimal
+
+getId(): Integer
+getHotWaterAdvanceValue(): BigDecimal
 }
 
 class HeatingPlaceAndCommunalAreaAdvance {
+id: Integer
 heatingPlaceAdvanceValue: BigDecimal
 heatingCommunalAreaAdvanceValue: BigDecimal
 advanceChangeFactor: Float
+
+getId(): Integer
 calculateAdvance(): BigDecimal
+
+getHeatingPlaceAdvanceValue(): BigDecimal
+getHeatingCommunalAreaAdvanceValue(): BigDecimal
+getAdvanceChangeFactor(): Float
 }
 
 
 class PastQuarterHotWaterPayoff {
+id: Integer
 averageConsumption: BigDecimal
 daysNumberInQuarter: Integer
+
+getId(): Integer
+getAverageConsumption(): BigDecimal
+getDaysNumberInQuarter(): Integer
 }
 
 class AnnualBalance {
+id: Integer
 year: Integer
 balanceHotWater: BigDecimal
 balanceHeatingPlace: BigDecimal
@@ -95,22 +158,37 @@ balanceHeatingCommunalArea: BigDecimal
 totalHotWaterCost: BigDecimal
 totalHeatingPlaceCost: BigDecimal
 totalHeatingCommunalAreaCost: BigDecimal
+
 updateBalance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
+
+getId(): Integer
+getYear(): Integer
+getBalanceHotWater(): BigDecimal
+getBalanceHeatingPlace(): BigDecimal
+getBalanceHeatingCommunalArea(): BigDecimal
+getTotalHotWaterCost(): BigDecimal
+getTotalHeatingPlaceCost(): BigDecimal
+getTotalHeatingCommunalAreaCost(): BigDecimal
 }
 
-enum Role {
-MANAGER
-OWNER
-}
-
- class Account {
+class Account {
 id: String
 username: String
 password: String
 name: String
 surname: String
-insertHotWaterEntry(value: BigDecimal): void
+
+getId(): String
+getUsername(): String
+getPassword(): String
+getName(): String
+getSurname(): String
+
+setUsername(username: String): void
+setPassword(password: String): void
+setName(name: String): void
+setSurname(surname: String): void
 }
 
 class Manager {
@@ -121,11 +199,11 @@ class Owner {
 
 }
 
-note left of HeatingPlaceAndCommunalAreaAdvance
+note right of HeatingPlaceAndCommunalAreaAdvance
 advanceChangeFactor is inserted once per quarter
 end note
 
-note left of HeatDistributionCentre 
+note left of HeatDistributionCentrePayoff 
 Monthly billing period
 hotWaterFactorAggregate = 100% - heatingAreaFactor
 end note
