@@ -52,11 +52,13 @@
   MOW17 ..> MOW13: includes
   MOW17 <.. MOW18: extends
 
+  MOW19 ..> MOW20: includes    
+
 
     z -- MOW26
     z -- MOW21
     z -- MOW19
-    z -- MOW20
+
     z -- MOW27
     
     @enduml

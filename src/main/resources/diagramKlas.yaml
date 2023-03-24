@@ -9,8 +9,8 @@
   Place "1" -- "many" Advance
   Place "1" -- "many" AnnualBalance
   Place "1" -- "many" HotWaterEntry
-  Advance "1"  *-- "0..1" HotWaterAdvance
-  Advance "1" *-- "1" HeatingPlaceAndCommunalAreaAdvance
+  Advance  <|--  HotWaterAdvance
+  Advance <|--  HeatingPlaceAndCommunalAreaAdvance
   MonthPayoff "many" -- "1" Account
   PastQuarterHotWaterPayoff -- Place
   Account <|-- Owner
@@ -101,7 +101,7 @@ getCentralHeatingUnitCost(): BigDecimal
 getHotWaterConsumption(): BigDecimal
 }
 
-class Advance {
+abstract class Advance {
 id: Integer
 date: LocalDate
 
@@ -112,7 +112,7 @@ getDate(): LocalDate
 class HotWaterAdvance {
 id: Integer
 hotWaterAdvanceValue: BigDecimal
-calculateAdvance(): BigDecimal
+
 
 getId(): Integer
 getHotWaterAdvanceValue(): BigDecimal
@@ -124,7 +124,6 @@ heatingPlaceAdvanceValue: BigDecimal
 heatingCommunalAreaAdvanceValue: BigDecimal
 advanceChangeFactor: Float
 
-calculateAdvance(): BigDecimal
 
 getId(): Integer
 getHeatingPlaceAdvanceValue(): BigDecimal
@@ -149,21 +148,21 @@ setDaysNumberInQuarter(daysNumber: Integer): void
 class AnnualBalance {
 id: Integer
 year: Integer
-balanceHotWater: BigDecimal
-balanceHeatingPlace: BigDecimal
-balanceHeatingCommunalArea: BigDecimal
+totalHotWaterAdvance: BigDecimal
+totalHeatingPlaceAdvance: BigDecimal
+totalHeatingCommunalAreaAdvance: BigDecimal
 totalHotWaterCost: BigDecimal
 totalHeatingPlaceCost: BigDecimal
 totalHeatingCommunalAreaCost: BigDecimal
 
-updateBalance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
+updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 
 getId(): Integer
 getYear(): Integer
-getBalanceHotWater(): BigDecimal
-getBalanceHeatingPlace(): BigDecimal
-getBalanceHeatingCommunalArea(): BigDecimal
+getTotalHotWaterAdvance(): BigDecimal
+getTotalHeatingPlaceAdvance(): BigDecimal
+getTotalHeatingCommunalAreaAdvance(): BigDecimal
 getTotalHotWaterCost(): BigDecimal
 getTotalHeatingPlaceCost(): BigDecimal
 getTotalHeatingCommunalAreaCost(): BigDecimal
@@ -202,10 +201,6 @@ end note
 
 
 note right of Building
-Building can have following types of connection:
-  - hot water connection,
-  - central heating connection,
-  - hot water connection and central heating connection.
 communalAreaAggregate = totalArea - sum(Place.area)
 end note
   
