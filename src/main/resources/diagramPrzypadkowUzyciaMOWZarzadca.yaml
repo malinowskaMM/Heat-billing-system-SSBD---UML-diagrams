@@ -9,7 +9,6 @@
     usecase "Wprowadzenie współczynnika podziału \n użycia  dostarczonego ciepła \n na ogrzanie lokali i wody" as MOW2
     usecase "Modyfikacja lokalu w budynku" as MOW5
     usecase "Wprowadzenie wartości \n kosztu ciepła dostarczonego \n do węzła ciepłowniczego" as MOW6
-    usecase "Okresowe odłączenie \n budynku od węzła ciepłowniczego" as MOW7
     usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW12
       usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania części wspólnej" as MOW12A
     usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW13
@@ -31,7 +30,6 @@
     }
 
   MOW19 <.. MOW3: extends
-  MOW19 <.. MOW7: extends
   MOW20 <.. MOW4: extends
   MOW20 <.. MOW5: extends
   MOW21 <.. MOW1: extends

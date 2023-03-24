@@ -45,8 +45,6 @@ id: Integer
 totalArea: BigDecimal
 communalAreaAggregate: BigDecimal
 address: String
-hotWaterConnection: Boolean
-centralHeatingConnection: Boolean
 
 addPlace(place: Place): void
 
@@ -54,11 +52,6 @@ getId(): Integer
 getTotalArea(): BigDecimal
 getCommunalAreaAggregate(): BigDecimal
 getAddress(): String
-getHotWaterConnection(): Boolean
-getCentralHeatingConnection(): Boolean
-
-setHotWaterConnection(flag: Boolean): Boolean
-setCentralHeatingConnection(flag: Boolean): Boolean
 }
 
 
@@ -97,14 +90,12 @@ setEntryValue(date: LocalDate, value: BigDecimal): void
 class MonthPayoff {
 id: Integer
 payoffDate: LocalDate
-disconnection: Boolean
 waterHeatingUnitCost: BigDecimal
 centralHeatingUnitCost: BigDecimal
 hotWaterConsumption: BigDecimal
 
 getId(): Integer
 getPayoffDate(): LocalDate
-getDisconnection(): Boolean
 getWaterHeatingUnitCost(): BigDecimal
 getCentralHeatingUnitCost(): BigDecimal
 getHotWaterConsumption(): BigDecimal
@@ -113,8 +104,6 @@ getHotWaterConsumption(): BigDecimal
 class Advance {
 id: Integer
 date: LocalDate
-
-calculateTotalAdvance(): BigDecimal
 
 getId(): Integer
 getDate(): LocalDate
@@ -135,9 +124,9 @@ heatingPlaceAdvanceValue: BigDecimal
 heatingCommunalAreaAdvanceValue: BigDecimal
 advanceChangeFactor: Float
 
-getId(): Integer
 calculateAdvance(): BigDecimal
 
+getId(): Integer
 getHeatingPlaceAdvanceValue(): BigDecimal
 getHeatingCommunalAreaAdvanceValue(): BigDecimal
 getAdvanceChangeFactor(): Float
@@ -180,7 +169,7 @@ getTotalHeatingPlaceCost(): BigDecimal
 getTotalHeatingCommunalAreaCost(): BigDecimal
 }
 
-class Account {
+abstract class Account {
 id: String
 username: String
 password: String
