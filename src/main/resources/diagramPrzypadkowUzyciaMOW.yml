@@ -1,9 +1,9 @@
 @startuml
     left to right direction
-    actor Gość as g
     actor Zarządca as z
     actor Właściciel as w
     actor System as s
+    actor Gosc as g
     
     rectangle MOW {
     usecase "Dodanie budynku" as MOW3
@@ -13,22 +13,44 @@
     usecase "Modyfikacja lokalu w budynku" as MOW5
     usecase "Wprowadzenie wartości \n kosztu ciepła dostarczonego \n do węzła ciepłowniczego" as MOW6
     usecase "Okresowe odłączenie \n budynku od węzła ciepłowniczego" as MOW7
-
     usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania powierzchni lokalu \n z uwzględnieniem części wspólnej" as MOW12
     usecase "Oblicz wielkość zaliczki \n na poczet ogrzewania wody" as MOW13
-
     usecase "Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW14
     usecase "Wprowadzenie predykcji zużycia \n wodomierza ciepłej wody \n dla nowego lokalu" as MOW15
-
     usecase "Bilans kosztu zużytego ciepła" as MOW16
     usecase "Bilans kosztu zużytego \n ciepła na ogrzanie powierzchni lokalu \n względem wpłaconych zaliczek" as MOW8
     usecase "Bilans kosztu zużytego \n ciepła na ogrzanie części wspólnej \n względem wpłaconych zaliczek" as MOW9
     usecase "Bilans kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zaliczek" as MOW10
-
     usecase "Oblicz wielkość zaliczki" as MOW17
-
     usecase "Wprowadź współczynnik modyfikacji wielkości zaliczki" as MOW18
+    usecase "Wyświetlanie listy budynków \n podłączonych do węzła" as MOW19
+    usecase "Wyświetlanie listy lokali w budynku" as MOW20
+    usecase "Wyświetlenie parametrów węzła" as MOW21
+    usecase "Wyświetlenie raportu zbiorczego" as MOW22
+    usecase "Wyświetlenie raportu indywidualnego \n dla posiadanych lokali" as MOW23
+    usecase "Wyświetlanie kosztu ogrzania \n 1 metra kwadratowego powierzchni" as MOW24
+    usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
+    usecase "Wyświetlenie raportu" as MOW26
   }
+
+    MOW19 <.. MOW3: extends
+    MOW19 <.. MOW7: extends
+    MOW20 <.. MOW4: extends
+    MOW20 <.. MOW5: extends
+    MOW21 <.. MOW1: extends
+    MOW21 <.. MOW2: extends
+    MOW21 <.. MOW6: extends
+    MOW5 <.. MOW14: extends
+    MOW5 <.. MOW15: extends
+
+    MOW22 ..> MOW16: includes
+    MOW22 ..> MOW17: includes
+    MOW23 ..> MOW16: includes
+    MOW23 ..> MOW17: includes
+    MOW26 <.. MOW22: extends
+    MOW26 <.. MOW23: extends
+    MOW26 ..> MOW24: includes
+    MOW26 ..> MOW25: includes
 
     MOW16 ..> MOW8 : includes
     MOW16 ..> MOW9 : includes
@@ -38,22 +60,20 @@
     MOW17 ..> MOW13: includes
     MOW17 <.. MOW18: extends
 
-    MOW3 <.. MOW4: extends
 
-
-    s -down- MOW17
-    s -down- MOW16
-    z -- MOW1
-    z -- MOW2
-    z -- MOW3
-    z -- MOW4
-    z -- MOW5
-    z -- MOW6
-    z -- MOW7
-    w -up- MOW14
-    z -up- MOW14
-    w -up- MOW15
+    z -- MOW26
+    z -- MOW22
+    s -up- MOW16
+    s -up- MOW17
+    z -- MOW21
+    z -- MOW19
+    z -- MOW20
+    z -- MOW14
     z -- MOW18
-    
+    w -- MOW14
+    w -- MOW15
+    w -- MOW23
+    g -up- MOW24
+    g -up- MOW25
   
 @enduml

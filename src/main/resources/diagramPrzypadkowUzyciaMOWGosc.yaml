@@ -1,0 +1,15 @@
+  @startuml
+    left to right direction
+
+    actor Gosc as g
+    
+    rectangle MOW {
+    usecase "Wyświetlanie kosztu ogrzania \n 1 metra kwadratowego powierzchni" as MOW24
+    usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
+    usecase "Wyświetlenie raportu" as MOW26
+    }
+  MOW26 ..> MOW24: includes
+  MOW26 ..> MOW25: includes
+
+    g -- MOW26
+    @enduml

@@ -211,10 +211,6 @@ note right of HeatingPlaceAndCommunalAreaAdvance
 advanceChangeFactor is inserted once per quarter
 end note
 
-note left of HeatDistributionCentrePayoff 
-Monthly billing period
-hotWaterFactorAggregate = 100% - heatingAreaFactor
-end note
 
 note right of Building
 Building can have following types of connection:
