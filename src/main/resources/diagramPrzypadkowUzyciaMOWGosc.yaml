@@ -8,8 +8,8 @@
     usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
     usecase "Wyświetlenie raportu" as MOW26
     }
-  MOW26 ..> MOW24: includes
-  MOW26 ..> MOW25: includes
+  MOW26 ..> MOW24: <<include>>
+  MOW26 ..> MOW25: <<include>>
 
     g -- MOW26
     @enduml

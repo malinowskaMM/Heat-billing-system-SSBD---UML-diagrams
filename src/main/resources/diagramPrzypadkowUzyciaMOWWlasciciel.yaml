@@ -1,49 +1,49 @@
-  @startuml
-    left to right direction
-    actor Właściciel as w
-    
-    rectangle MOW {
-    usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW11
-    usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania  części wspólnej" as MOW12
-    usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW13
-    usecase "Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW14
-    usecase "Wprowadzenie predykcji zużycia \n wodomierza ciepłej wody \n dla nowego lokalu" as MOW15
-    usecase "Wyświetlenie bilansu kosztu zużytego ciepła" as MOW16
-    usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie powierzchni lokalu \n względem wpłaconych zaliczek" as MOW8
-    usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie części wspólnej \n względem wpłaconych zaliczek" as MOW9
-    usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zaliczek" as MOW10
-    usecase "Wyświetlenie wielkości zaliczki" as MOW17
-    usecase "Wyświetlanie listy posiadanych lokali" as MOW20
-    usecase "Wyświetlanie lokalu" as MOW27
-    usecase "Wyświetlanie kosztu ogrzania \n 1 metra kwadratowego powierzchni" as MOW24
-    usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
-    usecase "Wyświetlenie raportu" as MOW26
-    usecase "Wyświetlenie jednostkowego kosztu ogrzania" as MOW28
-    usecase "Wyświetlenie raportów posiadanych lokali" as MOW29
-    }
+    @startuml
+        left to right direction
+        actor Właściciel as w
+
+        rectangle MOW {
+        usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW11
+        usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania  części wspólnej" as MOW12
+        usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW13
+        usecase "Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW14
+        usecase "Wprowadzenie predykcji zużycia \n wodomierza ciepłej wody \n dla nowego lokalu" as MOW15
+        usecase "Wyświetlenie bilansu kosztu zużytego ciepła" as MOW16
+        usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie powierzchni lokalu \n względem wpłaconych zaliczek" as MOW8
+        usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie części wspólnej \n względem wpłaconych zaliczek" as MOW9
+        usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zaliczek" as MOW10
+        usecase "Wyświetlenie wielkości zaliczki" as MOW17
+        usecase "Wyświetlanie listy posiadanych lokali" as MOW20
+        usecase "Wyświetlanie lokalu" as MOW27
+        usecase "Wyświetlanie kosztu ogrzania \n 1 metra kwadratowego powierzchni" as MOW24
+        usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
+        usecase "Wyświetlenie raportu" as MOW26
+        usecase "Wyświetlenie jednostkowego kosztu ogrzania" as MOW28
+        usecase "Wyświetlenie raportów posiadanych lokali" as MOW29
+        }
 
 
-  MOW28 ..> MOW24: includes
-  MOW28 ..> MOW25: includes
+    MOW28 ..> MOW24: <<include>>
+    MOW28 ..> MOW25: <<include>>
 
-  MOW16 ..> MOW8 : includes
-  MOW16 ..> MOW9 : includes
-  MOW16 ..> MOW10 : includes
+    MOW16 ..> MOW8 : <<include>>
+    MOW16 ..> MOW9 : <<include>>
+    MOW16 ..> MOW10 : <<include>>
 
-  MOW17 ..> MOW12: includes
-  MOW17 ..> MOW13: includes
-  MOW17 ..> MOW11: includes
+    MOW17 ..> MOW12: <<include>>
+    MOW17 ..> MOW13: <<include>>
+    MOW17 ..> MOW11: <<include>>
 
-  MOW20 ..> MOW27: includes
-  MOW27 <.. MOW14: extends
-  MOW27 <.. MOW15: extends
-  MOW29 ..> MOW26: includes
+    MOW20 ..> MOW27: <<include>>
+    MOW27 <.. MOW14: <<extend>>
+    MOW27 <.. MOW15: <<extend>>
+    MOW29 ..> MOW26: <<include>>
 
-  MOW26 ..> MOW16: includes
-  MOW26 ..> MOW17: includes
+    MOW26 ..> MOW16: <<include>>
+    MOW26 ..> MOW17: <<include>>
 
-    w -- MOW20
-    w -- MOW28
-    w -- MOW29
-    
-    @enduml
+        w -- MOW20
+        w -- MOW28
+        w -- MOW29
+
+        @enduml
