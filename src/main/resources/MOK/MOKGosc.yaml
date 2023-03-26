@@ -5,12 +5,12 @@
     actor Gość as g
     
     rectangle MOK {
-        usecase "11 - Usunięcie konta nieaktywowanego w trakcie rejestracji" as MOK11
-        usecase "13 - Zablokowanie konta po trzykrotnie nieudanej próbie uwierzytelnienia" as MOK13
+        usecase "10 - Usunięcie konta nieaktywowanego w trakcie rejestracji" as MOK11
+        usecase "12 - Zablokowanie konta po trzykrotnie nieudanej próbie uwierzytelnienia" as MOK13
         usecase "1 - Rejestracja" as MOK1
         usecase "2 - Uwierzytelnienie" as MOK2
         usecase "3 - Reset hasła" as MOK3
-        usecase "12 - Zmiana języka" as MOK12
+        usecase "11 - Zmiana języka" as MOK12
     }
     
     g -- MOK2
