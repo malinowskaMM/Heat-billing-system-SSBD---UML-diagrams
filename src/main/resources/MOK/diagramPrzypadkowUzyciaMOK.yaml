@@ -1,7 +1,6 @@
 @startuml
 left to right direction
-
-actor Guest as g
+actor Gość as g
 actor Admin as a
 actor Manager as m
 actor Owner as o

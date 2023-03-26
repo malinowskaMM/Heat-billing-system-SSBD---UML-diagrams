@@ -1,0 +1,26 @@
+  @startuml
+    
+    left to right direction
+    actor System as s
+    actor Gość as g
+    
+    rectangle MOK {
+        usecase "11 - Usunięcie konta nieaktywowanego w trakcie rejestracji" as MOK11
+        usecase "13 - Zablokowanie konta po trzykrotnie nieudanej próbie uwierzytelnienia" as MOK13
+        usecase "1 - Rejestracja" as MOK1
+        usecase "2 - Uwierzytelnienie" as MOK2
+        usecase "3 - Reset hasła" as MOK3
+        usecase "12 - Zmiana języka" as MOK12
+    }
+    
+    g -- MOK2
+    s -up- MOK13
+    s -- MOK11
+    g -- MOK1
+    g -- MOK3
+    g -- MOK12
+
+  MOK2 <.. MOK13: <<extend>>
+  MOK1 <.. MOK11: <<extend>>
+    
+    @enduml

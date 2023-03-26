@@ -1,0 +1,18 @@
+  @startuml
+    left to right direction
+    
+    actor Właściciel as w
+    
+    rectangle MOK {
+    usecase "6 - Zmiana własnego hasła" as MOK6
+    usecase "7 - Edycja danych własnego konta" as MOK7
+    usecase "12 - Zmiana języka" as MOK12
+    usecase "14 - Wylogowanie" as MOK14
+  }
+    
+    w -- MOK6
+    w -- MOK7
+    w -- MOK12
+    w -- MOK14
+    
+    @enduml

@@ -1,0 +1,21 @@
+  @startuml
+    left to right direction
+    
+    actor Zarządca as z
+    
+    rectangle MOK {
+    usecase "5 - Zmiana własnego hasła" as MOK5
+    usecase "7 - Edycja danych własnego konta" as MOK7
+    usecase "8 - Edycja danych innego konta" as MOK8
+    usecase "9 - Zablokowanie/odblokowanie konta właściciela" as MOK9
+    usecase "12 - Zmiana języka" as MOK12
+    usecase "14 - Wylogowanie" as MOK14
+  }
+    z -- MOK5
+    z -- MOK7
+    z -- MOK8
+    z -- MOK9
+    z -- MOK12
+    z -- MOK14
+    
+    @enduml
