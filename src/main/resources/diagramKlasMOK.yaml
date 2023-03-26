@@ -1,0 +1,64 @@
+  @startuml model
+    ' left to right direction
+    package pl.lodz.p.it.ssbd2023.ssbd03 {
+    
+    Account <|-- Manager
+    Account <|-- Owner
+    Account <|-- Admin
+    
+    abstract class Account {
+      id: Integer
+      email: String
+      password: String
+      blockedFlag: Boolean
+
+      geId(): Integer
+      getEmail(): String
+      getPassword(): String
+      getBlockedFlag(): Boolean
+
+      setEmail(): String
+      setPassword(): String
+      setBlockedFlag(): Boolean
+    }
+
+    class Manager {
+      name: String
+      surname: String
+
+      getName(): String
+      getSurname(): String
+
+      setName(): String
+      setSurname(): String
+    }
+
+    class Owner {
+      name: String
+      surname: String
+      billingAddress: String
+
+      getName(): String
+      getSurname(): String
+      getBillingAddress(): String
+
+      setName(): String
+      setSurname(): String
+      setBillingAddress(): String
+  
+    }
+    
+    class Admin {
+    }
+    
+    class Guest {
+    }
+  
+  }
+
+
+
+
+
+    
+    @enduml
