@@ -12,15 +12,21 @@ rectangle MOK {
   usecase "9 - Zablokowanie/odblokowanie konta" as MOK9
   usecase "11 - Zmiana języka" as MOK12
   usecase "13 - Wylogowanie" as MOK14
-}
+  usecase "Wyświetlenie listy kont" as MOK15
+  usecase "Wyświetlenie informacji o własnym koncie" as MOK16
+  usecase "Wyświetlenie informacji o koncie użytkownika" as MOK17
 
-  a -- MOK4
-  a -- MOK5
-  a -- MOK6
-  a -- MOK7
-  a -- MOK8
-  a -- MOK9
+}
   a -- MOK12
   a -- MOK14
+  a -- MOK15
+  a -- MOK16
+  MOK15 ..> MOK17: <<include>>
+  MOK17 <.. MOK9: <<extend>>
+  MOK17 <.. MOK8: <<extend>>
+  MOK17 <.. MOK5: <<extend>>
+  MOK17 <.. MOK4: <<extend>>
+  MOK16 <.. MOK7: <<extend>>
+  MOK16 <.. MOK6: <<extend>>
 
 @enduml
