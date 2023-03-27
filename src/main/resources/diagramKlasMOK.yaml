@@ -5,60 +5,101 @@
     Account <|-- Manager
     Account <|-- Owner
     Account <|-- Admin
+  
+    PersonalData "1" --* "1" Account
+    LoginData "1" --* "1"Account
+      
+    AbstractEntity -- Account
+    AbstractEntity -- PersonalData
     
     abstract class Account {
       id: Integer
       email: String
       password: String
-      blockedFlag: Boolean
+      isEnable: Boolean
+      registerDate: LocalDateTime
+      language: String
 
       geId(): Integer
       getEmail(): String
       getPassword(): String
-      getBlockedFlag(): Boolean
+      isEnable(): Boolean
+      getRegisterDate(): LocalDateTime
+      getRegisterDate(date: LocalDateTime): void
+      getLanguage(language: String): void
+      getLanguage(): String
 
-      setEmail(): String
-      setPassword(): String
-      setBlockedFlag(): Boolean
+      setEmail(email: String): void
+      setPassword(password: String): void
+      resetPassword(): void
+    }
+
+    class LoginData {
+      id: Integer
+      lastValidLoginDate: LocalDateTime
+      lastValidLogicAddress: String
+      lastInvalidLoginDate: LocalDateTime
+      lastInvalidLogicAddress: String
+      invalidLoginCounter: Integer
+
+      getId(): Integer
+      getLastValidLoginDate(): LocalDateTime
+      getLastValidLogicAddress(): String
+      getLastInvalidLoginDate(): LocalDateTime
+      getLastInvalidLogicAddress(): String
+      getInvalidLoginCounter(): Integer
+
+      setLastValidLoginDate(date: LocalDateTime): void
+      setLastValidLogicAddress(address: String): void
+      setLastInvalidLoginDate(date: LocalDateTime): void
+      setLastInvalidLogicAddress(address: String): void
+      setInvalidLoginCounter(counter: Integer): void
+
+  }
+
+    abstract class AbstractEntity {
+      version: Integer
+      lastModificationDate: LocalDateTime
+      lastModificationAuthor: String
+      lastModificationOperation: String
+
+      getVersion(): Integer
+      getLastModificationDate(): LocalDateTime
+      getLastModificationAuthor(): String
+      getLastModificationOperation(): String
     }
 
     class Manager {
-      name: String
-      surname: String
-
-      getName(): String
-      getSurname(): String
-
-      setName(): String
-      setSurname(): String
+      editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
+      setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
+      editOwnerEmail(ownerId: Integer, email: String): void
+      editOwnerRole(ownerId: Integer, role: String ???): void
     }
 
     class Owner {
-      name: String
-      surname: String
-      billingAddress: String
-
-      getName(): String
-      getSurname(): String
-      getBillingAddress(): String
-
-      setName(): String
-      setSurname(): String
-      setBillingAddress(): String
-  
     }
     
     class Admin {
+      editUserAccount(accountId: Integer, name: String, surname: String, language: String): void
+      setUserAccountEnable(accountId: Integer, enable: Boolean): void
+      editUserEmail(accountId: Integer, email: String): void
+      editUserPassword(accountId: Integer, password: String): void
+      editUserRole(accountId: Integer, role: String ???): void
     }
-    
-    class Guest {
+
+      class PersonalData {
+      id: Integer
+      name: String
+      surname: String
+
+      getId(): Integer
+      getName(): String
+      getSurname(): String
+
+      setName(name: String): void
+      setSurname(surname: String): void
     }
+
   
   }
-
-
-
-
-
-    
     @enduml
