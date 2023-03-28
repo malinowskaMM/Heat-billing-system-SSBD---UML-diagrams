@@ -5,16 +5,16 @@ actor Administrator as a
   
 rectangle MOK {
   usecase "4 - Dołączenie/Odłączenie poziomu dostępu do konta" as MOK4
-  usecase "5 - Zmiana hasła innego użytkownika" as MOK5
-  usecase "6 - Zmiana własnego hasła" as MOK6
-  usecase "7 - Edycja danych własnego konta" as MOK7
-  usecase "8 - Edycja danych innego konta" as MOK8
+  usecase "5 - Zmiana hasła konta" as MOK5
+  usecase "6 - Zmiana hasła" as MOK6
+  usecase "7 - Edycja danych" as MOK7
+  usecase "8 - Edycja danych konta" as MOK8
   usecase "9 - Zablokowanie/odblokowanie konta" as MOK9
   usecase "11 - Zmiana języka" as MOK12
   usecase "13 - Wylogowanie" as MOK14
-  usecase "Wyświetlenie listy kont" as MOK15
-  usecase "Wyświetlenie informacji o własnym koncie" as MOK16
-  usecase "Wyświetlenie informacji o koncie użytkownika" as MOK17
+  usecase "15 - Wyświetlenie listy kont" as MOK15
+  usecase "14 - Wyświetlenie informacji o własnym koncie" as MOK16
+  usecase "16 - Wyświetlenie informacji o koncie" as MOK17
 
 }
   a -- MOK12

@@ -27,6 +27,7 @@
         usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
         usecase "Wyświetlenie raportów" as MOW26
         usecase "Wyświetlenie jednostkowego kosztu ogrzania" as MOW27
+        usecase "Modyfikacja właściciela lokalu" as MOW28
         }
 
     MOW19 <.. MOW3: <<extend>>
