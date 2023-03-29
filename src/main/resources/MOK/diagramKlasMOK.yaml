@@ -32,6 +32,7 @@
       setEmail(email: String): void
       setPassword(password: String): void
       resetPassword(): void
+      logOut(): void
     }
 
     class LoginData {
@@ -70,6 +71,9 @@
     }
 
     class Manager {
+      licenceId: String
+
+      getLicenceId(): String
       editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
       setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
       editOwnerEmail(ownerId: Integer, email: String): void
@@ -77,6 +81,10 @@
     }
 
     class Owner {
+      billingAddress: String
+
+      getBillingAddress(): String
+      setBillingAddress(address: String): void
     }
     
     class Admin {
