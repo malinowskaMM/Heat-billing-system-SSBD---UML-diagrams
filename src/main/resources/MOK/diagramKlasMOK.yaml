@@ -77,7 +77,7 @@
       editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
       setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
       editOwnerEmail(ownerId: Integer, email: String): void
-      editOwnerRole(ownerId: Integer, role: String ???): void
+      editOwnerRole(ownerId: Integer, role: String): void
     }
 
     class Owner {
@@ -92,7 +92,7 @@
       setUserAccountEnable(accountId: Integer, enable: Boolean): void
       editUserEmail(accountId: Integer, email: String): void
       editUserPassword(accountId: Integer, password: String): void
-      editUserRole(accountId: Integer, role: String ???): void
+      editUserRole(accountId: Integer, role: String): void
     }
 
       class PersonalData {
