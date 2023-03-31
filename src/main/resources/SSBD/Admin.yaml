@@ -1,0 +1,32 @@
+  @startuml
+    left to right direction
+    
+    actor Administrator as a
+    
+    rectangle MOK {
+    usecase "Dołączenie/Odłączenie poziomu dostępu do konta" as MOK4
+    usecase "Zmiana hasła konta" as MOK5
+    usecase "Zmiana hasła" as MOK6
+    usecase "Edycja danych" as MOK7
+    usecase "Edycja danych konta" as MOK8
+    usecase "Zablokowanie/odblokowanie konta" as MOK9
+    usecase "Zmiana języka" as MOK12
+    usecase "Wylogowanie" as MOK14
+    usecase "Wyświetlenie listy kont" as MOK15
+    usecase "Wyświetlenie informacji o własnym koncie" as MOK16
+    usecase "Wyświetlenie informacji o koncie" as MOK17
+  
+  }
+    a -- MOK12
+    a -- MOK14
+    a -- MOK15
+    a -- MOK16
+  MOK15 ..> MOK17: <<include>>
+  MOK17 <.. MOK9: <<extend>>
+  MOK17 <.. MOK8: <<extend>>
+  MOK17 <.. MOK5: <<extend>>
+  MOK17 <.. MOK4: <<extend>>
+  MOK16 <.. MOK7: <<extend>>
+  MOK16 <.. MOK6: <<extend>>
+    
+    @enduml

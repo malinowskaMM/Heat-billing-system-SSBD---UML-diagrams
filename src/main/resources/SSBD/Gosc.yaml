@@ -1,0 +1,32 @@
+  @startuml
+    left to right direction
+    
+    actor Gość as g
+    
+    rectangle MOK {
+    usecase "Usunięcie konta nieaktywowanego w trakcie rejestracji" as MOK11
+    usecase "Zablokowanie konta po trzykrotnie nieudanej próbie uwierzytelnienia" as MOK13
+    usecase "Rejestracja" as MOK1
+    usecase "Uwierzytelnienie" as MOK2
+    usecase "Reset hasła" as MOK3
+    usecase "Zmiana języka" as MOK12
+    }
+    
+    rectangle MOW {
+    usecase "Wyświetlanie kosztu ogrzania \n 1 metra kwadratowego powierzchni" as MOW24
+    usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
+    usecase "Wyświetlenie raportu" as MOW26
+    }
+    
+    g -- MOK2
+    g -- MOK1
+    g -left- MOK3
+    g -left- MOK12
+    g -right- MOW26
+
+  MOK2 <.. MOK13: <<extend>>
+  MOK1 <.. MOK11: <<extend>>
+  MOW26 ..> MOW24: <<include>>
+  MOW26 ..> MOW25: <<include>>
+
+  @enduml
