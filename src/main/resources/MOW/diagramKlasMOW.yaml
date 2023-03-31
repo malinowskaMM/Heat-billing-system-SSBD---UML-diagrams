@@ -19,172 +19,166 @@
   HeatDistributionCentre "1" o-- "many" Building
   
 class HeatDistributionCentre {
-id: Integer
+- id: Integer
 
-addBuilding(building: Building): void
++ addBuilding(building: Building): void
 }
 
 
 class HeatDistributionCentrePayoff {
-id: Integer
-date: LocalDate
-consumption: BigDecimal
-consumptionCost: BigDecimal
-heatingAreaFactor: BigDecimal
+- id: Integer
+- date: LocalDate
+- consumption: BigDecimal
+- consumptionCost: BigDecimal
+- heatingAreaFactor: BigDecimal
 
-getId(): Integer
-getDate(): LocalDate
-getConsumption(): BigDecimal
-getConsumptionCost(): BigDecimal
-getHeatingAreaFactor(): BigDecimal
++ getId(): Integer
++ getDate(): LocalDate
++ getConsumption(): BigDecimal
++ getConsumptionCost(): BigDecimal
++ getHeatingAreaFactor(): BigDecimal
 }
 
 
 class Building {
-id: Integer
-totalArea: BigDecimal
-communalAreaAggregate: BigDecimal
-address: String
+- id: Integer
+- totalArea: BigDecimal
+- communalAreaAggregate: BigDecimal
+- address: String
 
-addPlace(place: Place): void
++ addPlace(place: Place): void
 
-getId(): Integer
-getTotalArea(): BigDecimal
-getCommunalAreaAggregate(): BigDecimal
-getAddress(): String
++ getId(): Integer
++ getTotalArea(): BigDecimal
++ getCommunalAreaAggregate(): BigDecimal
++ getAddress(): String
 }
 
 
 class Place {
-id: Integer
-area: BigDecimal
-hotWaterConnection: Boolean
-centralHeatingConnection: Boolean
-predictedHotWaterConsumption: BigDecimal
+- id: Integer
+- area: BigDecimal
+- hotWaterConnection: Boolean
+- centralHeatingConnection: Boolean
+- predictedHotWaterConsumption: BigDecimal
 
-getId(): Integer
-getArea(): BigDecimal
-getHotWaterConnection(): Boolean
-getCentralHeatingConnection(): Boolean
-getPredictedHotWaterConsumption(): BigDecimal
++ getId(): Integer
++ getArea(): BigDecimal
++ getHotWaterConnection(): Boolean
++ getCentralHeatingConnection(): Boolean
++ getPredictedHotWaterConsumption(): BigDecimal
 
-setArea(area: BigDecimal): void
-setHotWaterConnection(flag: Boolean): void
-setCentralHeatingConnection(flag: Boolean): void
-setPredictedHotWaterConsumption(predictedConsumption: BigDecimal): void
++ setArea(area: BigDecimal): void
++ setHotWaterConnection(flag: Boolean): void
++ setCentralHeatingConnection(flag: Boolean): void
++ setPredictedHotWaterConsumption(predictedConsumption: BigDecimal): void
 }
 
 class HotWaterEntry {
-id: Integer
-date: LocalDate
-entryValue: BigDecimal
+- id: Integer
+- date: LocalDate
+- entryValue: BigDecimal
 
-getId(): Integer
-getDate(): LocalDate
-getEntryValue(): BigDecimal
++ getId(): Integer
++ getDate(): LocalDate
++ getEntryValue(): BigDecimal
 
-setEntryValue(date: LocalDate, value: BigDecimal): void
++ setEntryValue(date: LocalDate, value: BigDecimal): void
 }
 
 
 class MonthPayoff {
-id: Integer
-payoffDate: LocalDate
-waterHeatingUnitCost: BigDecimal
-centralHeatingUnitCost: BigDecimal
-hotWaterConsumption: BigDecimal
+- id: Integer
+- payoffDate: LocalDate
+- waterHeatingUnitCost: BigDecimal
+- centralHeatingUnitCost: BigDecimal
+- hotWaterConsumption: BigDecimal
 
-getId(): Integer
-getPayoffDate(): LocalDate
-getWaterHeatingUnitCost(): BigDecimal
-getCentralHeatingUnitCost(): BigDecimal
-getHotWaterConsumption(): BigDecimal
++ getId(): Integer
++ getPayoffDate(): LocalDate
++ getWaterHeatingUnitCost(): BigDecimal
++ getCentralHeatingUnitCost(): BigDecimal
++ getHotWaterConsumption(): BigDecimal
 }
 
 abstract class Advance {
-id: Integer
-date: LocalDate
+# id: Integer
+# date: LocalDate
 
-getId(): Integer
-getDate(): LocalDate
+# getId(): Integer
+# getDate(): LocalDate
 }
 
 class HotWaterAdvance {
-id: Integer
-hotWaterAdvanceValue: BigDecimal
+- hotWaterAdvanceValue: BigDecimal
 
-
-getId(): Integer
-getHotWaterAdvanceValue(): BigDecimal
++ getHotWaterAdvanceValue(): BigDecimal
 }
 
 class HeatingPlaceAndCommunalAreaAdvance {
-id: Integer
-heatingPlaceAdvanceValue: BigDecimal
-heatingCommunalAreaAdvanceValue: BigDecimal
-advanceChangeFactor: Float
+- heatingPlaceAdvanceValue: BigDecimal
+- heatingCommunalAreaAdvanceValue: BigDecimal
+- advanceChangeFactor: Float
 
-
-getId(): Integer
-getHeatingPlaceAdvanceValue(): BigDecimal
-getHeatingCommunalAreaAdvanceValue(): BigDecimal
-getAdvanceChangeFactor(): Float
++ getHeatingPlaceAdvanceValue(): BigDecimal
++ getHeatingCommunalAreaAdvanceValue(): BigDecimal
++ getAdvanceChangeFactor(): Float
 }
 
 
 class PastQuarterHotWaterPayoff {
-id: Integer
-averageConsumption: BigDecimal
-daysNumberInQuarter: Integer
+- id: Integer
+- averageConsumption: BigDecimal
+- daysNumberInQuarter: Integer
 
-getId(): Integer
-getAverageConsumption(): BigDecimal
-getDaysNumberInQuarter(): Integer
++ getId(): Integer
++ getAverageConsumption(): BigDecimal
++ getDaysNumberInQuarter(): Integer
 
-setAverageConsumption(consumption: BigDecimal): void
-setDaysNumberInQuarter(daysNumber: Integer): void
++ setAverageConsumption(consumption: BigDecimal): void
++ setDaysNumberInQuarter(daysNumber: Integer): void
 }
 
 class AnnualBalance {
-id: Integer
-year: Integer
-totalHotWaterAdvance: BigDecimal
-totalHeatingPlaceAdvance: BigDecimal
-totalHeatingCommunalAreaAdvance: BigDecimal
-totalHotWaterCost: BigDecimal
-totalHeatingPlaceCost: BigDecimal
-totalHeatingCommunalAreaCost: BigDecimal
+- id: Integer
+- year: Integer
+- totalHotWaterAdvance: BigDecimal
+- totalHeatingPlaceAdvance: BigDecimal
+- totalHeatingCommunalAreaAdvance: BigDecimal
+- totalHotWaterCost: BigDecimal
+- totalHeatingPlaceCost: BigDecimal
+- totalHeatingCommunalAreaCost: BigDecimal
 
-updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
-updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
++ updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
++ updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 
-getId(): Integer
-getYear(): Integer
-getTotalHotWaterAdvance(): BigDecimal
-getTotalHeatingPlaceAdvance(): BigDecimal
-getTotalHeatingCommunalAreaAdvance(): BigDecimal
-getTotalHotWaterCost(): BigDecimal
-getTotalHeatingPlaceCost(): BigDecimal
-getTotalHeatingCommunalAreaCost(): BigDecimal
++ getId(): Integer
++ getYear(): Integer
++ getTotalHotWaterAdvance(): BigDecimal
++ getTotalHeatingPlaceAdvance(): BigDecimal
++ getTotalHeatingCommunalAreaAdvance(): BigDecimal
++ getTotalHotWaterCost(): BigDecimal
++ getTotalHeatingPlaceCost(): BigDecimal
++ getTotalHeatingCommunalAreaCost(): BigDecimal
 }
 
 abstract class Account {
-id: String
-username: String
-password: String
-name: String
-surname: String
+# id: String
+# username: String
+# password: String
+# name: String
+# surname: String
 
-getId(): String
-getUsername(): String
-getPassword(): String
-getName(): String
-getSurname(): String
+# getId(): String
+# getUsername(): String
+# getPassword(): String
+# getName(): String
+# getSurname(): String
 
-setUsername(username: String): void
-setPassword(password: String): void
-setName(name: String): void
-setSurname(surname: String): void
+# setUsername(username: String): void
+#setPassword(password: String): void
+# setName(name: String): void
+# setSurname(surname: String): void
 }
 
 class Manager {
