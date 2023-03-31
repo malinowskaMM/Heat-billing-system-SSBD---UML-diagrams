@@ -13,99 +13,99 @@
     AbstractEntity -- PersonalData
     
     abstract class Account {
-      id: Integer
-      email: String
-      password: String
-      isEnable: Boolean
-      registerDate: LocalDateTime
-      language: String
+      # id: Integer
+      # email: String
+      # password: String
+      # isEnable: Boolean
+      # registerDate: LocalDateTime
+      #language: String
 
-      geId(): Integer
-      getEmail(): String
-      getPassword(): String
-      isEnable(): Boolean
-      getRegisterDate(): LocalDateTime
-      getRegisterDate(date: LocalDateTime): void
-      getLanguage(language: String): void
-      getLanguage(): String
+      + geId(): Integer
+      + getEmail(): String
+      + getPassword(): String
+      + isEnable(): Boolean
+      + getRegisterDate(): LocalDateTime
+      + getRegisterDate(date: LocalDateTime): void
+      + getLanguage(language: String): void
+      + getLanguage(): String
 
-      setEmail(email: String): void
-      setPassword(password: String): void
-      resetPassword(): void
-      logOut(): void
+      + setEmail(email: String): void
+      + setPassword(password: String): void
+      + resetPassword(): void
+      + logOut(): void
     }
 
     class LoginData {
-      id: Integer
-      lastValidLoginDate: LocalDateTime
-      lastValidLogicAddress: String
-      lastInvalidLoginDate: LocalDateTime
-      lastInvalidLogicAddress: String
-      invalidLoginCounter: Integer
+      - id: Integer
+      - lastValidLoginDate: LocalDateTime
+      - lastValidLogicAddress: String
+      - lastInvalidLoginDate: LocalDateTime
+      - lastInvalidLogicAddress: String
+      - invalidLoginCounter: Integer
 
-      getId(): Integer
-      getLastValidLoginDate(): LocalDateTime
-      getLastValidLogicAddress(): String
-      getLastInvalidLoginDate(): LocalDateTime
-      getLastInvalidLogicAddress(): String
-      getInvalidLoginCounter(): Integer
+      + getId(): Integer
+      + getLastValidLoginDate(): LocalDateTime
+      + getLastValidLogicAddress(): String
+      + getLastInvalidLoginDate(): LocalDateTime
+      + getLastInvalidLogicAddress(): String
+      + getInvalidLoginCounter(): Integer
 
-      setLastValidLoginDate(date: LocalDateTime): void
-      setLastValidLogicAddress(address: String): void
-      setLastInvalidLoginDate(date: LocalDateTime): void
-      setLastInvalidLogicAddress(address: String): void
-      setInvalidLoginCounter(counter: Integer): void
+      + setLastValidLoginDate(date: LocalDateTime): void
+      + setLastValidLogicAddress(address: String): void
+      + setLastInvalidLoginDate(date: LocalDateTime): void
+      + setLastInvalidLogicAddress(address: String): void
+      + setInvalidLoginCounter(counter: Integer): void
 
   }
 
     abstract class AbstractEntity {
-      version: Integer
-      lastModificationDate: LocalDateTime
-      lastModificationAuthor: String
-      lastModificationOperation: String
+      # version: Integer
+      # lastModificationDate: LocalDateTime
+      # lastModificationAuthor: String
+      # lastModificationOperation: String
 
-      getVersion(): Integer
-      getLastModificationDate(): LocalDateTime
-      getLastModificationAuthor(): String
-      getLastModificationOperation(): String
+      + getVersion(): Integer
+      + getLastModificationDate(): LocalDateTime
+      + getLastModificationAuthor(): String
+      + getLastModificationOperation(): String
     }
 
     class Manager {
-      licenceId: String
+      - licenceId: String
 
-      getLicenceId(): String
-      editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
-      setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
-      editOwnerEmail(ownerId: Integer, email: String): void
-      editOwnerRole(ownerId: Integer, role: String): void
+      + getLicenceId(): String
+      + editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
+      + setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
+      + editOwnerEmail(ownerId: Integer, email: String): void
+      + editOwnerRole(ownerId: Integer, role: String): void
     }
 
     class Owner {
-      billingAddress: String
+      - billingAddress: String
 
-      getBillingAddress(): String
-      setBillingAddress(address: String): void
+      + getBillingAddress(): String
+      +setBillingAddress(address: String): void
     }
     
     class Admin {
-      editUserAccount(accountId: Integer, name: String, surname: String, language: String): void
-      setUserAccountEnable(accountId: Integer, enable: Boolean): void
-      editUserEmail(accountId: Integer, email: String): void
-      editUserPassword(accountId: Integer, password: String): void
-      editUserRole(accountId: Integer, role: String): void
+      + editUserAccount(accountId: Integer, name: String, surname: String, language: String): void
+      + setUserAccountEnable(accountId: Integer, enable: Boolean): void
+      + editUserEmail(accountId: Integer, email: String): void
+      + editUserPassword(accountId: Integer, password: String): void
+      + editUserRole(accountId: Integer, role: String): void
     }
 
       class PersonalData {
-      id: Integer
-      name: String
-      surname: String
+      - id: Integer
+      - name: String
+      - surname: String
 
-      getId(): Integer
-      getName(): String
-      getSurname(): String
+      + getId(): Integer
+      + getName(): String
+      + getSurname(): String
 
-      setName(name: String): void
-      setSurname(surname: String): void
+      + setName(name: String): void
+      + setSurname(surname: String): void
     }
 
   

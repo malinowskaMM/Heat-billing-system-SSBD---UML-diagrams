@@ -105,8 +105,8 @@ abstract class Advance {
 # id: Integer
 # date: LocalDate
 
-# getId(): Integer
-# getDate(): LocalDate
++ getId(): Integer
++ getDate(): LocalDate
 }
 
 class HotWaterAdvance {
@@ -169,16 +169,16 @@ abstract class Account {
 # name: String
 # surname: String
 
-# getId(): String
-# getUsername(): String
-# getPassword(): String
-# getName(): String
-# getSurname(): String
++ getId(): String
++ getUsername(): String
++ getPassword(): String
++ getName(): String
++ getSurname(): String
 
-# setUsername(username: String): void
-#setPassword(password: String): void
-# setName(name: String): void
-# setSurname(surname: String): void
++ setUsername(username: String): void
++ setPassword(password: String): void
++ setName(name: String): void
++ setSurname(surname: String): void
 }
 
 class Manager {
