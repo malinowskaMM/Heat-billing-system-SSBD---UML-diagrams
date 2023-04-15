@@ -3,6 +3,8 @@
     participant Strona
     participant StronaUżytkownika
     participant FormularzPrzyznawaniaPoziomuDostępu
+    participant FormularzManager
+    participant FormularzOwner
     control AccountService
     entity Admin
     entity Owner
@@ -46,7 +48,9 @@
       end
     else wybierz poziom dostępu Manager
       U -> FormularzPrzyznawaniaPoziomuDostępu: Wprowadź "Manager" w polu dodawania roli
-      FormularzPrzyznawaniaPoziomuDostępu -> AccountService: Dodaj role Manager do konta użytkownika
+      FormularzPrzyznawaniaPoziomuDostępu -> FormularzManager: Załaduj formularz dodania poziomu dostępu Manager
+      U -> FormularzManager: Wprowadź numer licencji
+      FormularzManager -> AccountService: Zatwierdź formularz dodania poziomu dostępu Manager
       alt użytkownik posiada już role Manager
       AccountService --> FormularzPrzyznawaniaPoziomuDostępu: Użytkownik posiada już role Manager
       AccountService --> StronaUżytkownika: Poziom dostępu Manager nie został przypisany
@@ -63,7 +67,9 @@
       end
     else wybierz poziom dostępu Owner
       U -> FormularzPrzyznawaniaPoziomuDostępu: Wprowadź "Owner" w polu dodawania roli
-      FormularzPrzyznawaniaPoziomuDostępu -> AccountService: Dodaj role Owner do konta użytkownika
+      FormularzPrzyznawaniaPoziomuDostępu -> FormularzOwner: Załaduj formularz dodania poziomu dostępu Owner
+      U -> FormularzOwner: Wprowadź numer telefonu
+      FormularzOwner -> AccountService: Zatwierdź formularz dodania poziomu dostępu Owner
       alt użytkownik posiada już role Owner
       AccountService --> FormularzPrzyznawaniaPoziomuDostępu: Użytkownik posiada już role Owner
       AccountService --> StronaUżytkownika: Poziom dostępu Owner nie został przypisany
