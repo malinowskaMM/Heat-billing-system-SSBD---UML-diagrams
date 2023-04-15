@@ -1,4 +1,5 @@
 @startuml
+  left to right direction
   package pl.lodz.p.it.ssbd2023.ssbd03.entities.mow {
   Owner "1" -- "many" HotWaterEntry
   Manager "1" -- "many" HotWaterEntry
@@ -24,23 +25,6 @@ class HeatDistributionCentre {
 
 + addBuilding(building: Building): void
 }
-class Address {
-- id: Integer
-- street: String
-- placeNumber: Integer
-- city: String
-- postalCode: String
-- version: Integer
-
-+ getId(): String
-+ getStreet(): String
-+ getPlaceNumber(): String
-+ getCity(): String
-+ getPostalCode(): String
-+ getVersion(): Integer
-
-+ setVersion(version:Integer): void
-}
 
 class HeatDistributionCentrePayoff {
 - id: Integer
@@ -56,6 +40,18 @@ class HeatDistributionCentrePayoff {
 + getHeatingAreaFactor(): BigDecimal
 }
 
+  class PastQuarterHotWaterPayoff {
+- id: Integer
+- averageConsumption: BigDecimal
+- daysNumberInQuarter: Integer
+
++ getId(): Integer
++ getAverageConsumption(): BigDecimal
++ getDaysNumberInQuarter(): Integer
+
++ setAverageConsumption(consumption: BigDecimal): void
++ setDaysNumberInQuarter(daysNumber: Integer): void
+}
 
 class Building {
 - id: Integer
@@ -70,6 +66,7 @@ class Building {
 + getCommunalAreaAggregate(): BigDecimal
 + getAddress(): String
 }
+
 
 
 class Place {
@@ -118,43 +115,7 @@ class MonthPayoff {
 + getHotWaterConsumption(): BigDecimal
 }
 
-abstract class Advance {
-# id: Integer
-# date: LocalDate
 
-+ getId(): Integer
-+ getDate(): LocalDate
-}
-
-class HotWaterAdvance {
-- hotWaterAdvanceValue: BigDecimal
-
-+ getHotWaterAdvanceValue(): BigDecimal
-}
-
-class HeatingPlaceAndCommunalAreaAdvance {
-- heatingPlaceAdvanceValue: BigDecimal
-- heatingCommunalAreaAdvanceValue: BigDecimal
-- advanceChangeFactor: Float
-
-+ getHeatingPlaceAdvanceValue(): BigDecimal
-+ getHeatingCommunalAreaAdvanceValue(): BigDecimal
-+ getAdvanceChangeFactor(): Float
-}
-
-
-class PastQuarterHotWaterPayoff {
-- id: Integer
-- averageConsumption: BigDecimal
-- daysNumberInQuarter: Integer
-
-+ getId(): Integer
-+ getAverageConsumption(): BigDecimal
-+ getDaysNumberInQuarter(): Integer
-
-+ setAverageConsumption(consumption: BigDecimal): void
-+ setDaysNumberInQuarter(daysNumber: Integer): void
-}
 
 class AnnualBalance {
 - id: Integer
@@ -178,32 +139,70 @@ class AnnualBalance {
 + getTotalHeatingPlaceCost(): BigDecimal
 + getTotalHeatingCommunalAreaCost(): BigDecimal
 }
+  class HeatingPlaceAndCommunalAreaAdvance {
+  - heatingPlaceAdvanceValue: BigDecimal
+- heatingCommunalAreaAdvanceValue: BigDecimal
+- advanceChangeFactor: Float
 
-abstract class Account {
-# id: String
-# username: String
++ getHeatingPlaceAdvanceValue(): BigDecimal
++ getHeatingCommunalAreaAdvanceValue(): BigDecimal
++ getAdvanceChangeFactor(): Float
+}
+
+  class HotWaterAdvance {
+- hotWaterAdvanceValue: BigDecimal
+
++ getHotWaterAdvanceValue(): BigDecimal
+}
+
+abstract class Advance {
+# id: Integer
+# date: LocalDate
+
++ getId(): Integer
++ getDate(): LocalDate
+}
+
+  abstract class Account {
+# id: Integer
+# email: String
 # password: String
-# name: String
-# surname: String
+# isEnable: Boolean
+# isActive: Boolean
+# registerDate: LocalDateTime
+#language: String
 
-+ getId(): String
-+ getUsername(): String
++ geId(): Integer
++ getEmail(): String
 + getPassword(): String
-+ getName(): String
-+ getSurname(): String
++ isEnable(): Boolean
++ isActive(): Boolean
++ getRegisterDate(): LocalDateTime
++ getRegisterDate(date: LocalDateTime): void
++ getLanguage(language: String): void
++ getLanguage(): String
 
-+ setUsername(username: String): void
++ setEmail(email: String): void
 + setPassword(password: String): void
-+ setName(name: String): void
-+ setSurname(surname: String): void
++ resetPassword(): void
++ logOut(): void
 }
 
-class Manager {
+  class Manager {
+  - licenceId: String
 
++ getLicenceId(): String
++ editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
++ setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
++ editOwnerEmail(ownerId: Integer, email: String): void
++ editOwnerRole(ownerId: Integer, role: String): void
 }
 
-class Owner {
+  class Owner {
+- phoneNumber: String
 
++ getPhoneNumber(): String
++setPhoneNumber(phoneNumber: String): void
 }
 
 note right of HeatingPlaceAndCommunalAreaAdvance
