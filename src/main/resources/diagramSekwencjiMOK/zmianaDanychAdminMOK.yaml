@@ -6,7 +6,7 @@
     control AccountService
     entity PersonalData
 
-  U -> Strona: Naciśnij przycisk "Wyświetl liste użytkowników"
+  U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
   Strona -> AccountService: Wczytaj listę kont użytkowników
   AccountService --> Strona: Wczytano listę kont użytkowników
   U -> Strona: Wybierz konto użytkownika
@@ -22,11 +22,11 @@
     activate PersonalData
     PersonalData --> AccountService: Pobrano dane do formularz edycji danych
   AccountService --> FormularzEdycjiDanych: Załadowano dane do formularza edycji danych
-  U -> FormularzEdycjiDanych: Wprowadź edytowane dane (imie/nazwisko)
+  U -> FormularzEdycjiDanych: Wprowadź edytowane dane (imię/nazwisko)
   FormularzEdycjiDanych -> AccountService: Zmień dane osobowe użytkownika
     alt format wprowadzonych danych jest niepoprawny
     AccountService --> FormularzEdycjiDanych: Format wprowadzonych danych jest niepoprawny
-    FormularzEdycjiDanych --> StronaUżytkownika: Pokaż ostrzeżenie o niepoparwnym formacie wwprowadzonych danych
+    FormularzEdycjiDanych --> StronaUżytkownika: Pokaż ostrzeżenie o niepoprawnym formacie wwprowadzonych danych
     else format wprowadzonych danych jest poprawny
     AccountService -> PersonalData: Zmień pola firstName i sureName obiektu PersonalData
     AccountService --> StronaUżytkownika: Dane osobowe zostały zaktualizowane

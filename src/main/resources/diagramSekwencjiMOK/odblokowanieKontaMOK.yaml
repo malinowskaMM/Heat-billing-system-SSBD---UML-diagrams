@@ -23,6 +23,7 @@
     FormularzOdblokowaniaUżytkownika --> StronaUżytkowników: Pokaż ostrzeżenie o braku możliwości ponownego odblokowania użytkownika
     else
     AccountService -> Account: Zmień pole isEnable obiektu Account na wartość true
+    Account --> AccountService: Pole isEnable obiektu Account zmieniono na wartość true
     AccountService --> StronaUżytkowników: Użytkownik odblokowany pomyślnie
     end
     end

@@ -20,7 +20,7 @@
   FormularzEdycjiHasła -> AccountService: Zatwierdź formularz zmiany hasła użytkownika
     activate AccountService
     alt wprowadzone dane są niepoprawne
-    opt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
+    opt nowe hasło nie jest zgodne z przyjętą polityką (hasło nie krótsze niż 8 znaków)
     AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
     FormularzEdycjiHasła --> StronaUżytkownika: Pokaż ostrzeżenie o niezgodności hasła z polityką
 

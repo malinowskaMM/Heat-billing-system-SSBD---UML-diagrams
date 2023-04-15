@@ -6,7 +6,7 @@
     control AccountService
     entity Account
 
-  U -> Strona: Naciśnij przycisk "Wyświetl liste użytkowników"
+  U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
   Strona -> AccountService: Wczytaj listę kont użytkowników
   AccountService --> Strona: Wczytano listę kont użytkowników
   U -> Strona: Wybierz konto użytkownika

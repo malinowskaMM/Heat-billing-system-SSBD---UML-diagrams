@@ -14,11 +14,11 @@ FormularzEdycjiDanych -> AccountService: Załaduj dane do formularz edycji danyc
   activate PersonalData
   PersonalData --> AccountService: Pobrano dane do formularz edycji danych
 AccountService --> FormularzEdycjiDanych: Załadowano dane do formularza edycji danych
-U -> FormularzEdycjiDanych: Wprowadź edytowane dane (imie/nazwisko)
+U -> FormularzEdycjiDanych: Wprowadź edytowane dane (imię/nazwisko)
 FormularzEdycjiDanych -> AccountService: Zmień dane osobowe użytkownika
   alt format wprowadzonych danych jest niepoprawny
   AccountService --> FormularzEdycjiDanych: Format wprowadzonych danych jest niepoprawny
-  FormularzEdycjiDanych --> Strona: Pokaż ostrzeżenie o niepoparwnym formacie wwprowadzonych danych
+  FormularzEdycjiDanych --> Strona: Pokaż ostrzeżenie o niepoprawnym formacie wprowadzonych danych
   else format wprowadzonych danych jest poprawny
   AccountService -> PersonalData: Zmień pola firstName i sureName obiektu PersonalData
   AccountService --> Strona: Dane osobowe zostały zaktualizowane
