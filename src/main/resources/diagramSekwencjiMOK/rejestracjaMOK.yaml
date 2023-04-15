@@ -1,0 +1,77 @@
+@startuml
+actor Gość
+participant Strona
+participant FormularzRejestracji
+control AccountService
+entity Account
+entity LoginData
+entity PersonalData
+
+Gość -> Strona: Naciśnij przycisk\n"Zajerestruj"
+Strona -> FormularzRejestracji: Otwórz formularz rejestracyjny
+Gość -> FormularzRejestracji: Wprowadź nazwę użytkownika
+FormularzRejestracji -> AccountService: <<transaction>> Sprawdź unikalność nazwy użytkownika
+  note right: RW, READ COMMITTED, zakres: wykonanie zapytania do bazy danych
+  activate AccountService
+alt wybrana nazwa użytkownika jest zajęta
+AccountService --> FormularzRejestracji: Nazwa użytkownika zajęta
+  FormularzRejestracji --> Strona: Pokaż ostrzeżenie o zajętości wybranej nazwy użytkownika
+else wybrana nazwa użytkownika jest unikalna
+  AccountService --> FormularzRejestracji: Nazwa użytkownika unikalna
+
+end
+
+Gość -> FormularzRejestracji: Wprowadź adres e-mail
+FormularzRejestracji -> AccountService: <<transaction>> Sprawdź unikalność adresu e-mail
+  note right: RW, READ COMMITTED, zakres: wykonanie zapytania do bazy danych
+  alt wybrany adres e-mail jest przypisany do istniejącego konta
+AccountService --> FormularzRejestracji: Adres e-mail przypisany do istniejącego konta
+FormularzRejestracji --> Strona: Pokaż ostrzeżenie o przypisaniu adresu e-mail do istniejącego konta
+  else wybrany adres e-mail nie jest przypisany do istniejącego konta
+AccountService --> FormularzRejestracji: Adres e-mail poprawny
+  end
+
+Gość -> FormularzRejestracji: Wprowadź hasło
+FormularzRejestracji -> AccountService: Sprawdź poprawność hasła względem polityki
+  alt wybrany hasło jest niepoprawne względem polityki
+AccountService --> FormularzRejestracji: Hasło niepoprawne względem polityki
+FormularzRejestracji --> Strona: Pokaż ostrzeżenie o niepoprawnosci hasła względem polityki
+  else wybrany hasło jest poprawne względem polityki
+AccountService --> FormularzRejestracji: Hasło poprawne
+  end
+
+Gość -> FormularzRejestracji: Wprowadź hasło potwierdzające
+FormularzRejestracji -> AccountService: Sprawdź poprawność hasła potwierdzającego względem hasła
+  alt hasła różnią się
+AccountService --> FormularzRejestracji: Hasła różnią się
+FormularzRejestracji --> Strona: Pokaż ostrzeżenie o różnicy pomiędzy hasłem a hasłem potwierdzającym
+  else hasła są tożsame
+AccountService --> FormularzRejestracji: Hasła są takie same
+  end
+
+Gość -> FormularzRejestracji: Wprowadź dane osobowe
+FormularzRejestracji -> AccountService: Waliduj dane osobowe
+  alt format danych osobowych niepoprawny
+AccountService --> FormularzRejestracji: Format danych osobowych niepoprawny
+FormularzRejestracji --> Strona: Pokaż ostrzeżenie o niepopraawnym formacie danych osobowych
+AccountService --> FormularzRejestracji: Format danych osobowych poprawny
+  end
+
+
+Gość -> FormularzRejestracji: Zatwierdź formularz rejestracyjny
+  alt formularz jest wypełniony niepoprawnie
+FormularzRejestracji -> Strona: Pokaż ostrzeżenie o niepoprawnym wypełnieniu formularza 
+  else formularz jest wypełniony poprawnie
+FormularzRejestracji -> AccountService: <<transaction>> Utwórz użytkownika
+note right: RW, SERIALIZABLE, zakres: wykonanie zapytan do bazy danych, \ndodanie rekordu do tabeli account,\ndodanie rekordu do tabeli login_data,\ndodanie rekordu do tabeli personal_data
+AccountService -> Account: Utwórz obiekt Account
+activate Account
+Account -> LoginData: Utwórz obiekt LoginData
+activate LoginData
+Account -> PersonalData: Utwórz obiekt PersonalData
+activate PersonalData
+AccountService --> FormularzRejestracji: Użytkownik został utworzony
+FormularzRejestracji --> Strona: Przenieś na stronę informującą o poprawnym utworzeniu użytkownika
+  end
+
+@enduml
