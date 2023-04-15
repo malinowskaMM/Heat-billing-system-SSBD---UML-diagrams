@@ -1,6 +1,6 @@
   @startuml model
     ' left to right direction
-    package pl.lodz.p.it.ssbd2023.ssbd03 {
+    package pl.lodz.p.it.ssbd2023.ssbd03.entities.mok {
     
     Account <|-- Manager
     Account <|-- Owner
@@ -17,6 +17,7 @@
       # email: String
       # password: String
       # isEnable: Boolean
+      # isActive: Boolean
       # registerDate: LocalDateTime
       #language: String
 
@@ -24,6 +25,7 @@
       + getEmail(): String
       + getPassword(): String
       + isEnable(): Boolean
+      + isActive(): Boolean
       + getRegisterDate(): LocalDateTime
       + getRegisterDate(date: LocalDateTime): void
       + getLanguage(language: String): void
@@ -81,10 +83,10 @@
     }
 
     class Owner {
-      - billingAddress: String
+      - phoneNumber: String
 
-      + getBillingAddress(): String
-      +setBillingAddress(address: String): void
+      + getPhoneNumber(): String
+      +setPhoneNumber(phoneNumber: String): void
     }
     
     class Admin {
