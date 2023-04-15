@@ -1,0 +1,29 @@
+  @startuml
+    actor ZarządcaLubAdministartor as U
+    participant StronaUżytkowników
+    participant FormularzBlokowaniaUżytkownika
+    control AccountService
+    entity Account
+
+  U -> StronaUżytkowników: Naciśnij przycisk "Wyświetl liste użytkowników"
+  StronaUżytkowników -> AccountService: Wczytaj listę kont użytkowników
+  AccountService --> StronaUżytkowników: Wczytano listę kont użytkowników
+  StronaUżytkowników -> FormularzBlokowaniaUżytkownika: Załaduj formularz blokowania wybranego użytkownika
+  group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- edycja rekordu w tabeli account
+  FormularzBlokowaniaUżytkownika -> AccountService: Załaduj dane do formularza blokowania użytkownika
+    activate AccountService
+    AccountService -> Account: Pobierz dane do formularza blokowania użytkownika
+    activate Account
+    Account --> AccountService: Pobrano dane do formularza blokowania użytkownika
+  AccountService --> FormularzBlokowaniaUżytkownika: Załadowano dane do formularza blokowania użytkownika
+  U -> FormularzBlokowaniaUżytkownika: Wybierz opcje "Zablokuj"
+  FormularzBlokowaniaUżytkownika -> AccountService: Zatwierdź formularz blokowania konta użytkownika
+    alt użytkownik już zablokowany
+    AccountService --> FormularzBlokowaniaUżytkownika: Użytkownik nie może zostać zablokowany
+    FormularzBlokowaniaUżytkownika --> StronaUżytkowników: Pokaż ostrzeżenie o braku możliwości ponownego zablokowania użytkownika
+    else
+    AccountService -> Account: Zmień pole isEnable obiektu Account na wartość false
+    AccountService --> StronaUżytkowników: Użytkownik zablokowany pomyślnie
+    end
+    end
+    @enduml

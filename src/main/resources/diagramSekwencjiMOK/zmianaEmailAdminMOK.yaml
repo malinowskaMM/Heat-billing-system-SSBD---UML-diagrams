@@ -1,12 +1,20 @@
   @startuml
-    actor UżytkownikUwierzytelniony as U
+    actor Admin as U
     participant Strona
+    participant StronaUżytkownika
     participant FormularzEdycjiAdresuEmail
     control AccountService
     entity Account
 
-  U -> Strona: Naciśnij przycisk "Edytuj adres e-mail"
-  Strona -> FormularzEdycjiAdresuEmail: Załaduj formularz edycji adresu e-mail
+  U -> Strona: Naciśnij przycisk "Wyświetl liste użytkowników"
+  Strona -> AccountService: Wczytaj listę kont użytkowników
+  AccountService --> Strona: Wczytano listę kont użytkowników
+  U -> Strona: Wybierz konto użytkownika
+  Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
+  StronaUżytkownika -> AccountService: Wczytaj szczegóły konta użytkownika
+  AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
+  U -> StronaUżytkownika: Naciśnij przycisk "Edytuj adres e-mail użytkownika"
+  StronaUżytkownika -> FormularzEdycjiAdresuEmail: Załaduj formularz edycji adresu e-mail
   group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- edycja rekordu tabeli account
 
   FormularzEdycjiAdresuEmail --> AccountService: Załaduj dane do formularz edycji adresu e-mail
@@ -21,22 +29,16 @@
     alt wprowadzony adres e-mail jest niepoprawny
     opt format wprowadzonego adresu e-mail jest niepoprawny
     AccountService --> FormularzEdycjiAdresuEmail: Format wprowadzonego adresu e-mail jest niepoprawny
-    FormularzEdycjiAdresuEmail --> Strona: Pokaż ostrzeżenie o niepoparwnym formacie wprowadzonego adresu e-mail
+    FormularzEdycjiAdresuEmail --> StronaUżytkownika: Pokaż ostrzeżenie o niepoprawnym formacie wprowadzonego adresu e-mail
     else wprowadzony adres e-mail jest już przypisany do istniejącego konta
-    FormularzEdycjiAdresuEmail -> AccountService: Sprawdź czy wprowadzony adres e-mail jest już przypisany do istniejąceego konta
+    FormularzEdycjiAdresuEmail -> AccountService: Sprawdź czy wprowadzony adres e-mail jest już przypisany do istniejącego konta
     AccountService --> FormularzEdycjiAdresuEmail: Wprowadzony adres e-mail jest już przypisany do istniejącego konta
-    FormularzEdycjiAdresuEmail --> Strona: Pokaż ostrzeżenie o przypisaniu adresu e-mail do istniejącego konta
+    FormularzEdycjiAdresuEmail --> StronaUżytkownika: Pokaż ostrzeżenie o przypisaniu adresu e-mail do istniejącego konta
     end
     else wprowadzony adres e-mail jest poprawny
-    group inicjonowane na podstawie przycisku "Wyślij link autoryzujący"
-    AccountService --> U: Wyślij wiadomość pocztową w linkiem autoryzującym czynność zmiany adresu e-mail
-      alt autoryzacja czynności zmiany adresu e-mail nie została uzyskana
-      AccountService --> Strona: Pokaż ostrzeżenie o nieudanej zmianie adresu e-mail
-      else autoryzacja czynności zmiany adresu e-mail została uzyskana
       AccountService -> Account: Zmień pole email obiektu Account
-      AccountService --> Strona: Dane osobowe zostały zaktualizowane
-      end
-    end
+      AccountService --> StronaUżytkownika: Dane osobowe zostały zaktualizowane
+
     end
     end
     

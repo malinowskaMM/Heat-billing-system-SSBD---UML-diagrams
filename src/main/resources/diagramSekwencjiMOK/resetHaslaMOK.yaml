@@ -9,28 +9,28 @@ U -> Strona: Naciśnij przycisk "Resetuj hasło użytkownika"
 Strona -> AccountService: Resetuj hasło użytkownika
 group inicjonowane na podstawie przycisku "Wyślij link resetujący hasło użytkownika"
 AccountService --> U: Wyślij wiadomość pocztową w linkiem do resetu hasła użytkownika
-
 U -> Strona: Załaduj stronę resetu hasła
 Strona -> FormularzResetuHasła: Załaduj formularz resetu hasła
 U -> FormularzResetuHasła: Wypełnij formularz resetu hasła (nowe hasło, hasło potwierdzające)
-FormularzResetuHasła -> AccountService: <<transaction>> Resetuj hasło użytkownika
+group <<transaction>> RW, READ COMMITTED, zakres:\n- wykonanie zapytania do bazy danych,\n- edycja rekordu tabeli account
+FormularzResetuHasła -> AccountService: Zatwierdź formularz resetu hasła użytkownika
   activate AccountService
 
-  note right: RW, READ COMMITTED, zakres: wykonanie zapytania do bazy danych,\n edycja rekordu tabeli account
-
-  alt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
+alt wprowadzone dane są niepoprawne
+  opt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
   AccountService --> FormularzResetuHasła: Nowe hasło nie jest zgodne z przyjętą polityką
   FormularzResetuHasła --> Strona: Pokaż ostrzeżenie o niezgodności hasła z polityką
 
   else nowe hasło nie jest tożsame z hasłem potwierdzającym
   AccountService --> FormularzResetuHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
   FormularzResetuHasła --> Strona: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
-
+end
   else wprowadzone dane są poprawne
   AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
   activate Account
   AccountService --> Strona: Hasło użytkownika zostało zaktualizowane
   end
   end
+end
 
 @enduml

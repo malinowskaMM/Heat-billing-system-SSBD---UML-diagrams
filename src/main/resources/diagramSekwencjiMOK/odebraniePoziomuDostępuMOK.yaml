@@ -1,0 +1,78 @@
+    @startuml
+        actor UżytkownikUwierzytelniony as U
+        participant Strona
+        participant StronaUżytkownika
+        participant FormularzOdbieraniaPoziomuDostępu
+        control AccountService
+        entity Admin
+        entity Owner
+        entity Manager
+        entity AccessLevelMapping
+
+    U -> Strona: Naciśnij przycisk "Wyświetl liste użytkowników"
+    Strona -> AccountService: Wczytaj listę kont użytkowników
+    AccountService --> Strona: Wczytano listę kont użytkowników
+    U -> Strona: Wybierz konto użytkownika
+    Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
+    StronaUżytkownika -> AccountService: Wczytaj szczegóły konta użytkownika
+    AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
+
+    U -> StronaUżytkownika: Naciśnij przycisk "Usuń poziom dostępu"
+    StronaUżytkownika -> FormularzOdbieraniaPoziomuDostępu: Załaduj formularz edycji dodania poziomu dostępu
+
+    group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- usuwanie rekordu w tabeli access_level_mapping,\n- usuwanie rekordu w tabeli admin, ,\n- usuwanie rekordu w tabeli owner,\n- usuwanie rekordu w tabeli manager
+    FormularzOdbieraniaPoziomuDostępu -> AccountService: Załaduj dane do formularz edycji poziomu dostępu
+        activate AccountService
+        AccountService -> AccessLevelMapping: Pobierz dane do formularz edycji poziomu dostępu
+        AccessLevelMapping --> AccountService: Pobrano dane do formularz edycji poziomu dostępu
+    AccountService --> FormularzOdbieraniaPoziomuDostępu: Załadowano dane do formularza poziomu dostępu
+        
+        opt odbierz poziom dostępu Admin
+        U -> FormularzOdbieraniaPoziomuDostępu: Wprowadź "Admin" w polu usuwania roli
+        FormularzOdbieraniaPoziomuDostępu -> AccountService: Usuń role Admin do konta użytkownika
+        alt użytkownik nie posiada roli Admin
+        AccountService --> FormularzOdbieraniaPoziomuDostępu: Użytkownik nie posiada roli Admin
+        AccountService --> StronaUżytkownika: Odebranie poziom dostępu Admin nie powiodło się
+        else
+        activate Admin
+        activate AccessLevelMapping
+        AccountService -> Admin !!: Usuń obiekt Admin
+        Admin -> AccessLevelMapping !!: Usuń obiekt AccessLevelMapping
+        AccessLevelMapping --> Admin: Obiekt AccessLevelMapping został usunięty
+        deactivate AccessLevelMapping
+        Admin --> AccountService: Obiekt Admin został usunięty
+        AccountService --> StronaUżytkownika: Poziom dostępu Admin został odebrany
+        end
+        else odbierz poziom dostępu Manager
+        U -> FormularzOdbieraniaPoziomuDostępu: Wprowadź "Manager" w polu usuwania roli
+        FormularzOdbieraniaPoziomuDostępu -> AccountService: Usuń role Manager do konta użytkownika
+        alt użytkownik nie posiada roli Manager
+        AccountService --> FormularzOdbieraniaPoziomuDostępu: Użytkownik nie posiada roli Manager
+        AccountService --> StronaUżytkownika: Odebranie poziom dostępu Manager nie powiodło się
+        else
+        activate Manager
+        activate AccessLevelMapping
+        AccountService -> Manager !!: Usuń obiekt Manager
+        Manager -> AccessLevelMapping !!: Usuń obiekt AccessLevelMapping
+        AccessLevelMapping --> Manager: Obiekt AccessLevelMapping został usunięty
+        Manager --> AccountService: Obiekt Manager został usunięty
+        AccountService --> StronaUżytkownika: Poziom dostępu Manager został odebrany
+        end
+        else odbierz poziom dostępu Owner
+        U -> FormularzOdbieraniaPoziomuDostępu: Wprowadź "Owner" w polu usuwania roli
+        FormularzOdbieraniaPoziomuDostępu -> AccountService: Usuń role Owner do konta użytkownika
+        alt użytkownik nie posiada roli Owner
+        AccountService --> FormularzOdbieraniaPoziomuDostępu: Użytkownik nie posiada roli Owner
+        AccountService --> StronaUżytkownika: Odebranie poziom dostępu Owner nie powiodło się
+        else
+        activate Owner
+        activate AccessLevelMapping
+        AccountService -> Owner !!: Usuń obiekt Owner
+        Owner -> AccessLevelMapping !!: Usuń obiekt AccessLevelMapping
+        AccessLevelMapping --> Owner: Obiekt AccessLevelMapping został usunięty
+        Owner --> AccountService: Obiekt Owner został usunięty
+        AccountService --> StronaUżytkownika: Poziom dostępu Owner został odebrany
+        end
+        end
+        end
+        @enduml

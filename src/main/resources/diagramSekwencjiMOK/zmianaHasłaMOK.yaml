@@ -8,16 +8,23 @@
   U -> Strona: Naciśnij przycisk "Edytuj hasło użytkownika"
   Strona -> FormularzEdycjiHasła: Załaduj formularz edycji hasła
   U -> FormularzEdycjiHasła: Wypełnij formularz zmiany hasła (stare hasło, nowe hasło, hasło potwierdzające)
-  FormularzEdycjiHasła -> AccountService: <<transaction>> Zmień hasło użytkownika
+  group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do bazy danych,\n edycja rekordu tabeli account
+  FormularzEdycjiHasła -> AccountService: Zatwierź formularz zmiany hasła użytkownika
     activate AccountService
-
-    note right: RW, READ COMMITTED, zakres: wykonanie zapytania do bazy danych,\n edycja rekordu tabeli account
-
-    alt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
+    alt wprowadzone dane są niepoprawne
+    opt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
     AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
     FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niezgodności hasła z polityką
 
+    else wprowadzone stare hasło jest niepoprawne
+    AccountService -> Account: Sprawdź poprawność hasła
+    Account --> AccountService: Hasło niepoprawne
+    AccountService --> FormularzEdycjiHasła: Wprowadzone stare hasło jest niepoprawne
+    FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niepoprawności wprowaadzonego starego hasła
+
     else nowe hasło jest tożsame ze starym hasłem
+    AccountService -> Account: Porównaj nowe hasło ze starym
+    Account --> AccountService: Hasła tożsame
     AccountService --> FormularzEdycjiHasła: Nowe hasło jest tożsame ze starym hasłem
     FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o tożsamości nowego hasła ze starym hasłem
 
@@ -25,10 +32,12 @@
     AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
     FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
 
+    end
     else wprowadzone dane są poprawne
       AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
       activate Account
       AccountService --> Strona: Hasło użytkownika zostało zaktualizowane
+    end
     end
     
     @enduml

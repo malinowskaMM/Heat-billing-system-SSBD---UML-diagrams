@@ -7,22 +7,22 @@ entity PersonalData
 
 U -> Strona: Naciśnij przycisk "Edytuj dane osobowe"
 Strona -> FormularzEdycjiDanych: Załaduj formularz edycji danych
+group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- edycja rekordu w tabeli personal_data
 FormularzEdycjiDanych -> AccountService: Załaduj dane do formularz edycji danych
   activate AccountService
+  AccountService -> PersonalData: Pobierz dane do formularz edycji danych
+  activate PersonalData
+  PersonalData --> AccountService: Pobrano dane do formularz edycji danych
 AccountService --> FormularzEdycjiDanych: Załadowano dane do formularza edycji danych
 U -> FormularzEdycjiDanych: Wprowadź edytowane dane (imie/nazwisko)
-FormularzEdycjiDanych -> AccountService: <<transaction>> Zmień dane osobowe użytkownika
-
-  note right: RW, READ COMMITTED, zakres: wykonanie zapytania do bazy danych,\n edycja rekordu tabeli personal_data
-
+FormularzEdycjiDanych -> AccountService: Zmień dane osobowe użytkownika
   alt format wprowadzonych danych jest niepoprawny
   AccountService --> FormularzEdycjiDanych: Format wprowadzonych danych jest niepoprawny
   FormularzEdycjiDanych --> Strona: Pokaż ostrzeżenie o niepoparwnym formacie wwprowadzonych danych
   else format wprowadzonych danych jest poprawny
-  AccountService -> PersonalData: Zmień obiekt PersonalData
-  activate PersonalData
+  AccountService -> PersonalData: Zmień pola firstName i sureName obiektu PersonalData
   AccountService --> Strona: Dane osobowe zostały zaktualizowane
-
+end
   
   end
 

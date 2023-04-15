@@ -1,0 +1,39 @@
+  @startuml
+    actor Admin as U
+    participant Strona
+    participant StronaUżytkownika
+    participant FormularzEdycjiHasła
+    control AccountService
+    entity Account
+
+  U -> Strona: Naciśnij przycisk "Wyświetl liste użytkowników"
+  Strona -> AccountService: Wczytaj listę kont użytkowników
+  AccountService --> Strona: Wczytano listę kont użytkowników
+  U -> Strona : Wybierz konto użytkownika
+  Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
+  StronaUżytkownika -> AccountService: Wczytaj szczegóły konta użytkownika
+  AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
+  U -> StronaUżytkownika: Naciśnij przycisk "Edytuj hasło użytkownika"
+  StronaUżytkownika -> FormularzEdycjiHasła: Załaduj formularz edycji hasła użytkownika
+  U -> FormularzEdycjiHasła: Wypełnij formularz zmiany hasła (nowe hasło, hasło potwierdzające)
+  group <<transaction>> RW, READ COMMITTED, zakres: edycja rekordu tabeli account
+  FormularzEdycjiHasła -> AccountService: Zatwierdź formularz zmiany hasła użytkownika
+    activate AccountService
+    alt wprowadzone dane są niepoprawne
+    opt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
+    AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
+    FormularzEdycjiHasła --> StronaUżytkownika: Pokaż ostrzeżenie o niezgodności hasła z polityką
+
+    else nowe hasło nie jest tożsame z hasłem potwierdzającym
+    AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
+    FormularzEdycjiHasła --> StronaUżytkownika: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
+
+    end
+    else wprowadzone dane są poprawne
+    AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
+    activate Account
+    AccountService --> StronaUżytkownika: Hasło użytkownika zostało zaktualizowane
+    end
+    end
+    
+    @enduml

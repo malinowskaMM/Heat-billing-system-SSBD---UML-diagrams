@@ -1,0 +1,29 @@
+  @startuml
+    actor ZarządcaLubAdministartor as U
+    participant StronaUżytkowników
+    participant FormularzOdblokowaniaUżytkownika
+    control AccountService
+    entity Account
+
+  U -> StronaUżytkowników: Naciśnij przycisk "Wyświetl liste użytkowników"
+  StronaUżytkowników -> AccountService: Wczytaj listę kont użytkowników
+  AccountService --> StronaUżytkowników: Wczytano listę kont użytkowników
+  StronaUżytkowników -> FormularzOdblokowaniaUżytkownika: Załaduj formularz odblokowania wybranego użytkownika
+  group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- edycja rekordu w tabeli account
+  FormularzOdblokowaniaUżytkownika -> AccountService: Załaduj dane do formularza odblokowania użytkownika
+    activate AccountService
+    AccountService -> Account: Pobierz dane do formularza odblokowania użytkownika
+    activate Account
+    Account --> AccountService: Pobrano dane do formularza odblokowania użytkownika
+  AccountService --> FormularzOdblokowaniaUżytkownika: Załadowano dane do formularza odblokowania użytkownika
+  U -> FormularzOdblokowaniaUżytkownika: Wybierz opcje "Odblokuj"
+  FormularzOdblokowaniaUżytkownika -> AccountService: Zatwierdź formularz odblokowania konta użytkownika
+    alt użytkownik już odblokowany
+    AccountService --> FormularzOdblokowaniaUżytkownika: Użytkownik nie może zostać odblokowany
+    FormularzOdblokowaniaUżytkownika --> StronaUżytkowników: Pokaż ostrzeżenie o braku możliwości ponownego odblokowania użytkownika
+    else
+    AccountService -> Account: Zmień pole isEnable obiektu Account na wartość true
+    AccountService --> StronaUżytkowników: Użytkownik odblokowany pomyślnie
+    end
+    end
+    @enduml
