@@ -12,18 +12,35 @@
   Advance  <|--  HotWaterAdvance
   Advance <|--  HeatingPlaceAndCommunalAreaAdvance
   MonthPayoff "many" -- "1" Account
-  PastQuarterHotWaterPayoff -- Place
+  PastQuarterHotWaterPayoff "1" -- "1" Place
   Account <|-- Owner
   Account <|-- Manager
   HeatDistributionCentre "1" -- "many" HeatDistributionCentrePayoff
   HeatDistributionCentre "1" o-- "many" Building
+  Building "1" *-- "1" Address
   
 class HeatDistributionCentre {
 - id: Integer
 
 + addBuilding(building: Building): void
 }
+class Address {
+- id: Integer
+- street: String
+- placeNumber: Integer
+- city: String
+- postalCode: String
+- version: Integer
 
++ getId(): String
++ getStreet(): String
++ getPlaceNumber(): String
++ getCity(): String
++ getPostalCode(): String
++ getVersion(): Integer
+
++ setVersion(version:Integer): void
+}
 
 class HeatDistributionCentrePayoff {
 - id: Integer
