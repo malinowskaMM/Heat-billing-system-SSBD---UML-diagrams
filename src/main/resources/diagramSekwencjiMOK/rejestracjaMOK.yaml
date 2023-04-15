@@ -8,7 +8,7 @@ entity LoginData
 entity PersonalData
 
 Gość -> Strona: Naciśnij przycisk\n"Zajerestruj"
-Strona -> FormularzRejestracji: Otwórz formularz rejestracyjny
+Strona -> FormularzRejestracji: Załaduj formularz rejestracyjny
 Gość -> FormularzRejestracji: Wprowadź nazwę użytkownika
 FormularzRejestracji -> AccountService: <<transaction>> Sprawdź unikalność nazwy użytkownika
   note right: RW, READ COMMITTED, zakres: wykonanie zapytania do bazy danych
@@ -63,13 +63,14 @@ Gość -> FormularzRejestracji: Zatwierdź formularz rejestracyjny
 FormularzRejestracji -> Strona: Pokaż ostrzeżenie o niepoprawnym wypełnieniu formularza 
   else formularz jest wypełniony poprawnie
 FormularzRejestracji -> AccountService: <<transaction>> Utwórz użytkownika
-note right: RW, SERIALIZABLE, zakres: wykonanie zapytan do bazy danych, \ndodanie rekordu do tabeli account,\ndodanie rekordu do tabeli login_data,\ndodanie rekordu do tabeli personal_data
+note right: RW, READ COMMITTED, zakres: wykonanie zapytan do bazy danych, \ndodanie rekordu do tabeli account,\ndodanie rekordu do tabeli login_data,\ndodanie rekordu do tabeli personal_data
 AccountService -> Account: Utwórz obiekt Account
 activate Account
 Account -> LoginData: Utwórz obiekt LoginData
 activate LoginData
 Account -> PersonalData: Utwórz obiekt PersonalData
 activate PersonalData
+AccountService --> Gość: Wyślij wiadomość pocztową w linkiem autoryzującym czynność rejestracji konta
 AccountService --> FormularzRejestracji: Użytkownik został utworzony
 FormularzRejestracji --> Strona: Przenieś na stronę informującą o poprawnym utworzeniu użytkownika
   end
