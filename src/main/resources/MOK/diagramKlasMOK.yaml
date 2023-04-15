@@ -1,6 +1,6 @@
   @startuml model
     ' left to right direction
-    package pl.lodz.p.it.ssbd2023.ssbd03 {
+    package pl.lodz.p.it.ssbd2023.ssbd03.entities.mok {
     
     Account <|-- Manager
     Account <|-- Owner

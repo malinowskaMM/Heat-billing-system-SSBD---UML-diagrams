@@ -1,5 +1,5 @@
 @startuml
-  
+  package pl.lodz.p.it.ssbd2023.ssbd03.entities.mow {
   Owner "1" -- "many" HotWaterEntry
   Manager "1" -- "many" HotWaterEntry
   Manager "many" -- "1" HeatDistributionCentrePayoff
@@ -223,4 +223,5 @@ Place can have following types of connection:
   - no connection.
 end note
 
+}
 @enduml
