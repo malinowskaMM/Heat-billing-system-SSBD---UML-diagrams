@@ -1,6 +1,6 @@
 @startuml
-  left to right direction
-  package pl.lodz.p.it.ssbd2023.ssbd03.entities.mow {
+  top to bottom direction
+
   Owner "1" -- "many" HotWaterEntry
   Manager "1" -- "many" HotWaterEntry
   Manager "many" -- "1" HeatDistributionCentrePayoff
@@ -21,126 +21,161 @@
   Building "1" *-- "1" Address
   
 class HeatDistributionCentre {
-- id: Integer
+- id: Long
+- version: Long
 
 + addBuilding(building: Building): void
+
++ getVersion(): Long
+
 }
 
 class HeatDistributionCentrePayoff {
-- id: Integer
+- id: Long
 - date: LocalDate
 - consumption: BigDecimal
 - consumptionCost: BigDecimal
 - heatingAreaFactor: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getDate(): LocalDate
 + getConsumption(): BigDecimal
 + getConsumptionCost(): BigDecimal
 + getHeatingAreaFactor(): BigDecimal
++ getVersion(): Long
 }
 
   class PastQuarterHotWaterPayoff {
-- id: Integer
+- id: Long
 - averageConsumption: BigDecimal
-- daysNumberInQuarter: Integer
+- daysNumberInQuarter: Short
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getAverageConsumption(): BigDecimal
-+ getDaysNumberInQuarter(): Integer
++ getDaysNumberInQuarter(): Short
++ getVersion(): Long
 
 + setAverageConsumption(consumption: BigDecimal): void
-+ setDaysNumberInQuarter(daysNumber: Integer): void
++ setDaysNumberInQuarter(daysNumber: Short): void
 }
 
 class Building {
-- id: Integer
+- id: Long
 - totalArea: BigDecimal
 - communalAreaAggregate: BigDecimal
-- address: String
+- version: Long
 
 + addPlace(place: Place): void
 
-+ getId(): Integer
++ getId(): Long
 + getTotalArea(): BigDecimal
 + getCommunalAreaAggregate(): BigDecimal
-+ getAddress(): String
++ getVersion(): Long
+
+}
+
+  class Address {
+- id: Long
+- street: String
+- placeNumber: Short
+- city: String
+- postalCode: String
+- version: Long
+
++ getId(): String
++ getStreet(): String
++ getPlaceNumber(): Short
++ getCity(): String
++ getPostalCode(): String
++ getVersion(): Long
+
 }
 
 
-
 class Place {
-- id: Integer
+- id: Long
 - area: BigDecimal
 - hotWaterConnection: Boolean
 - centralHeatingConnection: Boolean
 - predictedHotWaterConsumption: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getArea(): BigDecimal
 + getHotWaterConnection(): Boolean
 + getCentralHeatingConnection(): Boolean
 + getPredictedHotWaterConsumption(): BigDecimal
++ getVersion(): Long
 
 + setArea(area: BigDecimal): void
-+ setHotWaterConnection(flag: Boolean): void
-+ setCentralHeatingConnection(flag: Boolean): void
-+ setPredictedHotWaterConsumption(predictedConsumption: BigDecimal): void
++ setHotWaterConnection(hotWaterConnection: Boolean): void
++ setCentralHeatingConnection(centralHeatingConnection: Boolean): void
++ setPredictedHotWaterConsumption(predictedHotWaterConsumption: BigDecimal): void
 }
 
 class HotWaterEntry {
-- id: Integer
+- id: Long
 - date: LocalDate
 - entryValue: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getDate(): LocalDate
 + getEntryValue(): BigDecimal
++ getVersion(): Long
+
 
 + setEntryValue(date: LocalDate, value: BigDecimal): void
 }
 
 
 class MonthPayoff {
-- id: Integer
+- id: Long
 - payoffDate: LocalDate
 - waterHeatingUnitCost: BigDecimal
 - centralHeatingUnitCost: BigDecimal
 - hotWaterConsumption: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getPayoffDate(): LocalDate
 + getWaterHeatingUnitCost(): BigDecimal
 + getCentralHeatingUnitCost(): BigDecimal
 + getHotWaterConsumption(): BigDecimal
++ getVersion(): Long
 }
 
 
 
 class AnnualBalance {
-- id: Integer
-- year: Integer
+- id: Long
+- year: Short
 - totalHotWaterAdvance: BigDecimal
 - totalHeatingPlaceAdvance: BigDecimal
 - totalHeatingCommunalAreaAdvance: BigDecimal
 - totalHotWaterCost: BigDecimal
 - totalHeatingPlaceCost: BigDecimal
 - totalHeatingCommunalAreaCost: BigDecimal
+- version: Long
 
 + updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 + updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 
-+ getId(): Integer
-+ getYear(): Integer
++ getId(): Long
++ getYear(): Short
 + getTotalHotWaterAdvance(): BigDecimal
 + getTotalHeatingPlaceAdvance(): BigDecimal
 + getTotalHeatingCommunalAreaAdvance(): BigDecimal
 + getTotalHotWaterCost(): BigDecimal
 + getTotalHeatingPlaceCost(): BigDecimal
 + getTotalHeatingCommunalAreaCost(): BigDecimal
++ getVersion(): Long
+
 }
   class HeatingPlaceAndCommunalAreaAdvance {
-  - heatingPlaceAdvanceValue: BigDecimal
+- heatingPlaceAdvanceValue: BigDecimal
 - heatingCommunalAreaAdvanceValue: BigDecimal
 - advanceChangeFactor: Float
 
@@ -156,35 +191,40 @@ class AnnualBalance {
 }
 
 abstract class Advance {
-# id: Integer
+# id: Long
 # date: LocalDate
+# version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getDate(): LocalDate
++ getVersion(): Long
 }
 
   abstract class Account {
-# id: Integer
+# id: Long
 # email: String
 # password: String
 # isEnable: Boolean
 # isActive: Boolean
 # registerDate: LocalDateTime
-#language: String
+# language: String
+# version: Long
 
-+ geId(): Integer
++ geId(): Long
 + getEmail(): String
 + getPassword(): String
-+ isEnable(): Boolean
-+ isActive(): Boolean
++ getIsEnable(): Boolean
++ getIsActive(): Boolean
 + getRegisterDate(): LocalDateTime
-+ getRegisterDate(date: LocalDateTime): void
-+ getLanguage(language: String): void
 + getLanguage(): String
++ getVersion(): Long
 
 + setEmail(email: String): void
 + setPassword(password: String): void
-+ resetPassword(): void
++ setIsEnable(isEnable: Boolean): void
++ setIsActive(isActive: Boolean): void
++ setLanguage(language: String): void
++ resetPassword(): void #?????????????????????????????????????????
 + logOut(): void
 }
 
@@ -192,17 +232,18 @@ abstract class Advance {
   - licenceId: String
 
 + getLicenceId(): String
-+ editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
-+ setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
-+ editOwnerEmail(ownerId: Integer, email: String): void
-+ editOwnerRole(ownerId: Integer, role: String): void
++ editOwnerAccount(ownerId: Long, name: String, surname: String, language: String): void
++ setOwnerAccountEnable(ownerId: Long, enable: Boolean): void
++ editOwnerEmail(ownerId: Long, email: String): void
++ editOwnerRole(ownerId: Long, role: String): void
 }
 
   class Owner {
 - phoneNumber: String
 
 + getPhoneNumber(): String
-+setPhoneNumber(phoneNumber: String): void
+
++ setPhoneNumber(phoneNumber: String): void
 }
 
 note right of HeatingPlaceAndCommunalAreaAdvance
@@ -222,5 +263,4 @@ Place can have following types of connection:
   - no connection.
 end note
 
-}
 @enduml
