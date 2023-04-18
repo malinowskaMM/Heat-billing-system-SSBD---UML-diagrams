@@ -7,9 +7,10 @@
     PersonalData "1" --* "1" Account
     LoginData "1" --* "1"Account
       
-    AbstractEntity -- Account
-    AbstractEntity -- PersonalData
-    
+    AbstractEntity <|-- Account
+    AbstractEntity <|-- PersonalData
+    AbstractEntity <|-- LoginData
+
     abstract class Account {
       # id: Long
       # email: String
@@ -19,6 +20,7 @@
       # isActive: Boolean
       # registerDate: LocalDateTime
       # language: String
+      # version: Long
 
       + geId(): Long
       + getEmail(): String
@@ -28,13 +30,12 @@
       + getIsActive(): Boolean
       + getRegisterDate(): LocalDateTime
       + getLanguage(): String
+      + getVersion(): Long
 
       + setEmail(email: String): void
-      + setPassword(password: String): void
       + setIsEnable(isEnable: Boolean): void
-      + setIsActive(isActive: Boolean): void
-      + resetPassword(): void #????????????
-      + logOut(): void
+      + setLanguage(language: String): void
+
     }
 
     class LoginData {
@@ -79,10 +80,6 @@
       - license: String
 
       + getLicense(): String
-      + editOwnerAccount(ownerId: Long, name: String, surname: String, language: String): void
-      + setOwnerAccountEnable(ownerId: Long, enable: Boolean): void
-      + editOwnerEmail(ownerId: Long, email: String): void
-      + editOwnerRole(ownerId: Long, role: String): void
     }
 
     class Owner {
@@ -94,21 +91,18 @@
     }
     
     class Admin {
-      + editUserAccount(accountId: Long, name: String, surname: String, language: String): void
-      + setUserAccountEnable(accountId: Long, enable: Boolean): void
-      + editUserEmail(accountId: Long, email: String): void
-      + editUserPassword(accountId: Long, password: String): void
-      + editUserRole(accountId: Long, role: String): void
-    }
+        }
 
       class PersonalData {
       - id: Long
       - firstName: String
       - surname: String
+      - version: Long
 
       + getId(): Long
       + getFirstName(): String
       + getSurname(): String
+      + getVersion(): Long
 
       + setFirstName(firstName: String): void
       + setSurname(surname: String): void

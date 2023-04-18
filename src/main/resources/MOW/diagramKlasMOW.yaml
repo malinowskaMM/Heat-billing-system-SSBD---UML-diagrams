@@ -19,13 +19,12 @@
   HeatDistributionCentre "1" -- "many" HeatDistributionCentrePayoff
   HeatDistributionCentre "1" o-- "many" Building
   Building "1" *-- "1" Address
-  
+
 class HeatDistributionCentre {
 - id: Long
 - version: Long
 
-+ addBuilding(building: Building): void
-
++ getId(): Long
 + getVersion(): Long
 
 }
@@ -66,8 +65,6 @@ class Building {
 - totalArea: BigDecimal
 - communalAreaAggregate: BigDecimal
 - version: Long
-
-+ addPlace(place: Place): void
 
 + getId(): Long
 + getTotalArea(): BigDecimal
@@ -126,7 +123,6 @@ class HotWaterEntry {
 + getEntryValue(): BigDecimal
 + getVersion(): Long
 
-
 + setEntryValue(date: LocalDate, value: BigDecimal): void
 }
 
@@ -160,9 +156,6 @@ class AnnualBalance {
 - totalHeatingCommunalAreaCost: BigDecimal
 - version: Long
 
-+ updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
-+ updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
-
 + getId(): Long
 + getYear(): Short
 + getTotalHotWaterAdvance(): BigDecimal
@@ -173,15 +166,20 @@ class AnnualBalance {
 + getTotalHeatingCommunalAreaCost(): BigDecimal
 + getVersion(): Long
 
++ updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
++ updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
+
 }
   class HeatingPlaceAndCommunalAreaAdvance {
 - heatingPlaceAdvanceValue: BigDecimal
 - heatingCommunalAreaAdvanceValue: BigDecimal
-- advanceChangeFactor: Float
+- advanceChangeFactor: BigDecimal
 
 + getHeatingPlaceAdvanceValue(): BigDecimal
 + getHeatingCommunalAreaAdvanceValue(): BigDecimal
-+ getAdvanceChangeFactor(): Float
++ getAdvanceChangeFactor(): BigDecimal
+
++ setAdvanceChangeFactor(advanceChangeFactor: BigDecimal): void
 }
 
   class HotWaterAdvance {
@@ -201,50 +199,17 @@ abstract class Advance {
 }
 
   abstract class Account {
-# id: Long
-# email: String
-# password: String
-# isEnable: Boolean
-# isActive: Boolean
-# registerDate: LocalDateTime
-# language: String
-# version: Long
-
-+ geId(): Long
-+ getEmail(): String
-+ getPassword(): String
-+ getIsEnable(): Boolean
-+ getIsActive(): Boolean
-+ getRegisterDate(): LocalDateTime
-+ getLanguage(): String
-+ getVersion(): Long
-
-+ setEmail(email: String): void
-+ setPassword(password: String): void
-+ setIsEnable(isEnable: Boolean): void
-+ setIsActive(isActive: Boolean): void
-+ setLanguage(language: String): void
-+ resetPassword(): void #?????????????????????????????????????????
-+ logOut(): void
 }
 
   class Manager {
-  - licenceId: String
-
-+ getLicenceId(): String
-+ editOwnerAccount(ownerId: Long, name: String, surname: String, language: String): void
-+ setOwnerAccountEnable(ownerId: Long, enable: Boolean): void
-+ editOwnerEmail(ownerId: Long, email: String): void
-+ editOwnerRole(ownerId: Long, role: String): void
 }
 
   class Owner {
-- phoneNumber: String
-
-+ getPhoneNumber(): String
-
-+ setPhoneNumber(phoneNumber: String): void
 }
+
+note left of Account
+Implementation for classes: Account, Manager, Owner is placed in MOK class diagram
+end note
 
 note right of HeatingPlaceAndCommunalAreaAdvance
 advanceChangeFactor is inserted once per quarter
@@ -262,5 +227,10 @@ Place can have following types of connection:
   - hot water connection and central heating connection,
   - no connection.
 end note
+  legend top
+  All classes in MOW extend AbstractEntity. Implementation of AbstractEntity Class is placed in MOK
+  end legend
+
+
 
 @enduml
