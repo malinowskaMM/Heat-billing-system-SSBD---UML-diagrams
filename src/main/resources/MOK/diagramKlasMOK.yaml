@@ -1,7 +1,5 @@
   @startuml model
-    ' left to right direction
-    package pl.lodz.p.it.ssbd2023.ssbd03.entities.mok {
-    
+    ' left to right direction   
     Account <|-- Manager
     Account <|-- Owner
     Account <|-- Admin
@@ -9,107 +7,105 @@
     PersonalData "1" --* "1" Account
     LoginData "1" --* "1"Account
       
-    AbstractEntity -- Account
-    AbstractEntity -- PersonalData
-    
+    AbstractEntity <|-- Account
+    AbstractEntity <|-- PersonalData
+    AbstractEntity <|-- LoginData
+
     abstract class Account {
-      # id: Integer
+      # id: Long
       # email: String
+      # username: String
       # password: String
       # isEnable: Boolean
       # isActive: Boolean
       # registerDate: LocalDateTime
-      #language: String
+      # language: String
+      # version: Long
 
-      + geId(): Integer
+      + geId(): Long
       + getEmail(): String
+      + getUsername(): String
       + getPassword(): String
-      + isEnable(): Boolean
-      + isActive(): Boolean
+      + getIsEnable(): Boolean
+      + getIsActive(): Boolean
       + getRegisterDate(): LocalDateTime
-      + getRegisterDate(date: LocalDateTime): void
-      + getLanguage(language: String): void
       + getLanguage(): String
+      + getVersion(): Long
 
       + setEmail(email: String): void
-      + setPassword(password: String): void
-      + resetPassword(): void
-      + logOut(): void
+      + setIsEnable(isEnable: Boolean): void
+      + setLanguage(language: String): void
+
     }
 
     class LoginData {
-      - id: Integer
+      - id: Long
       - lastValidLoginDate: LocalDateTime
       - lastValidLogicAddress: String
       - lastInvalidLoginDate: LocalDateTime
       - lastInvalidLogicAddress: String
-      - invalidLoginCounter: Integer
+      - invalidLoginCounter: Short
+      - version: Long
 
-      + getId(): Integer
+      + getId(): Long
       + getLastValidLoginDate(): LocalDateTime
       + getLastValidLogicAddress(): String
       + getLastInvalidLoginDate(): LocalDateTime
       + getLastInvalidLogicAddress(): String
-      + getInvalidLoginCounter(): Integer
+      + getInvalidLoginCounter(): Short
+      + getVersion(): Long
 
       + setLastValidLoginDate(date: LocalDateTime): void
       + setLastValidLogicAddress(address: String): void
       + setLastInvalidLoginDate(date: LocalDateTime): void
       + setLastInvalidLogicAddress(address: String): void
-      + setInvalidLoginCounter(counter: Integer): void
+      + setInvalidLoginCounter(counter: Short): void
 
   }
 
     abstract class AbstractEntity {
-      # version: Integer
       # lastModificationDate: LocalDateTime
       # lastModificationAuthor: String
       # lastModificationOperation: String
+      # version: Long
 
-      + getVersion(): Integer
+
       + getLastModificationDate(): LocalDateTime
       + getLastModificationAuthor(): String
       + getLastModificationOperation(): String
+      + getVersion(): Long
     }
 
     class Manager {
-      - licenceId: String
+      - license: String
 
-      + getLicenceId(): String
-      + editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
-      + setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
-      + editOwnerEmail(ownerId: Integer, email: String): void
-      + editOwnerRole(ownerId: Integer, role: String): void
+      + getLicense(): String
     }
 
     class Owner {
       - phoneNumber: String
 
       + getPhoneNumber(): String
-      +setPhoneNumber(phoneNumber: String): void
+
+      + setPhoneNumber(phoneNumber: String): void
     }
     
     class Admin {
-      + editUserAccount(accountId: Integer, name: String, surname: String, language: String): void
-      + setUserAccountEnable(accountId: Integer, enable: Boolean): void
-      + editUserEmail(accountId: Integer, email: String): void
-      + editUserPassword(accountId: Integer, password: String): void
-      + editUserRole(accountId: Integer, role: String): void
-    }
+        }
 
       class PersonalData {
-      - id: Integer
-      - name: String
+      - id: Long
+      - firstName: String
       - surname: String
+      - version: Long
 
-      + getId(): Integer
-      + getName(): String
+      + getId(): Long
+      + getFirstName(): String
       + getSurname(): String
+      + getVersion(): Long
 
-      + setName(name: String): void
+      + setFirstName(firstName: String): void
       + setSurname(surname: String): void
     }
 
-  
-  }
     @enduml

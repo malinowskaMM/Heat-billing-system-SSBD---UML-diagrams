@@ -1,5 +1,6 @@
 @startuml
-  package pl.lodz.p.it.ssbd2023.ssbd03.entities.mow {
+  top to bottom direction
+
   Owner "1" -- "many" HotWaterEntry
   Manager "1" -- "many" HotWaterEntry
   Manager "many" -- "1" HeatDistributionCentrePayoff
@@ -18,193 +19,197 @@
   HeatDistributionCentre "1" -- "many" HeatDistributionCentrePayoff
   HeatDistributionCentre "1" o-- "many" Building
   Building "1" *-- "1" Address
-  
+
 class HeatDistributionCentre {
-- id: Integer
+- id: Long
+- version: Long
 
-+ addBuilding(building: Building): void
-}
-class Address {
-- id: Integer
-- street: String
-- placeNumber: Integer
-- city: String
-- postalCode: String
-- version: Integer
++ getId(): Long
++ getVersion(): Long
 
-+ getId(): String
-+ getStreet(): String
-+ getPlaceNumber(): String
-+ getCity(): String
-+ getPostalCode(): String
-+ getVersion(): Integer
-
-+ setVersion(version:Integer): void
 }
 
 class HeatDistributionCentrePayoff {
-- id: Integer
+- id: Long
 - date: LocalDate
 - consumption: BigDecimal
 - consumptionCost: BigDecimal
 - heatingAreaFactor: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getDate(): LocalDate
 + getConsumption(): BigDecimal
 + getConsumptionCost(): BigDecimal
 + getHeatingAreaFactor(): BigDecimal
++ getVersion(): Long
 }
 
+  class PastQuarterHotWaterPayoff {
+- id: Long
+- averageConsumption: BigDecimal
+- daysNumberInQuarter: Short
+- version: Long
+
++ getId(): Long
++ getAverageConsumption(): BigDecimal
++ getDaysNumberInQuarter(): Short
++ getVersion(): Long
+
++ setAverageConsumption(consumption: BigDecimal): void
++ setDaysNumberInQuarter(daysNumber: Short): void
+}
 
 class Building {
-- id: Integer
+- id: Long
 - totalArea: BigDecimal
 - communalAreaAggregate: BigDecimal
-- address: String
+- version: Long
 
-+ addPlace(place: Place): void
-
-+ getId(): Integer
++ getId(): Long
 + getTotalArea(): BigDecimal
 + getCommunalAreaAggregate(): BigDecimal
-+ getAddress(): String
++ getVersion(): Long
+
+}
+
+  class Address {
+- id: Long
+- street: String
+- placeNumber: Short
+- city: String
+- postalCode: String
+- version: Long
+
++ getId(): String
++ getStreet(): String
++ getPlaceNumber(): Short
++ getCity(): String
++ getPostalCode(): String
++ getVersion(): Long
+
 }
 
 
 class Place {
-- id: Integer
+- id: Long
 - area: BigDecimal
 - hotWaterConnection: Boolean
 - centralHeatingConnection: Boolean
 - predictedHotWaterConsumption: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getArea(): BigDecimal
 + getHotWaterConnection(): Boolean
 + getCentralHeatingConnection(): Boolean
 + getPredictedHotWaterConsumption(): BigDecimal
++ getVersion(): Long
 
 + setArea(area: BigDecimal): void
-+ setHotWaterConnection(flag: Boolean): void
-+ setCentralHeatingConnection(flag: Boolean): void
-+ setPredictedHotWaterConsumption(predictedConsumption: BigDecimal): void
++ setHotWaterConnection(hotWaterConnection: Boolean): void
++ setCentralHeatingConnection(centralHeatingConnection: Boolean): void
++ setPredictedHotWaterConsumption(predictedHotWaterConsumption: BigDecimal): void
 }
 
 class HotWaterEntry {
-- id: Integer
+- id: Long
 - date: LocalDate
 - entryValue: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getDate(): LocalDate
 + getEntryValue(): BigDecimal
++ getVersion(): Long
 
 + setEntryValue(date: LocalDate, value: BigDecimal): void
 }
 
 
 class MonthPayoff {
-- id: Integer
+- id: Long
 - payoffDate: LocalDate
 - waterHeatingUnitCost: BigDecimal
 - centralHeatingUnitCost: BigDecimal
 - hotWaterConsumption: BigDecimal
+- version: Long
 
-+ getId(): Integer
++ getId(): Long
 + getPayoffDate(): LocalDate
 + getWaterHeatingUnitCost(): BigDecimal
 + getCentralHeatingUnitCost(): BigDecimal
 + getHotWaterConsumption(): BigDecimal
-}
-
-abstract class Advance {
-# id: Integer
-# date: LocalDate
-
-+ getId(): Integer
-+ getDate(): LocalDate
-}
-
-class HotWaterAdvance {
-- hotWaterAdvanceValue: BigDecimal
-
-+ getHotWaterAdvanceValue(): BigDecimal
-}
-
-class HeatingPlaceAndCommunalAreaAdvance {
-- heatingPlaceAdvanceValue: BigDecimal
-- heatingCommunalAreaAdvanceValue: BigDecimal
-- advanceChangeFactor: Float
-
-+ getHeatingPlaceAdvanceValue(): BigDecimal
-+ getHeatingCommunalAreaAdvanceValue(): BigDecimal
-+ getAdvanceChangeFactor(): Float
++ getVersion(): Long
 }
 
 
-class PastQuarterHotWaterPayoff {
-- id: Integer
-- averageConsumption: BigDecimal
-- daysNumberInQuarter: Integer
-
-+ getId(): Integer
-+ getAverageConsumption(): BigDecimal
-+ getDaysNumberInQuarter(): Integer
-
-+ setAverageConsumption(consumption: BigDecimal): void
-+ setDaysNumberInQuarter(daysNumber: Integer): void
-}
 
 class AnnualBalance {
-- id: Integer
-- year: Integer
+- id: Long
+- year: Short
 - totalHotWaterAdvance: BigDecimal
 - totalHeatingPlaceAdvance: BigDecimal
 - totalHeatingCommunalAreaAdvance: BigDecimal
 - totalHotWaterCost: BigDecimal
 - totalHeatingPlaceCost: BigDecimal
 - totalHeatingCommunalAreaCost: BigDecimal
+- version: Long
 
-+ updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
-+ updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
-
-+ getId(): Integer
-+ getYear(): Integer
++ getId(): Long
++ getYear(): Short
 + getTotalHotWaterAdvance(): BigDecimal
 + getTotalHeatingPlaceAdvance(): BigDecimal
 + getTotalHeatingCommunalAreaAdvance(): BigDecimal
 + getTotalHotWaterCost(): BigDecimal
 + getTotalHeatingPlaceCost(): BigDecimal
 + getTotalHeatingCommunalAreaCost(): BigDecimal
-}
++ getVersion(): Long
 
-abstract class Account {
-# id: String
-# username: String
-# password: String
-# name: String
-# surname: String
-
-+ getId(): String
-+ getUsername(): String
-+ getPassword(): String
-+ getName(): String
-+ getSurname(): String
-
-+ setUsername(username: String): void
-+ setPassword(password: String): void
-+ setName(name: String): void
-+ setSurname(surname: String): void
-}
-
-class Manager {
++ updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
++ updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void
 
 }
+  class HeatingPlaceAndCommunalAreaAdvance {
+- heatingPlaceAdvanceValue: BigDecimal
+- heatingCommunalAreaAdvanceValue: BigDecimal
+- advanceChangeFactor: BigDecimal
 
-class Owner {
++ getHeatingPlaceAdvanceValue(): BigDecimal
++ getHeatingCommunalAreaAdvanceValue(): BigDecimal
++ getAdvanceChangeFactor(): BigDecimal
 
++ setAdvanceChangeFactor(advanceChangeFactor: BigDecimal): void
 }
+
+  class HotWaterAdvance {
+- hotWaterAdvanceValue: BigDecimal
+
++ getHotWaterAdvanceValue(): BigDecimal
+}
+
+abstract class Advance {
+# id: Long
+# date: LocalDate
+# version: Long
+
++ getId(): Long
++ getDate(): LocalDate
++ getVersion(): Long
+}
+
+  abstract class Account {
+}
+
+  class Manager {
+}
+
+  class Owner {
+}
+
+note left of Account
+Implementation for classes: Account, Manager, Owner is placed in MOK class diagram
+end note
 
 note right of HeatingPlaceAndCommunalAreaAdvance
 advanceChangeFactor is inserted once per quarter
@@ -222,6 +227,10 @@ Place can have following types of connection:
   - hot water connection and central heating connection,
   - no connection.
 end note
+  legend top
+  All classes in MOW extend AbstractEntity. Implementation of AbstractEntity Class is placed in MOK
+  end legend
 
-}
+
+
 @enduml

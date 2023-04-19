@@ -1,0 +1,196 @@
+Index: src/main/resources/MOW/diagramKlasMOW.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@startuml\n  package pl.lodz.p.it.ssbd2023.ssbd03.entities.mow {\n  Owner \"1\" -- \"many\" HotWaterEntry\n  Manager \"1\" -- \"many\" HotWaterEntry\n  Manager \"many\" -- \"1\" HeatDistributionCentrePayoff\n  Building \"1\" *-- \"many\" Place\n  Place \"1\" -- \"many\" MonthPayoff\n  Place \"many\" -- \"1\" Account\n  Place \"1\" -- \"many\" Advance\n  Place \"1\" -- \"many\" AnnualBalance\n  Place \"1\" -- \"many\" HotWaterEntry\n  Advance  <|--  HotWaterAdvance\n  Advance <|--  HeatingPlaceAndCommunalAreaAdvance\n  MonthPayoff \"many\" -- \"1\" Account\n  PastQuarterHotWaterPayoff \"1\" -- \"1\" Place\n  Account <|-- Owner\n  Account <|-- Manager\n  HeatDistributionCentre \"1\" -- \"many\" HeatDistributionCentrePayoff\n  HeatDistributionCentre \"1\" o-- \"many\" Building\n  Building \"1\" *-- \"1\" Address\n  \nclass HeatDistributionCentre {\n- id: Integer\n\n+ addBuilding(building: Building): void\n}\nclass Address {\n- id: Integer\n- street: String\n- placeNumber: Integer\n- city: String\n- postalCode: String\n- version: Integer\n\n+ getId(): String\n+ getStreet(): String\n+ getPlaceNumber(): String\n+ getCity(): String\n+ getPostalCode(): String\n+ getVersion(): Integer\n\n+ setVersion(version:Integer): void\n}\n\nclass HeatDistributionCentrePayoff {\n- id: Integer\n- date: LocalDate\n- consumption: BigDecimal\n- consumptionCost: BigDecimal\n- heatingAreaFactor: BigDecimal\n\n+ getId(): Integer\n+ getDate(): LocalDate\n+ getConsumption(): BigDecimal\n+ getConsumptionCost(): BigDecimal\n+ getHeatingAreaFactor(): BigDecimal\n}\n\n\nclass Building {\n- id: Integer\n- totalArea: BigDecimal\n- communalAreaAggregate: BigDecimal\n- address: String\n\n+ addPlace(place: Place): void\n\n+ getId(): Integer\n+ getTotalArea(): BigDecimal\n+ getCommunalAreaAggregate(): BigDecimal\n+ getAddress(): String\n}\n\n\nclass Place {\n- id: Integer\n- area: BigDecimal\n- hotWaterConnection: Boolean\n- centralHeatingConnection: Boolean\n- predictedHotWaterConsumption: BigDecimal\n\n+ getId(): Integer\n+ getArea(): BigDecimal\n+ getHotWaterConnection(): Boolean\n+ getCentralHeatingConnection(): Boolean\n+ getPredictedHotWaterConsumption(): BigDecimal\n\n+ setArea(area: BigDecimal): void\n+ setHotWaterConnection(flag: Boolean): void\n+ setCentralHeatingConnection(flag: Boolean): void\n+ setPredictedHotWaterConsumption(predictedConsumption: BigDecimal): void\n}\n\nclass HotWaterEntry {\n- id: Integer\n- date: LocalDate\n- entryValue: BigDecimal\n\n+ getId(): Integer\n+ getDate(): LocalDate\n+ getEntryValue(): BigDecimal\n\n+ setEntryValue(date: LocalDate, value: BigDecimal): void\n}\n\n\nclass MonthPayoff {\n- id: Integer\n- payoffDate: LocalDate\n- waterHeatingUnitCost: BigDecimal\n- centralHeatingUnitCost: BigDecimal\n- hotWaterConsumption: BigDecimal\n\n+ getId(): Integer\n+ getPayoffDate(): LocalDate\n+ getWaterHeatingUnitCost(): BigDecimal\n+ getCentralHeatingUnitCost(): BigDecimal\n+ getHotWaterConsumption(): BigDecimal\n}\n\nabstract class Advance {\n# id: Integer\n# date: LocalDate\n\n+ getId(): Integer\n+ getDate(): LocalDate\n}\n\nclass HotWaterAdvance {\n- hotWaterAdvanceValue: BigDecimal\n\n+ getHotWaterAdvanceValue(): BigDecimal\n}\n\nclass HeatingPlaceAndCommunalAreaAdvance {\n- heatingPlaceAdvanceValue: BigDecimal\n- heatingCommunalAreaAdvanceValue: BigDecimal\n- advanceChangeFactor: Float\n\n+ getHeatingPlaceAdvanceValue(): BigDecimal\n+ getHeatingCommunalAreaAdvanceValue(): BigDecimal\n+ getAdvanceChangeFactor(): Float\n}\n\n\nclass PastQuarterHotWaterPayoff {\n- id: Integer\n- averageConsumption: BigDecimal\n- daysNumberInQuarter: Integer\n\n+ getId(): Integer\n+ getAverageConsumption(): BigDecimal\n+ getDaysNumberInQuarter(): Integer\n\n+ setAverageConsumption(consumption: BigDecimal): void\n+ setDaysNumberInQuarter(daysNumber: Integer): void\n}\n\nclass AnnualBalance {\n- id: Integer\n- year: Integer\n- totalHotWaterAdvance: BigDecimal\n- totalHeatingPlaceAdvance: BigDecimal\n- totalHeatingCommunalAreaAdvance: BigDecimal\n- totalHotWaterCost: BigDecimal\n- totalHeatingPlaceCost: BigDecimal\n- totalHeatingCommunalAreaCost: BigDecimal\n\n+ updateTotalAdvance(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void\n+ updateTotalCost(hotWater: BigDecimal, heatingPlace: BigDecimal, heatingCommunalArea: BigDecimal): void\n\n+ getId(): Integer\n+ getYear(): Integer\n+ getTotalHotWaterAdvance(): BigDecimal\n+ getTotalHeatingPlaceAdvance(): BigDecimal\n+ getTotalHeatingCommunalAreaAdvance(): BigDecimal\n+ getTotalHotWaterCost(): BigDecimal\n+ getTotalHeatingPlaceCost(): BigDecimal\n+ getTotalHeatingCommunalAreaCost(): BigDecimal\n}\n\nabstract class Account {\n# id: String\n# username: String\n# password: String\n# name: String\n# surname: String\n\n+ getId(): String\n+ getUsername(): String\n+ getPassword(): String\n+ getName(): String\n+ getSurname(): String\n\n+ setUsername(username: String): void\n+ setPassword(password: String): void\n+ setName(name: String): void\n+ setSurname(surname: String): void\n}\n\nclass Manager {\n\n}\n\nclass Owner {\n\n}\n\nnote right of HeatingPlaceAndCommunalAreaAdvance\nadvanceChangeFactor is inserted once per quarter\nend note\n\n\nnote right of Building\ncommunalAreaAggregate = totalArea - sum(Place.area)\nend note\n  \nnote left of Place\nPlace can have following types of connection:\n  - hot water connection,\n  - central heating connection,\n  - hot water connection and central heating connection,\n  - no connection.\nend note\n\n}\n@enduml
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/MOW/diagramKlasMOW.yaml b/src/main/resources/MOW/diagramKlasMOW.yaml
+--- a/src/main/resources/MOW/diagramKlasMOW.yaml	(revision 6d1621d8be9da9fe727e6d73275b33f7b7aefde7)
++++ b/src/main/resources/MOW/diagramKlasMOW.yaml	(date 1681579971960)
+@@ -1,4 +1,5 @@
+ @startuml
++  left to right direction
+   package pl.lodz.p.it.ssbd2023.ssbd03.entities.mow {
+   Owner "1" -- "many" HotWaterEntry
+   Manager "1" -- "many" HotWaterEntry
+@@ -24,23 +25,6 @@
+ 
+ + addBuilding(building: Building): void
+ }
+-class Address {
+-- id: Integer
+-- street: String
+-- placeNumber: Integer
+-- city: String
+-- postalCode: String
+-- version: Integer
+-
+-+ getId(): String
+-+ getStreet(): String
+-+ getPlaceNumber(): String
+-+ getCity(): String
+-+ getPostalCode(): String
+-+ getVersion(): Integer
+-
+-+ setVersion(version:Integer): void
+-}
+ 
+ class HeatDistributionCentrePayoff {
+ - id: Integer
+@@ -56,6 +40,18 @@
+ + getHeatingAreaFactor(): BigDecimal
+ }
+ 
++  class PastQuarterHotWaterPayoff {
++- id: Integer
++- averageConsumption: BigDecimal
++- daysNumberInQuarter: Integer
++
+++ getId(): Integer
+++ getAverageConsumption(): BigDecimal
+++ getDaysNumberInQuarter(): Integer
++
+++ setAverageConsumption(consumption: BigDecimal): void
+++ setDaysNumberInQuarter(daysNumber: Integer): void
++}
+ 
+ class Building {
+ - id: Integer
+@@ -72,6 +68,7 @@
+ }
+ 
+ 
++
+ class Place {
+ - id: Integer
+ - area: BigDecimal
+@@ -118,43 +115,7 @@
+ + getHotWaterConsumption(): BigDecimal
+ }
+ 
+-abstract class Advance {
+-# id: Integer
+-# date: LocalDate
+-
+-+ getId(): Integer
+-+ getDate(): LocalDate
+-}
+-
+-class HotWaterAdvance {
+-- hotWaterAdvanceValue: BigDecimal
+-
+-+ getHotWaterAdvanceValue(): BigDecimal
+-}
+-
+-class HeatingPlaceAndCommunalAreaAdvance {
+-- heatingPlaceAdvanceValue: BigDecimal
+-- heatingCommunalAreaAdvanceValue: BigDecimal
+-- advanceChangeFactor: Float
+-
+-+ getHeatingPlaceAdvanceValue(): BigDecimal
+-+ getHeatingCommunalAreaAdvanceValue(): BigDecimal
+-+ getAdvanceChangeFactor(): Float
+-}
+-
+-
+-class PastQuarterHotWaterPayoff {
+-- id: Integer
+-- averageConsumption: BigDecimal
+-- daysNumberInQuarter: Integer
+ 
+-+ getId(): Integer
+-+ getAverageConsumption(): BigDecimal
+-+ getDaysNumberInQuarter(): Integer
+-
+-+ setAverageConsumption(consumption: BigDecimal): void
+-+ setDaysNumberInQuarter(daysNumber: Integer): void
+-}
+ 
+ class AnnualBalance {
+ - id: Integer
+@@ -178,32 +139,70 @@
+ + getTotalHeatingPlaceCost(): BigDecimal
+ + getTotalHeatingCommunalAreaCost(): BigDecimal
+ }
++  class HeatingPlaceAndCommunalAreaAdvance {
++  - heatingPlaceAdvanceValue: BigDecimal
++- heatingCommunalAreaAdvanceValue: BigDecimal
++- advanceChangeFactor: Float
++
+++ getHeatingPlaceAdvanceValue(): BigDecimal
+++ getHeatingCommunalAreaAdvanceValue(): BigDecimal
+++ getAdvanceChangeFactor(): Float
++}
++
++  class HotWaterAdvance {
++- hotWaterAdvanceValue: BigDecimal
++
+++ getHotWaterAdvanceValue(): BigDecimal
++}
++
++abstract class Advance {
++# id: Integer
++# date: LocalDate
++
+++ getId(): Integer
+++ getDate(): LocalDate
++}
+ 
+-abstract class Account {
+-# id: String
+-# username: String
++  abstract class Account {
++# id: Integer
++# email: String
+ # password: String
+-# name: String
+-# surname: String
++# isEnable: Boolean
++# isActive: Boolean
++# registerDate: LocalDateTime
++#language: String
+ 
+-+ getId(): String
+-+ getUsername(): String
+++ geId(): Integer
+++ getEmail(): String
+ + getPassword(): String
+-+ getName(): String
+-+ getSurname(): String
+++ isEnable(): Boolean
+++ isActive(): Boolean
+++ getRegisterDate(): LocalDateTime
+++ getRegisterDate(date: LocalDateTime): void
+++ getLanguage(language: String): void
+++ getLanguage(): String
+ 
+-+ setUsername(username: String): void
+++ setEmail(email: String): void
+ + setPassword(password: String): void
+-+ setName(name: String): void
+-+ setSurname(surname: String): void
+++ resetPassword(): void
+++ logOut(): void
+ }
+ 
+-class Manager {
++  class Manager {
++  - licenceId: String
+ 
+++ getLicenceId(): String
+++ editOwnerAccount(ownerId: Integer, name: String, surname: String, language: String): void
+++ setOwnerAccountEnable(ownerId: Integer, enable: Boolean): void
+++ editOwnerEmail(ownerId: Integer, email: String): void
+++ editOwnerRole(ownerId: Integer, role: String): void
+ }
+ 
+-class Owner {
++  class Owner {
++- phoneNumber: String
+ 
+++ getPhoneNumber(): String
+++setPhoneNumber(phoneNumber: String): void
+ }
+ 
+ note right of HeatingPlaceAndCommunalAreaAdvance
