@@ -1,5 +1,5 @@
     @startuml
-        actor UżytkownikUwierzytelniony as U
+        actor Administrator as U
         participant Strona
         participant StronaUżytkownika
         participant FormularzOdbieraniaPoziomuDostępu
@@ -8,6 +8,7 @@
         entity Owner
         entity Manager
         entity AccessLevelMapping
+        actor Użytkownik as UZ
 
     U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
     Strona -> AccountService: Wczytaj listę kont użytkowników
@@ -20,7 +21,8 @@
     U -> StronaUżytkownika: Naciśnij przycisk "Usuń poziom dostępu"
     StronaUżytkownika -> FormularzOdbieraniaPoziomuDostępu: Załaduj formularz edycji dodania poziomu dostępu
 
-    group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- usuwanie rekordu w tabeli access_level_mapping,\n- usuwanie rekordu w tabeli admin, ,\n- usuwanie rekordu w tabeli owner,\n- usuwanie rekordu w tabeli manager
+    group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli: access_level_mapping, admin, owner, manager,\n- usuwanie rekordu w tabeli access_level_mapping,\n- usuwanie rekordu w tabeli admin, ,\n- usuwanie rekordu w tabeli owner,\n- usuwanie rekordu w tabeli manager
+    note over of U: Administracyjny poziom dostępu (tzw. administrator) odpowiada \nza przydzielanie i odbieranie poziomów dostępu: administrator, \nzarządca oraz właściciel. Użytkownik z administracyjnym \npoziomem dostępu nie może modyfikować własnego poziomu dostępu.
     FormularzOdbieraniaPoziomuDostępu -> AccountService: Załaduj dane do formularz edycji poziomu dostępu
         activate AccountService
         AccountService -> AccessLevelMapping: Pobierz dane do formularz edycji poziomu dostępu
@@ -36,11 +38,12 @@
         else
         activate Admin
         activate AccessLevelMapping
-        AccountService -> Admin !!: Usuń obiekt Admin
+        AccountService -> Admin: Usuń obiekt Admin
         Admin -> AccessLevelMapping !!: Usuń obiekt AccessLevelMapping
-        AccessLevelMapping --> Admin: Obiekt AccessLevelMapping został usunięty
+        AccessLevelMapping --> Admin !!: Obiekt AccessLevelMapping został usunięty
         deactivate AccessLevelMapping
         Admin --> AccountService: Obiekt Admin został usunięty
+        AccountService -> UZ: Wyślij wiadomość pocztową z informacją o odebraniu poziomu dostępu Admin
         AccountService --> StronaUżytkownika: Poziom dostępu Admin został odebrany
         end
         else odbierz poziom dostępu Manager
@@ -52,10 +55,11 @@
         else
         activate Manager
         activate AccessLevelMapping
-        AccountService -> Manager !!: Usuń obiekt Manager
+        AccountService -> Manager : Usuń obiekt Manager
         Manager -> AccessLevelMapping !!: Usuń obiekt AccessLevelMapping
-        AccessLevelMapping --> Manager: Obiekt AccessLevelMapping został usunięty
+        AccessLevelMapping --> Manager !!: Obiekt AccessLevelMapping został usunięty
         Manager --> AccountService: Obiekt Manager został usunięty
+        AccountService -> UZ: Wyślij wiadomość pocztową z informacją o odebraniu poziomu dostępu Manager
         AccountService --> StronaUżytkownika: Poziom dostępu Manager został odebrany
         end
         else odbierz poziom dostępu Owner
@@ -67,10 +71,11 @@
         else
         activate Owner
         activate AccessLevelMapping
-        AccountService -> Owner !!: Usuń obiekt Owner
+        AccountService -> Owner: Usuń obiekt Owner
         Owner -> AccessLevelMapping !!: Usuń obiekt AccessLevelMapping
-        AccessLevelMapping --> Owner: Obiekt AccessLevelMapping został usunięty
-        Owner --> AccountService: Obiekt Owner został usunięty
+        AccessLevelMapping --> Owner !!:  Obiekt AccessLevelMapping został usunięty
+        Owner  --> AccountService : Obiekt Owner został usunięty
+        AccountService -> UZ: Wyślij wiadomość pocztową z informacją o odebraniu poziomu dostępu Owner
         AccountService --> StronaUżytkownika: Poziom dostępu Owner został odebrany
         end
         end

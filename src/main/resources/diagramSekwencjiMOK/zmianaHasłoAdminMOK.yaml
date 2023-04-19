@@ -5,9 +5,11 @@
     participant FormularzEdycjiHasła
     control AccountService
     entity Account
+    actor Użytkownik
 
   U -> Strona: Naciśnij przycisk "Wyświetl liste użytkowników"
   Strona -> AccountService: Wczytaj listę kont użytkowników
+    activate AccountService
   AccountService --> Strona: Wczytano listę kont użytkowników
   U -> Strona : Wybierz konto użytkownika
   Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
@@ -18,7 +20,6 @@
   U -> FormularzEdycjiHasła: Wypełnij formularz zmiany hasła (nowe hasło, hasło potwierdzające)
   group <<transaction>> RW, READ COMMITTED, zakres: edycja rekordu tabeli account
   FormularzEdycjiHasła -> AccountService: Zatwierdź formularz zmiany hasła użytkownika
-    activate AccountService
     alt wprowadzone dane są niepoprawne
     opt nowe hasło nie jest zgodne z przyjętą polityką (hasło nie krótsze niż 8 znaków)
     AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
@@ -31,8 +32,15 @@
     end
     else wprowadzone dane są poprawne
     AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
-    activate Account
+      activate Account
+    Account --> AccountService: Zmieniono wartość pola password obiektu Account
     AccountService --> StronaUżytkownika: Hasło użytkownika zostało zaktualizowane
+    AccountService -> Użytkownik: Wyślij wiadomość pocztową z czasowo aktywnym linkiem do bezpośredniej zmiany hasła
+    opt
+    ref over Użytkownik, AccountService
+      Diagram sekwencji "Zmiana hasła konta użytkownika przez właściciela"
+    end
+    end
     end
     end
     

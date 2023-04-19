@@ -8,19 +8,21 @@
 
   U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
   Strona -> AccountService: Wczytaj listę kont użytkowników
+    activate AccountService
   AccountService --> Strona: Wczytano listę kont użytkowników
   U -> Strona: Wybierz konto użytkownika
   Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
   StronaUżytkownika -> AccountService: Wczytaj szczegóły konta użytkownika
+  AccountService -> Account: Pobierz zawartość pól obiektu Account
+    activate Account
+  Account --> AccountService: Pobierano zawartość pól obiektu Account
   AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
   U -> StronaUżytkownika: Naciśnij przycisk "Edytuj adres e-mail użytkownika"
-  StronaUżytkownika -> FormularzEdycjiAdresuEmail: Załaduj formularz edycji adresu e-mail
-  group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- edycja rekordu tabeli account
 
+  StronaUżytkownika -> FormularzEdycjiAdresuEmail: Załaduj formularz edycji adresu e-mail
+  group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account,\n- edycja rekordu tabeli account
   FormularzEdycjiAdresuEmail --> AccountService: Załaduj dane do formularz edycji adresu e-mail
-    activate AccountService
   AccountService -> Account: Pobierz dane do formularz edycji adresu e-mail
-    activate Account
   Account --> AccountService: Pobrano dane do formularz edycji adresu e-mail
   AccountService --> FormularzEdycjiAdresuEmail: Załadowano dane do formularza edycji adresu e-mail
   U -> FormularzEdycjiAdresuEmail: Wprowadź nowy adres e-mail
@@ -37,6 +39,7 @@
     end
     else wprowadzony adres e-mail jest poprawny
       AccountService -> Account: Zmień pole email obiektu Account
+      Account --> AccountService: Wartość pola email obiektu Account została zmieniona
       AccountService --> StronaUżytkownika: Dane osobowe zostały zaktualizowane
 
     end
