@@ -14,6 +14,7 @@
 
     U -> StronaLogowania: Wprowadź adres e-mail
     StronaLogowania -> AccountService: Waliduj adres e-mail
+        activate AccountService
         alt format adresu e-mail niepoprawny
     AccountService --> StronaLogowania: Format adresu e-mail niepoprawny
     StronaLogowania --> Strona: Pokaż ostrzeżenie o niepoprawnym formacie adresu e-mail
@@ -33,7 +34,7 @@
     U -> StronaLogowania: Naciśnij przycisk "Zaloguj"
     StronaLogowania -> AccountService: Zatwierdź formularz logowania
 
-    group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account
+    group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account, edycja rekordów tabel login_data, account
     AccountService -> Account: Sprawdź tożsamość pól email oraz password obiektu Account względem wprowadzonych e-maila i hasła
     activate Account
     alt wprowadzone e-mail i hasło nie są tożsame z wartościami pól email oraz password obiektu Account
@@ -46,17 +47,25 @@
     AccountService -> LoginData: Zinkrementować wartość pola invalidLoginCounter
     LoginData --> AccountService: Zinkrementowano wartość pola invalidLoginCounter
     alt invalidLoginCounter == 3
-    group << transaction>> RW, READ COMMITTED, zakres:\n- edycja rekordu w tabeli account
     AccountService -> AccountFacade: Zmień obiekt Account
         activate AccountFacade
         AccountFacade -> Account: Zmień pole isEnable obiektu Account na wartość false
     Account --> AccountFacade: Wartość pola isEnable została zmieniona na wartość false
         AccountFacade --> AccountService: Zmieniono obiekt Account
-    StronaLogowania --> StronaUżytkownikaZalogowanego: Przenieś na stronę użytkownika zalogowanego
-    end      
+      AccountService --> Strona: Użytkownik został zablokowany z powodu zbyt dużej ilości niepoprawnych zalogowań
+    else invalidLoginCounter < 3
+    AccountService --> StronaLogowania: Użytkownik wprowadził niepoprawny adres e-mail lub hasło
+      StronaLogowania --> Strona: Pokaż ostrzeżenie o niepoprawnym adresie e-mail lub haśle
     end
     else wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
     Account --> AccountService: Wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
+    AccountService -> Account: Sprawdź wartość pola isEnable obiektu Account
+    alt wartość pola isEnable obiektu Account wynosi false
+    Account --> AccountService: Wartość pola isEnable obiektu Account wynosi false
+    AccountService --> StronaLogowania: Użytkownik jest zablokowany, uwierzytelnienie niemożliwe
+    StronaLogowania --> Strona: Pokaż ostrzeżenie o zablokowaniu użytkownika i braku możliwości uwierzytelnienia się
+    else wartość pola isEnable obiektu Account wynosi true
+    Account --> AccountService: Wartość pola isEnable obiektu Account wynosi true
     AccountService -> LoginData: Zmień wartość pola lastValidLoginDate
     LoginData --> AccountService: Zmieniono wartość pola lastValidLoginDate
     AccountService -> LoginData: Zmień wartość pola lastValidLogicAddress
@@ -66,6 +75,7 @@
     AccountService --> StronaLogowania: Zwrócono token JWT
     StronaLogowania --> StronaUżytkownikaZalogowanego: Przenieś na stronę użytkownika zalogowanego
     end
-      
+    end
+    end  
     
       @enduml

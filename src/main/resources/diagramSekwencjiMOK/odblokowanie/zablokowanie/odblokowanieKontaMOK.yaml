@@ -10,12 +10,12 @@
   U -> StronaUżytkowników: Naciśnij przycisk "Wyświetl liste użytkowników"
   group << transaction>> RO, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   StronaUżytkowników -> AccountService: Wczytaj listę kont użytkowników
+    activate AccountService
   AccountService --> StronaUżytkowników: Wczytano listę kont użytkowników
   end
   StronaUżytkowników -> FormularzOdblokowaniaUżytkownika: Załaduj formularz odblokowania wybranego użytkownika
   group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   FormularzOdblokowaniaUżytkownika -> AccountService: Załaduj dane do formularza odblokowania użytkownika
-    activate AccountService
     AccountService -> Account: Pobierz dane do formularza odblokowania użytkownika (wartość pola isEnable)
     activate Account
     Account --> AccountService: Pobrano dane do formularza odblokowania użytkownika

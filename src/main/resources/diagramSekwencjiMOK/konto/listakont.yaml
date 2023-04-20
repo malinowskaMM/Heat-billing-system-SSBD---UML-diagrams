@@ -1,13 +1,15 @@
   @startuml
     actor AdministratorLubZarządca as U
     participant Strona
-    participant StronaKonta
+    participant StronaKont
     control AccountService
 
   U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
   group << transaction>> RO, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
-  Strona -> AccountService: Wczytaj listę kont użytkowników
+  Strona -> StronaKont: Załaduj stronę listy kont użytkowników
+  StronaKont -> AccountService: Wczytaj listę kont użytkowników
     activate AccountService
-  AccountService --> Strona: Wczytano listę kont użytkowników
+  AccountService --> StronaKont: Wczytano listę kont użytkowników
+      StronaKont -> Strona: Załadowano stronę listy kont użytkowników
     end
     @enduml

@@ -15,6 +15,7 @@
   U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
   group << transaction>> RO, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   Strona -> AccountService: Wczytaj listę kont użytkowników
+    activate AccountService
   AccountService --> Strona: Wczytano listę kont użytkowników
   end
   U -> Strona: Wybierz konto użytkownika
@@ -24,14 +25,15 @@
   AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
   end
   U -> StronaUżytkownika: Naciśnij przycisk "Dodaj poziom dostępu"
-  StronaUżytkownika -> FormularzPrzyznawaniaPoziomuDostępu: Załaduj formularz edycji dodania poziomu dostępu
 
+  StronaUżytkownika -> FormularzPrzyznawaniaPoziomuDostępu: Załaduj formularz edycji dodania poziomu dostępu
   group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli access_level_mapping, admin, owner, manger,\n- dodanie rekordu w tabeli access_level_mapping,\n- dodanie rekordu w tabeli admin, ,\n- dodanie rekordu w tabeli owner,\n- dodanie rekordu w tabeli manager
   note over of U: Administracyjny poziom dostępu (tzw. administrator) odpowiada \nza przydzielanie i odbieranie poziomów dostępu: administrator, \nzarządca oraz właściciel. Użytkownik z administracyjnym \npoziomem dostępu nie może modyfikować własnego poziomu dostępu.
   FormularzPrzyznawaniaPoziomuDostępu -> AccountService: Załaduj dane do formularz edycji poziomu dostępu
-    activate AccountService
     AccountService -> AccessLevelMapping: Pobierz dane do formularz edycji poziomu dostępu
+    activate AccessLevelMapping
     AccessLevelMapping --> AccountService: Pobrano dane do formularz edycji poziomu dostępu
+  deactivate AccessLevelMapping
   AccountService --> FormularzPrzyznawaniaPoziomuDostępu: Załadowano dane do formularza poziomu dostępu
   
     opt wybierz poziom dostępu Admin

@@ -12,10 +12,15 @@
     group <<transaction>> RO, READ COMMITTED, zakres: wykonanie zapytania do tabel account, login_data, personal_data, access_level_mapping
     Strona -> StronaKonta: Załaduj szczegółowe informacje o koncie
     StronaKonta -> AccountService: Pobierz szczegółowe informacje o koncie
+    activate AccountService
     AccountService -> Account: Pobierz informacje o koncie
+      activate Account
     Account -> LoginData: Pobierz informacje o koncie
+      activate LoginData
     LoginData -> PersonalData: Pobierz informacje o koncie
+      activate PersonalData
     PersonalData -> AccessLevelMapping: Pobierz informacje o koncie
+      activate AccessLevelMapping
     AccessLevelMapping --> PersonalData: Pobrano informacje o koncie
     PersonalData --> LoginData: Pobrano informacje o koncie
     LoginData --> Account: Pobrano informacje o koncie

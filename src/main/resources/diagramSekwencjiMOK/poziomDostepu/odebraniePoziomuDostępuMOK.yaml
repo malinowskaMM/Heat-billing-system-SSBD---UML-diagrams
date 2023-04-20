@@ -29,7 +29,9 @@
     FormularzOdbieraniaPoziomuDostępu -> AccountService: Załaduj dane do formularz edycji poziomu dostępu
         activate AccountService
         AccountService -> AccessLevelMapping: Pobierz dane do formularz edycji poziomu dostępu
+        activate AccessLevelMapping
         AccessLevelMapping --> AccountService: Pobrano dane do formularz edycji poziomu dostępu
+        deactivate AccessLevelMapping
     AccountService --> FormularzOdbieraniaPoziomuDostępu: Załadowano dane do formularza poziomu dostępu
         
         opt odbierz poziom dostępu Admin
