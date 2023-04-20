@@ -8,37 +8,55 @@
   U -> Strona: Naciśnij przycisk "Edytuj hasło użytkownika"
   Strona -> FormularzEdycjiHasła: Załaduj formularz edycji hasła
   U -> FormularzEdycjiHasła: Wypełnij formularz zmiany hasła (stare hasło, nowe hasło, hasło potwierdzające)
-  group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account,\n edycja rekordu tabeli account
-  FormularzEdycjiHasła -> AccountService: Zatwierź formularz zmiany hasła użytkownika
+  FormularzEdycjiHasła -> AccountService: Zatwierdź formularz zmiany hasła użytkownika
     activate AccountService
-    alt wprowadzone dane są niepoprawne
-    opt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
-    AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
-    FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niezgodności hasła z polityką
+      
+      alt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
+      AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niezgodności hasła z polityką
+      else nowe hasło jest zgodne z przyjętą polityką
+      AccountService --> FormularzEdycjiHasła: Nowe hasło jest zgodne z przyjętą polityką
+      end
 
-    else wprowadzone stare hasło jest niepoprawne
-    AccountService -> Account: Sprawdź poprawność hasła
+      group <<transaction>> RW, READ COMMITTED, zakres: \nwykonanie zapytania do tabeli account
+      AccountService -> Account: Sprawdź poprawność hasła
       activate Account
-    Account --> AccountService: Hasło niepoprawne
-    AccountService --> FormularzEdycjiHasła: Wprowadzone stare hasło jest niepoprawne
+      alt wprowadzone stare hasło jest niepoprawne
+      Account --> AccountService: Hasło niepoprawne
+      AccountService --> FormularzEdycjiHasła: Wprowadzone stare hasło jest niepoprawne
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niepoprawności wprowaadzonego starego hasła
+      else wprowadzone stare hasło jest poprawne
+      Account --> AccountService: Hasło poprawne
+      AccountService --> FormularzEdycjiHasła: Wprowadzone stare hasło jest poprawne
+      end
 
-    FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niepoprawności wprowaadzonego starego hasła
-    else nowe hasło jest tożsame ze starym hasłem
-    AccountService -> Account: Porównaj nowe hasło ze starym hasłem
-    Account --> AccountService: Hasła tożsame
-    AccountService --> FormularzEdycjiHasła: Nowe hasło jest tożsame ze starym hasłem
+      AccountService -> Account: Porównaj nowe hasło ze starym hasłem
+      alt nowe hasło jest tożsame ze starym hasłem
+      Account --> AccountService: Hasła tożsame
+      AccountService --> FormularzEdycjiHasła: Nowe hasło jest tożsame ze starym hasłem
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o tożsamości nowego hasła ze starym hasłem
+      else nowe hasło nie jest tożsame ze starym hasłem
+      Account --> AccountService: Hasła nietożsame
+      AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest tożsame ze starym hasłem
+      end
+      end
+      
+      alt nowe hasło nie jest tożsame z hasłem potwierdzającym
+      AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
+      else nowe hasło jest tożsame z hasłem potwierdzającym
+      AccountService --> FormularzEdycjiHasła: Nowe hasło jest tożsame z hasłem potwierdzającym
+      end
 
-    FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o tożsamości nowego hasła ze starym hasłem
-    else nowe hasło nie jest tożsame z hasłem potwierdzającym
-    AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
 
-    FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
-    end
-    else wprowadzone dane są poprawne
-    AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
+      group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account,\n edycja rekordu tabeli account
+      alt formularz jest wypełniony niepoprawnie
+      AccountService --> FormularzEdycjiHasła: Formularz jest wypełniony niepoprawnie
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niepoprawnym wypełnieniu formularza
+      else formularz jest wypełniony poprawnie
+    AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu obliczonego z nowego hasła
     Account --> AccountService: Wartość pola password obiektu Account została zmieniona
       AccountService --> Strona: Hasło użytkownika zostało zaktualizowane
     end
     end
-    
     @enduml

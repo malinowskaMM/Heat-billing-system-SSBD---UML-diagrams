@@ -12,37 +12,39 @@
   AccountService --> Strona: Wczytano listę kont użytkowników
   U -> Strona: Wybierz konto użytkownika
   Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
+  group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   StronaUżytkownika -> AccountService: Wczytaj szczegóły konta użytkownika
   AccountService -> Account: Pobierz zawartość pól obiektu Account
     activate Account
   Account --> AccountService: Pobierano zawartość pól obiektu Account
   AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
+  end
   U -> StronaUżytkownika: Naciśnij przycisk "Edytuj adres e-mail użytkownika"
 
   StronaUżytkownika -> FormularzEdycjiAdresuEmail: Załaduj formularz edycji adresu e-mail
-  group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account,\n- edycja rekordu tabeli account
+  group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   FormularzEdycjiAdresuEmail --> AccountService: Załaduj dane do formularz edycji adresu e-mail
   AccountService -> Account: Pobierz dane do formularz edycji adresu e-mail
   Account --> AccountService: Pobrano dane do formularz edycji adresu e-mail
   AccountService --> FormularzEdycjiAdresuEmail: Załadowano dane do formularza edycji adresu e-mail
+  end
   U -> FormularzEdycjiAdresuEmail: Wprowadź nowy adres e-mail
-
   FormularzEdycjiAdresuEmail -> AccountService: Zatwierdź formularz zmiany adresu e-mail użytkownika
-    alt wprowadzony adres e-mail jest niepoprawny
-    opt format wprowadzonego adresu e-mail jest niepoprawny
-    AccountService --> FormularzEdycjiAdresuEmail: Format wprowadzonego adresu e-mail jest niepoprawny
-    FormularzEdycjiAdresuEmail --> StronaUżytkownika: Pokaż ostrzeżenie o niepoprawnym formacie wprowadzonego adresu e-mail
-    else wprowadzony adres e-mail jest już przypisany do istniejącego konta
-    FormularzEdycjiAdresuEmail -> AccountService: Sprawdź czy wprowadzony adres e-mail jest już przypisany do istniejącego konta
-    AccountService --> FormularzEdycjiAdresuEmail: Wprowadzony adres e-mail jest już przypisany do istniejącego konta
-    FormularzEdycjiAdresuEmail --> StronaUżytkownika: Pokaż ostrzeżenie o przypisaniu adresu e-mail do istniejącego konta
-    end
-    else wprowadzony adres e-mail jest poprawny
-      AccountService -> Account: Zmień pole email obiektu Account
-      Account --> AccountService: Wartość pola email obiektu Account została zmieniona
-      AccountService --> StronaUżytkownika: Dane osobowe zostały zaktualizowane
-
-    end
-    end
-    
+      group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account, \n- edycja rekordu tabeli account
+      alt format wprowadzonego adresu e-mail jest niepoprawny
+      AccountService --> FormularzEdycjiAdresuEmail: Format wprowadzonego adresu e-mail jest niepoprawny
+      FormularzEdycjiAdresuEmail --> Strona: Pokaż ostrzeżenie o niepoparwnym formacie wprowadzonego adresu e-mail
+      else format wprowadzonego adresu e-mail jest poprawny
+      FormularzEdycjiAdresuEmail -> AccountService: Sprawdź czy wprowadzony adres e-mail jest już przypisany do istniejącego konta
+      alt wprowadzony adres e-mail jest już przypisany do istniejącego konta
+      AccountService --> FormularzEdycjiAdresuEmail: Wprowadzony adres e-mail jest już przypisany do istniejącego konta
+      FormularzEdycjiAdresuEmail --> Strona: Pokaż ostrzeżenie o przypisaniu adresu e-mail do istniejącego konta
+      else wprowadzony adres e-mail nie jest przypisany do żadnego już istniejącego konta
+      AccountService -> Account: Zmień pole e-mail obiektu Account
+      Account --> AccountService: Wartość pola e-mail obiektu Account została zmieniona
+      AccountService --> FormularzEdycjiAdresuEmail: Adres e-mail użytkownika został zaktualizowany
+      FormularzEdycjiAdresuEmail --> Strona: Adres e-mail użytkownika został zaktualizowany
+      end
+      end 
+      end
     @enduml

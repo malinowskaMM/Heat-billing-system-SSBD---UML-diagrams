@@ -8,22 +8,27 @@
 
   U -> StronaUżytkowników: Naciśnij przycisk "Wyświetl liste użytkowników"
   StronaUżytkowników -> AccountService: Wczytaj listę kont użytkowników
+    activate AccountService
   AccountService --> StronaUżytkowników: Wczytano listę kont użytkowników
   StronaUżytkowników -> FormularzBlokowaniaUżytkownika: Załaduj formularz blokowania wybranego użytkownika
-  group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do bazy danych,\n- edycja rekordu w tabeli account
+  group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   FormularzBlokowaniaUżytkownika -> AccountService: Załaduj dane do formularza blokowania użytkownika
-    activate AccountService
     AccountService -> Account: Pobierz dane do formularza blokowania użytkownika (wartość pola isEnable)
     activate Account
     Account --> AccountService: Pobrano dane do formularza blokowania użytkownika
   AccountService --> FormularzBlokowaniaUżytkownika: Załadowano dane do formularza blokowania użytkownika
+  end
   U -> FormularzBlokowaniaUżytkownika: Wybierz opcje "Zablokuj"
   note over of U: Administracyjny poziom dostępu (tzw. administrator) może wykonywać operację dla kont z poziomami dostępu: \nadministrator, właściciel lub zarządca. Użytkownik z administracyjnym poziomem dostępu nie może zablokować \noraz odblokować własnego konta.Zarządzający poziom dostępu (tzw. zarządca)  może wykonywać operację \ndla kont z poziomami dostępu właściciel oraz zarządca.
   FormularzBlokowaniaUżytkownika -> AccountService: Zatwierdź formularz blokowania konta użytkownika
-    alt użytkownik już zablokowany, isEnable = false
+      group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account,\n- edycja rekordu w tabeli account
+      AccountService -> Account: Sprawdź wartość pola isEnable obiektu Account
+      alt użytkownik już zablokowany
+      Account --> AccountService: Wartość pola isEnable obiektu Account wynosi false
     AccountService --> FormularzBlokowaniaUżytkownika: Użytkownik nie może zostać zablokowany
     FormularzBlokowaniaUżytkownika --> StronaUżytkowników: Pokaż ostrzeżenie o braku możliwości ponownego zablokowania użytkownika
     else
+      Account --> AccountService: Wartość pola isEnable obiektu Account wynosi true
     AccountService -> Account: Zmień pole isEnable obiektu Account na wartość false
     Account --> AccountService: Wartość pola isEnable została zmieniona na wartość false
     AccountService -> UZ: Wyślij wiadomość pocztową z informacją o zablokowaniu konta użytkownika
