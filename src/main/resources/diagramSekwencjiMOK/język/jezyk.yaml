@@ -3,6 +3,7 @@
     participant Strona
     participant FormularzEdycjiJęzyka
     control AccountService
+    database AccountFacade
     entity Account
 
   U -> Strona: Naciśnij przycisk "Edytuj język"
@@ -22,8 +23,11 @@
     AccountService --> FormularzEdycjiJęzyka: Zawartość wprowadzonego języka jest niepoprawna
     FormularzEdycjiJęzyka --> Strona: Pokaż ostrzeżenie o niepoprawnej zawartości wprowadzonego języka
     else zawartość wprowadzonego języka jest poprawna
-    AccountService -> Account: Zmień pole language_ obiektu Account
-    Account --> AccountService: Zmieniono wartości pola language_ obiektu Account
+    AccountService -> AccountFacade: Zmień obiekt Account
+    activate AccountFacade
+    AccountFacade -> Account: Zmień pole language_ obiektu Account
+    Account --> AccountFacade: Zmieniono wartości pola language_ obiektu Account
+    AccountFacade --> AccountService: Zmieniono obiekt Account
     AccountService --> Strona: Język został zaktualizowany
     end
     end

@@ -4,6 +4,7 @@
     participant FormularzEdycjiAdresuEmail
     participant FormularzAutoryzacjiZmianyAdresuEmail
     control AccountService
+    database AccountFacade
     entity Account
 
   U -> Strona: Naciśnij przycisk "Edytuj adres e-mail"
@@ -43,8 +44,11 @@
       FormularzAutoryzacjiZmianyAdresuEmail --> Strona: Pokaż ostrzeżenie o nieudanej zmianie adresu e-mail
       else autoryzacja czynności zmiany adresu e-mail została uzyskana
       FormularzAutoryzacjiZmianyAdresuEmail -> AccountService: Autoryzuj czynność zmiany adresu e-mail
-      AccountService -> Account: Zmień pole email obiektu Account
-      Account --> AccountService: Wartość pola email obiektu Account została zmieniona
+      AccountService -> AccountFacade: Zmień obiekt Account
+      activate AccountFacade
+      AccountFacade -> Account: Zmień pole email obiektu Account
+      Account --> AccountFacade: Wartość pola email obiektu Account została zmieniona
+      AccountFacade --> AccountService: Zmieniono obiekt Account
       AccountService --> FormularzAutoryzacjiZmianyAdresuEmail: Adres e-mail został zaktualizowany
       FormularzAutoryzacjiZmianyAdresuEmail --> Strona: Adres e-mail został zaktualizowany
       end

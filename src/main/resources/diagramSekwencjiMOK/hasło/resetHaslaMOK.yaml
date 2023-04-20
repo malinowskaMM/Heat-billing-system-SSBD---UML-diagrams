@@ -4,6 +4,7 @@ participant Strona
 participant StronaResetuHasła
 participant FormularzResetuHasła
 control AccountService
+database AccountFacade
 entity Account
 
 U -> Strona: Naciśnij przycisk "Resetuj hasło użytkownika"
@@ -47,8 +48,11 @@ alt formularz jest wypełniony niepoprawnie
 AccountService --> FormularzResetuHasła: Formularz jest wypełniony niepoprawnie
 FormularzResetuHasła --> StronaResetuHasła: Pokaż ostrzeżenie o niepoprawnie wypełnionym formularzu 
   else wprowadzone dane są poprawne
-AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
-Account --> AccountService: Wartość pola password obiektu Account została zmieniona
+  AccountService -> AccountFacade: Zmień obiekt Account
+  activate AccountFacade
+AccountFacade -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
+Account --> AccountFacade: Wartość pola password obiektu Account została zmieniona
+  AccountFacade --> AccountService: Zmieniono obiekt Account
   AccountService --> StronaResetuHasła: Hasło użytkownika zostało zaktualizowane
   end
   end

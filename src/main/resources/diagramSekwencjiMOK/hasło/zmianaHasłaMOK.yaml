@@ -3,6 +3,7 @@
     participant Strona
     participant FormularzEdycjiHasła
     control AccountService
+    database AccountFacade
     entity Account
 
   U -> Strona: Naciśnij przycisk "Edytuj hasło użytkownika"
@@ -54,8 +55,11 @@
       AccountService --> FormularzEdycjiHasła: Formularz jest wypełniony niepoprawnie
       FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niepoprawnym wypełnieniu formularza
       else formularz jest wypełniony poprawnie
-    AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu obliczonego z nowego hasła
-    Account --> AccountService: Wartość pola password obiektu Account została zmieniona
+    AccountService -> AccountFacade: Zmień obiekt Account
+      activate AccountFacade
+    AccountFacade -> Account: Zmień pole password obiektu Account na podstawie skrótu obliczonego z nowego hasła
+    Account --> AccountFacade: Wartość pola password obiektu Account została zmieniona
+    AccountFacade --> AccountService: Zmieniono obiekt Account
       AccountService --> Strona: Hasło użytkownika zostało zaktualizowane
     end
     end

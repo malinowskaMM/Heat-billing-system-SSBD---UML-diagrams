@@ -1,9 +1,10 @@
   @startuml
-    actor Admin as U
+    actor AdministratorLubZarządca as U
     participant Strona
     participant StronaUżytkownika
     participant FormularzEdycjiHasła
     control AccountService
+    database AccountFacade
     entity Account
     actor Użytkownik
 
@@ -43,9 +44,12 @@
       AccountService --> FormularzEdycjiHasła: Formularz jest wypełniony niepoprawnie
       FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niepoprawnym wypełnieniu formularza
     else wprowadzone dane są poprawne
-    AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu obliczonego z zawartości nowego hasła
+    AccountService -> AccountFacade: Zmień obiekt Account
+      activate AccountFacade
+      AccountFacade -> Account: Zmień pole password obiektu Account na podstawie skrótu obliczonego z zawartości nowego hasła
       activate Account
-    Account --> AccountService: Zmieniono wartość pola password obiektu Account
+    Account --> AccountFacade: Zmieniono wartość pola password obiektu Account
+    AccountFacade --> AccountService: Zmieniono obiekt Account
     AccountService --> StronaUżytkownika: Hasło użytkownika zostało zaktualizowane
     AccountService -> Użytkownik: Wyślij wiadomość pocztową z czasowo aktywnym linkiem do bezpośredniej zmiany hasła
     opt

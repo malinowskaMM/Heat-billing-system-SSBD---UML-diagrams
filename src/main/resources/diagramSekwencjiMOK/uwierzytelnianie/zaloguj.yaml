@@ -4,7 +4,9 @@
     participant Strona
     participant StronaLogowania
     control AccountService
+    database AccountFacade
     entity Account
+    entity LoginData
 
     U -> Strona: Naciśnij przycisk "Zaloguj"
     Strona -> StronaLogowania: Załaduj formularz logowania
@@ -31,17 +33,38 @@
     U -> StronaLogowania: Naciśnij przycisk "Zaloguj"
     StronaLogowania -> AccountService: Zatwierdź formularz logowania
 
-    group <<transaction>> RO, READ COMMITTED, zakres: wykonanie zapytania do tabeli account
-    AccountService -> Account: Sprawdź tożsamość pól email oraz password obiektu account względem wprowadzonych e-maila i hasła
-    alt wprowadzone e-mail i hasło nie są tożsame z wartościami pól email oraz password obiektu account
-    Account --> AccountService: Wprowadzone e-mail i hasło nie są tożsame z wartościami pól email oraz password obiektu account
-    AccountService --> StronaLogowania: Wprowadzony e-mail lub hasło są niepoprawne
-    StronaLogowania --> U: Pokaż ostrzeżenie o niepoprawnym adresie e-mail lub haśle
-    else wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
-    Account --> AccountService: Wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
-    AccountService --> StronaLogowania: Zwrócono token JWT
+    group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account
+    AccountService -> Account: Sprawdź tożsamość pól email oraz password obiektu Account względem wprowadzonych e-maila i hasła
+    activate Account
+    alt wprowadzone e-mail i hasło nie są tożsame z wartościami pól email oraz password obiektu Account
+    Account --> AccountService: Wprowadzone e-mail i hasło nie są tożsame z wartościami pól email oraz password obiektu Account
+    AccountService -> LoginData: Zmień wartość pola lastInvalidLoginDate
+    activate LoginData
+    LoginData --> AccountService: Zmieniono wartość pola lastInvalidLoginDate
+    AccountService -> LoginData: Zmień wartość pola lastInvalidLogicAddress
+    LoginData --> AccountService: Zmieniono wartość pola lastInvalidLogicAddress
+    AccountService -> LoginData: Zinkrementować wartość pola invalidLoginCounter
+    LoginData --> AccountService: Zinkrementowano wartość pola invalidLoginCounter
+    alt invalidLoginCounter == 3
+    group << transaction>> RW, READ COMMITTED, zakres:\n- edycja rekordu w tabeli account
+    AccountService -> AccountFacade: Zmień obiekt Account
+        activate AccountFacade
+        AccountFacade -> Account: Zmień pole isEnable obiektu Account na wartość false
+    Account --> AccountFacade: Wartość pola isEnable została zmieniona na wartość false
+        AccountFacade --> AccountService: Zmieniono obiekt Account
     StronaLogowania --> StronaUżytkownikaZalogowanego: Przenieś na stronę użytkownika zalogowanego
     end      
+    end
+    else wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
+    Account --> AccountService: Wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
+    AccountService -> LoginData: Zmień wartość pola lastValidLoginDate
+    LoginData --> AccountService: Zmieniono wartość pola lastValidLoginDate
+    AccountService -> LoginData: Zmień wartość pola lastValidLogicAddress
+    LoginData --> AccountService: Zmieniono wartość pola lastValidLogicAddress
+    AccountService -> LoginData: Ustawić wartość pola invalidLoginCounter na wartość 0
+    LoginData --> AccountService: Ustawiono wartość pola invalidLoginCounter na wartość 0
+    AccountService --> StronaLogowania: Zwrócono token JWT
+    StronaLogowania --> StronaUżytkownikaZalogowanego: Przenieś na stronę użytkownika zalogowanego
     end
       
     

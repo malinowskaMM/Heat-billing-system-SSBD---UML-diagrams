@@ -1,6 +1,7 @@
   @startuml
     actor System
     control AccountService
+  database AccountFacade
     entity Account
     entity LoginData
     entity PersonalData
@@ -13,14 +14,17 @@
     AccountService --> System: Czas na aktywacje konta minął
     group <<transaction>> RW, READ COMMITTED, zakres: usunięcie rekordu w tabeli account, login_data, personal_data, access_level_mapping
     System -> AccountService: Usuń konto użytkownika
-    activate AccountService
-    AccountService -> Account: Usuń konto użytkownika
+      activate AccountService
+    AccountService -> AccountFacade: Usuń konto użytkownika
+      activate AccountFacade
+    AccountFacade -> Account: Usuń konto użytkownika
     Account -> LoginData: Usuń obiekt LoginData
     LoginData -> PersonalData: Usuń obiekt PersonalData
     PersonalData -> AccessLevelMapping !!: Usuń obiekt AccessLevelMapping
     AccessLevelMapping --> PersonalData !!: Usunięto obiekt AccessLevelMapping
     PersonalData --> LoginData !!: Usunięto obiekt PersonalData
     LoginData --> Account !!: Usunięto obiekt LoginData
-    Account --> AccountService: Usunięto obiekt Account
+    Account --> AccountFacade: Usunięto obiekt Account
+    AccountFacade -->  AccountService: Usunięto obiekt Account
     end
     @enduml

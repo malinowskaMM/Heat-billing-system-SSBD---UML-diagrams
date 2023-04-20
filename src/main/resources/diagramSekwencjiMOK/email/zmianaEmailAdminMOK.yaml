@@ -1,9 +1,10 @@
   @startuml
-    actor Admin as U
+    actor AdministratorLubZarządca as U
     participant Strona
     participant StronaUżytkownika
     participant FormularzEdycjiAdresuEmail
     control AccountService
+    database AccountFacade
     entity Account
 
   U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
@@ -42,8 +43,11 @@
       AccountService --> FormularzEdycjiAdresuEmail: Wprowadzony adres e-mail jest już przypisany do istniejącego konta
       FormularzEdycjiAdresuEmail --> Strona: Pokaż ostrzeżenie o przypisaniu adresu e-mail do istniejącego konta
       else wprowadzony adres e-mail nie jest przypisany do żadnego już istniejącego konta
-      AccountService -> Account: Zmień pole e-mail obiektu Account
-      Account --> AccountService: Wartość pola e-mail obiektu Account została zmieniona
+      AccountService -> AccountFacade: Zmień obiekt Account
+      activate AccountFacade
+      AccountFacade -> Account: Zmień pole e-mail obiektu Account
+      Account --> AccountFacade: Wartość pola e-mail obiektu Account została zmieniona
+      AccountFacade --> AccountService: Zmieniono obiekt Account
       AccountService --> FormularzEdycjiAdresuEmail: Adres e-mail użytkownika został zaktualizowany
       FormularzEdycjiAdresuEmail --> Strona: Adres e-mail użytkownika został zaktualizowany
       end

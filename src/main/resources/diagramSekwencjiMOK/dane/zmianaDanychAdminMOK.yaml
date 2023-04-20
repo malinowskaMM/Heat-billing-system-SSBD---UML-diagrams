@@ -1,5 +1,5 @@
   @startuml
-    actor UżytkownikUwierzytelniony as U
+    actor AdministratorLubZarządca as U
     participant Strona
     participant StronaUżytkownika
     participant FormularzEdycjiDanych

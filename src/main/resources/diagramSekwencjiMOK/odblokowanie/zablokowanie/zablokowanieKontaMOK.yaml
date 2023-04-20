@@ -3,6 +3,7 @@
     participant StronaUżytkowników
     participant FormularzBlokowaniaUżytkownika
     control AccountService
+    database AccountFacade
     entity Account
     actor UżytkownikZablokowany as UZ
 
@@ -31,8 +32,11 @@
     FormularzBlokowaniaUżytkownika --> StronaUżytkowników: Pokaż ostrzeżenie o braku możliwości ponownego zablokowania użytkownika
     else
       Account --> AccountService: Wartość pola isEnable obiektu Account wynosi true
-    AccountService -> Account: Zmień pole isEnable obiektu Account na wartość false
-    Account --> AccountService: Wartość pola isEnable została zmieniona na wartość false
+    AccountService -> AccountFacade: Zmień obiekt Account
+      activate AccountFacade
+      AccountFacade -> Account: Zmień pole isEnable obiektu Account na wartość false
+    Account --> AccountFacade: Wartość pola isEnable została zmieniona na wartość false
+      AccountFacade --> AccountService: Zmieniono obiekt Account
     AccountService -> UZ: Wyślij wiadomość pocztową z informacją o zablokowaniu konta użytkownika
     AccountService --> StronaUżytkowników: Użytkownik zablokowany pomyślnie
     end
