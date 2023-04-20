@@ -12,9 +12,16 @@ entity AccessLevelMapping
 Gość -> Strona: Naciśnij przycisk\n"Zarejestruj"
 Strona -> FormularzRejestracji: Załaduj formularz rejestracyjny
 Gość -> FormularzRejestracji: Wprowadź nazwę użytkownika
+FormularzRejestracji -> AccountService: Waliduj nazwę użytkownika
+  activate AccountService
+  alt format nazwy użytkownika niepoprawny
+AccountService --> FormularzRejestracji: Format nazwy użytkownika niepoprawny
+  FormularzRejestracji --> Strona: Pokaż ostrzeżenie o niepoprawnym formacie nazwy użytkownika
+  else format nazwy użytkownika poprawny
+AccountService --> FormularzRejestracji: Format nazwy użytkownika poprawny
+  end
 group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account
 FormularzRejestracji -> AccountService: Sprawdź unikalność nazwy użytkownika
-  activate AccountService
 alt wybrana nazwa użytkownika jest zajęta
 AccountService --> FormularzRejestracji: Nazwa użytkownika zajęta
   FormularzRejestracji --> Strona: Pokaż ostrzeżenie o zajętości wybranej nazwy użytkownika
@@ -24,6 +31,13 @@ end
 end
 
 Gość -> FormularzRejestracji: Wprowadź adres e-mail
+FormularzRejestracji -> AccountService: Waliduj adres e-mail
+alt format adresu e-mail niepoprawny
+AccountService --> FormularzRejestracji: Format adresu e-mail niepoprawny
+  FormularzRejestracji --> Strona: Pokaż ostrzeżenie o niepoprawnym formacie adresu e-mail
+ else format adresu e-mail poprawny
+AccountService --> FormularzRejestracji: Format adresu e-mail poprawny
+end
 group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account
 FormularzRejestracji -> AccountService: Sprawdź unikalność adresu e-mail
   alt wybrany adres e-mail jest przypisany do istniejącego konta
@@ -76,7 +90,6 @@ Account -> PersonalData: Utwórz obiekt PersonalData
 activate PersonalData
 Account -> AccessLevelMapping: Utwórz obiekt AccessLevelMapping
   activate AccessLevelMapping
-
 AccessLevelMapping --> Account: Obiekt AccessLevelMapping został utworzony
 PersonalData --> Account: Obiekt PersonalData został utworzony
 LoginData --> Account: Obiekt LoginData został utworzony
@@ -84,20 +97,26 @@ Account --> AccountService: Obiekt Account został utworzony
 AccountService --> Gość: Wyślij wiadomość pocztową z linkiem potwierdzającym czynność rejestracji konta
 AccountService --> FormularzRejestracji: Użytkownik został utworzony
 FormularzRejestracji --> Strona: Przenieś na stronę informującą o konieczności aktywacji konta
-Gość -> FormularzPotwierdzeniaRejestracji: Przejdź na stronę o adresie url otrzymanym w wiadomości e-mail
-FormularzPotwierdzeniaRejestracji -> AccountService: Potwierdź utworzenie konta użytkownika
-AccountService -> Account: Zmień isActive na wartość true
-Account --> AccountService: Zmieniono isActive na wartość true
-AccountService --> FormularzPotwierdzeniaRejestracji: Konto użytkownika utworzone pomyślnie
-opt ponowienie wysłania wiadomości z linkiem potwierdzającym czynność rejestracji konta
-AccountService --> Gość: Wyślij wiadomość pocztową w linkiem potwierdzającym czynność rejestracji konta
+  end
 
+group Potwierdzenie utworzenia konta użytkownika \n<<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account, modyfikacja rekordu w tabeli account
 Gość -> FormularzPotwierdzeniaRejestracji: Przejdź na stronę o adresie url otrzymanym w wiadomości e-mail
 FormularzPotwierdzeniaRejestracji -> AccountService: Potwierdź utworzenie konta użytkownika
+AccountService -> Account: Sprawdź wartość pola isActive
+alt stworzenie konta użytkownika zostało juz wcześniej potwierdzone
+Account --> AccountService: Wartość pola isActive jest równa true
+AccountService --> FormularzPotwierdzeniaRejestracji: Stworzenie konta użytkownika zostało juz wcześniej potwierdzone
+FormularzPotwierdzeniaRejestracji --> Strona: Pokaż ostrzeżenie o wcześniejszym potwierdzeniu stworzenia konta użytkownika
+else stworzenie konta użytkownika nie zostało wcześniej potwierdzone
+Account --> AccountService: Wartość pola isActive jest równa false
 AccountService -> Account: Zmień isActive na wartość true
 Account --> AccountService: Zmieniono isActive na wartość true
 AccountService --> FormularzPotwierdzeniaRejestracji: Konto użytkownika utworzone pomyślnie
 end
+end
+opt ponowienie wysłania wiadomości z linkiem potwierdzającym czynność rejestracji konta
+AccountService --> Gość: Wyślij wiadomość pocztową w linkiem potwierdzającym czynność rejestracji konta
+ref over Gość, Account: Potwierdzenie utworzenia konta użytkownika
 end
 end
 
