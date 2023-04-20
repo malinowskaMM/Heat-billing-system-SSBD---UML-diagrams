@@ -2,13 +2,13 @@
     actor UżytkownikUwierzytelniony as U
     participant Strona
     participant FormularzEdycjiAdresuEmail
+    participant FormularzAutoryzacjiZmianyAdresuEmail
     control AccountService
     entity Account
 
   U -> Strona: Naciśnij przycisk "Edytuj adres e-mail"
   Strona -> FormularzEdycjiAdresuEmail: Załaduj formularz edycji adresu e-mail
-  group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account,\n- edycja rekordu tabeli account
-
+  group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   FormularzEdycjiAdresuEmail --> AccountService: Załaduj dane do formularz edycji adresu e-mail
     activate AccountService
   AccountService -> Account: Pobierz dane do formularz edycji adresu e-mail
@@ -17,28 +17,39 @@
   AccountService --> FormularzEdycjiAdresuEmail: Załadowano dane do formularza edycji adresu e-mail
   U -> FormularzEdycjiAdresuEmail: Wprowadź nowy adres e-mail
 
-  FormularzEdycjiAdresuEmail -> AccountService: Zatwierdź formularz zmiany adresu e-mail użytkownika
-    alt wprowadzony adres e-mail jest niepoprawny
-    opt format wprowadzonego adresu e-mail jest niepoprawny
+  FormularzEdycjiAdresuEmail -> AccountService: Waliduj nowy adres e-mail użytkownika
+    alt format wprowadzonego adresu e-mail jest niepoprawny
     AccountService --> FormularzEdycjiAdresuEmail: Format wprowadzonego adresu e-mail jest niepoprawny
     FormularzEdycjiAdresuEmail --> Strona: Pokaż ostrzeżenie o niepoparwnym formacie wprowadzonego adresu e-mail
-    else wprowadzony adres e-mail jest już przypisany do istniejącego konta
+    else format wprowadzonego adresu e-mail jest poprawny
     FormularzEdycjiAdresuEmail -> AccountService: Sprawdź czy wprowadzony adres e-mail jest już przypisany do istniejącego konta
+    alt wprowadzony adres e-mail jest już przypisany do istniejącego konta
     AccountService --> FormularzEdycjiAdresuEmail: Wprowadzony adres e-mail jest już przypisany do istniejącego konta
     FormularzEdycjiAdresuEmail --> Strona: Pokaż ostrzeżenie o przypisaniu adresu e-mail do istniejącego konta
-    end
-    else wprowadzony adres e-mail jest poprawny
+    else wprowadzony adres e-mail nie jest przypisany do żadnego już istniejącego konta
+    AccountService --> FormularzEdycjiAdresuEmail: Wprowadzony adres e-mail nie jest przypisany do żadnego już istniejącego konta
     group inicjonowane na podstawie przycisku "Wyślij link autoryzujący"
-    AccountService --> U: Wyślij wiadomość pocztową w linkiem autoryzującym czynność zmiany adresu e-mail
-      alt autoryzacja czynności zmiany adresu e-mail nie została uzyskana (wygaśnięcie linku
-      AccountService --> Strona: Pokaż ostrzeżenie o nieudanej zmianie adresu e-mail
+    U -> Strona: Naciśnij przycisk "Wyślij link autoryzujący"
+    Strona -> AccountService: Wyślij link autoryzujący czynność zmiany adresu e-mail
+    AccountService --> U: Wysłano wiadomość pocztową w linkiem autoryzującym czynność zmiany adresu e-mail
+    end
+    end
+    end
+    end
+    group <<transaction>> RW, READ COMMITTED, zakres:\n- edycja rekordu tabeli account
+    opt
+    U -> FormularzAutoryzacjiZmianyAdresuEmail: Przejdź do strony z linku otrzymanego w wiadomości podcztowej wysłanej na adres e-mail
+      alt autoryzacja czynności zmiany adresu e-mail nie została uzyskana (wygaśnięcie linku)
+      FormularzAutoryzacjiZmianyAdresuEmail --> Strona: Pokaż ostrzeżenie o nieudanej zmianie adresu e-mail
       else autoryzacja czynności zmiany adresu e-mail została uzyskana
+      FormularzAutoryzacjiZmianyAdresuEmail -> AccountService: Autoryzuj czynność zmiany adresu e-mail
       AccountService -> Account: Zmień pole email obiektu Account
       Account --> AccountService: Wartość pola email obiektu Account została zmieniona
-      AccountService --> Strona: Dane osobowe zostały zaktualizowane
+      AccountService --> FormularzAutoryzacjiZmianyAdresuEmail: Adres e-mail został zaktualizowany
+      FormularzAutoryzacjiZmianyAdresuEmail --> Strona: Adres e-mail został zaktualizowany
+      end
       end
     end
-    end
-    end
+
     
     @enduml
