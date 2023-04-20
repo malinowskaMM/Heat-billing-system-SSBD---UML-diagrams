@@ -1,0 +1,48 @@
+  @startuml
+    actor UżytkownikNieuwierzytelniony as U
+    participant StronaUżytkownikaZalogowanego
+    participant Strona
+    participant StronaLogowania
+    control AccountService
+    entity Account
+
+    U -> Strona: Naciśnij przycisk "Zaloguj"
+    Strona -> StronaLogowania: Załaduj formularz logowania
+    StronaLogowania --> Strona: Załadowano formularz logowania
+
+    U -> StronaLogowania: Wprowadź adres e-mail
+    StronaLogowania -> AccountService: Waliduj adres e-mail
+        alt format adresu e-mail niepoprawny
+    AccountService --> StronaLogowania: Format adresu e-mail niepoprawny
+    StronaLogowania --> Strona: Pokaż ostrzeżenie o niepoprawnym formacie adresu e-mail
+        else format adresu e-mail poprawny
+    AccountService --> StronaLogowania: Format adresu e-mail poprawny
+        end
+
+    U -> StronaLogowania: Wprowadź hasło
+    StronaLogowania -> AccountService: Waliduj hasło
+        alt format hasła niepoprawny
+    AccountService --> StronaLogowania: Format hasła niepoprawny
+    StronaLogowania --> Strona: Pokaż ostrzeżenie o niepoprawnym formacie hasła
+        else format hasła poprawny
+    AccountService --> StronaLogowania: Format hasła poprawny
+        end
+
+    U -> StronaLogowania: Naciśnij przycisk "Zaloguj"
+    StronaLogowania -> AccountService: Zatwierdź formularz logowania
+
+    group <<transaction>> RO, READ COMMITTED, zakres: wykonanie zapytania do tabeli account
+    AccountService -> Account: Sprawdź tożsamość pól email oraz password obiektu account względem wprowadzonych e-maila i hasła
+    alt wprowadzone e-mail i hasło nie są tożsame z wartościami pól email oraz password obiektu account
+    Account --> AccountService: Wprowadzone e-mail i hasło nie są tożsame z wartościami pól email oraz password obiektu account
+    AccountService --> StronaLogowania: Wprowadzony e-mail lub hasło są niepoprawne
+    StronaLogowania --> U: Pokaż ostrzeżenie o niepoprawnym adresie e-mail lub haśle
+    else wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
+    Account --> AccountService: Wprowadzone e-mail i hasło są tożsame z wartościami pól email oraz password obiektu account
+    AccountService --> StronaLogowania: Zwrócono token JWT
+    StronaLogowania --> StronaUżytkownikaZalogowanego: Przenieś na stronę użytkownika zalogowanego
+    end      
+    end
+      
+    
+      @enduml

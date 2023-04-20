@@ -1,0 +1,28 @@
+  @startuml
+    actor UżytkownikUwierzytelniony as U
+    participant Strona
+    participant StronaKonta
+    control AccountService
+    entity Account
+    entity LoginData
+    entity PersonalData
+    entity AccessLevelMapping
+ 
+    U ->  Strona: Naciśnij przycisk "Szczegóły konta"
+    group <<transaction>> RO, READ COMMITTED, zakres: wykonanie zapytania do tabel account, login_data, personal_data, access_level_mapping
+    Strona -> StronaKonta: Załaduj szczegółowe informacje o koncie
+    StronaKonta -> AccountService: Pobierz szczegółowe informacje o koncie
+    AccountService -> Account: Pobierz informacje o koncie
+    Account -> LoginData: Pobierz informacje o koncie
+    LoginData -> PersonalData: Pobierz informacje o koncie
+    PersonalData -> AccessLevelMapping: Pobierz informacje o koncie
+    AccessLevelMapping --> PersonalData: Pobrano informacje o koncie
+    PersonalData --> LoginData: Pobrano informacje o koncie
+    LoginData --> Account: Pobrano informacje o koncie
+    Account --> AccountService: Pobrano informacje o koncie
+    AccountService --> StronaKonta: Wyświetlono szczegółowe informacje o koncie
+    end
+    
+    
+    
+    @enduml

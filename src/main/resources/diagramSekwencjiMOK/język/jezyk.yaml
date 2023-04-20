@@ -1,0 +1,32 @@
+  @startuml
+    actor UżytkownikUwierzytelniony as U
+    participant Strona
+    participant FormularzEdycjiJęzyka
+    control AccountService
+    entity Account
+
+  U -> Strona: Naciśnij przycisk "Edytuj język"
+  Strona -> FormularzEdycjiJęzyka: Załaduj formularz edycji języka
+  group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
+  FormularzEdycjiJęzyka -> AccountService: Załaduj bieżący język do formularza edycji języka
+    activate AccountService
+    AccountService -> Account: Pobierz bieżący język do formularza edycji języka
+    activate Account
+    Account --> AccountService: Pobrano bieżący język do formularza edycji języka
+  AccountService --> FormularzEdycjiJęzyka: Załadowano bieżący język do formularza edycji języka
+    end
+  U -> FormularzEdycjiJęzyka: Wprowadź język
+  group << transaction>> RW, READ COMMITTED, zakres: \n- edycja rekordu w tabeli account
+  FormularzEdycjiJęzyka -> AccountService: Waliduj język
+    alt zawartość wprowadzonego języka jest niepoprawna (inny niż tekst "PL", "EN")
+    AccountService --> FormularzEdycjiJęzyka: Zawartość wprowadzonego języka jest niepoprawna
+    FormularzEdycjiJęzyka --> Strona: Pokaż ostrzeżenie o niepoprawnej zawartości wprowadzonego języka
+    else zawartość wprowadzonego języka jest poprawna
+    AccountService -> Account: Zmień pole language_ obiektu Account
+    Account --> AccountService: Zmieniono wartości pola language_ obiektu Account
+    AccountService --> Strona: Język został zaktualizowany
+    end
+    end
+    
+    
+    @enduml

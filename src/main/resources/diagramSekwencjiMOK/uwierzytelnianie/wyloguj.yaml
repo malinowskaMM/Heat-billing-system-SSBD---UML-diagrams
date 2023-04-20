@@ -1,0 +1,11 @@
+  @startuml
+    actor UżytkownikUwierzytelniony as U
+    participant Strona
+
+
+  U -> Strona: Naciśnij przycisk "Wyloguj"
+  Strona -> Strona: Porzuć token JWT
+  Strona --> U: Wylogowano  
+    
+    
+    @enduml
