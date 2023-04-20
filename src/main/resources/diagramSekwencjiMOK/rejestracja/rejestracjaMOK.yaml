@@ -9,6 +9,7 @@ entity Account
 entity LoginData
 entity PersonalData
 entity AccessLevelMapping
+entity Owner
 
 Gość -> Strona: Naciśnij przycisk\n"Zarejestruj"
 Strona -> FormularzRejestracji: Załaduj formularz rejestracyjny
@@ -76,6 +77,25 @@ else format danych osobowych poprawny
 AccountService --> FormularzRejestracji: Format danych osobowych poprawny
   end
 
+Gość -> FormularzRejestracji: Wprowadź numer telefonu
+FormularzRejestracji -> AccountService: Waliduj numer telefonu
+  alt format numeru telefonu niepoprawny
+AccountService --> FormularzRejestracji: Format numeru telefonu niepoprawny
+FormularzRejestracji --> Strona: Pokaż ostrzeżenie o niepoprawnym formacie numeru telefonu
+  else format numeru telefonu poprawny
+AccountService --> FormularzRejestracji: Format numeru telefonu poprawny
+  end
+
+group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli owner
+FormularzRejestracji -> AccountService: Sprawdź unikalność numeru telefonu
+  alt wybrany numer telefonu jest przypisany do istniejącego konta
+AccountService --> FormularzRejestracji: Numer telefonu przypisany do istniejącego konta
+FormularzRejestracji --> Strona: Pokaż ostrzeżenie o przypisaniu numeru telefonu do istniejącego konta
+  else wybrany numer telefonu nie jest przypisany do istniejącego konta
+AccountService --> FormularzRejestracji: Numer telefonu poprawny
+  end
+  end
+
 
 Gość -> FormularzRejestracji: Zatwierdź formularz rejestracyjny
   alt formularz jest wypełniony niepoprawnie
@@ -93,6 +113,9 @@ Account -> PersonalData: Utwórz obiekt PersonalData
 activate PersonalData
 Account -> AccessLevelMapping: Utwórz obiekt AccessLevelMapping
   activate AccessLevelMapping
+  AccessLevelMapping -> Owner: Utwórz obiekt Owner
+  activate Owner
+  Owner --> AccessLevelMapping: Obiekt Owner został utworzony
 AccessLevelMapping --> Account: Obiekt AccessLevelMapping został utworzony
 PersonalData --> Account: Obiekt PersonalData został utworzony
 LoginData --> Account: Obiekt LoginData został utworzony

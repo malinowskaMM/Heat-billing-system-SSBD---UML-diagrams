@@ -41,7 +41,7 @@
       else format wprowadzonego imienia jest poprawny
       AccountService -> PersonalData: Zmień pole firstName obiektu PersonalData
       PersonalData --> AccountService: Zmieniono wartości pola firstName obiektu PersonalData
-      AccountService --> Strona: Imię zostały zaktualizowane
+      AccountService --> Strona: Imię zostało zaktualizowane
       end
       else edycja nazwiska (pole surname)
   U -> FormularzEdycjiDanych: Wprowadź edytowane nazwisko
@@ -52,7 +52,7 @@
       else format wprowadzonego nazwiska jest poprawny
       AccountService -> PersonalData: Zmień pole surname obiektu PersonalData
       PersonalData --> AccountService: Zmieniono wartości pola surname obiektu PersonalData
-      AccountService --> Strona: Nazwisko zostały zaktualizowane
+      AccountService --> Strona: Nazwisko zostało zaktualizowane
       end
       end  
     end
