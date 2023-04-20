@@ -8,30 +8,42 @@
     actor Użytkownik
 
   U -> Strona: Naciśnij przycisk "Wyświetl liste użytkowników"
+  group <<transaction>> RO, READ COMMITTED, zakres:  wykonanie zapytania do tabeli account
   Strona -> AccountService: Wczytaj listę kont użytkowników
     activate AccountService
   AccountService --> Strona: Wczytano listę kont użytkowników
+  end
   U -> Strona : Wybierz konto użytkownika
   Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
+  group <<transaction>> RW, READ COMMITTED, zakres: wykonanie zapytania do tabeli account
   StronaUżytkownika -> AccountService: Wczytaj szczegóły konta użytkownika
   AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
+  end
   U -> StronaUżytkownika: Naciśnij przycisk "Edytuj hasło użytkownika"
   StronaUżytkownika -> FormularzEdycjiHasła: Załaduj formularz edycji hasła użytkownika
   U -> FormularzEdycjiHasła: Wypełnij formularz zmiany hasła (nowe hasło, hasło potwierdzające)
   group <<transaction>> RW, READ COMMITTED, zakres: edycja rekordu tabeli account
   FormularzEdycjiHasła -> AccountService: Zatwierdź formularz zmiany hasła użytkownika
-    alt wprowadzone dane są niepoprawne
-    opt nowe hasło nie jest zgodne z przyjętą polityką (hasło nie krótsze niż 8 znaków)
-    AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
-    FormularzEdycjiHasła --> StronaUżytkownika: Pokaż ostrzeżenie o niezgodności hasła z polityką
-
-    else nowe hasło nie jest tożsame z hasłem potwierdzającym
-    AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
-    FormularzEdycjiHasła --> StronaUżytkownika: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
-
-    end
+      
+      alt nowe hasło nie jest zgodne z przyjętą polityką (hasło niekrótsze niż 8 znaków)
+      AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest zgodne z przyjętą polityką
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niezgodności hasła z polityką
+      else nowe hasło jest zgodne z przyjętą polityką
+      AccountService --> FormularzEdycjiHasła: Nowe hasło jest zgodne z przyjętą polityką
+      end
+      
+      alt nowe hasło nie jest tożsame z hasłem potwierdzającym
+      AccountService --> FormularzEdycjiHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
+      else nowe hasło jest tożsame z hasłem potwierdzającym
+      AccountService --> FormularzEdycjiHasła: Nowe hasło jest tożsame z hasłem potwierdzającym
+      end
+      
+      alt formularz jest wypełniony niepoprawnie
+      AccountService --> FormularzEdycjiHasła: Formularz jest wypełniony niepoprawnie
+      FormularzEdycjiHasła --> Strona: Pokaż ostrzeżenie o niepoprawnym wypełnieniu formularza
     else wprowadzone dane są poprawne
-    AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
+    AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu obliczonego z zawartości nowego hasła
       activate Account
     Account --> AccountService: Zmieniono wartość pola password obiektu Account
     AccountService --> StronaUżytkownika: Hasło użytkownika zostało zaktualizowane

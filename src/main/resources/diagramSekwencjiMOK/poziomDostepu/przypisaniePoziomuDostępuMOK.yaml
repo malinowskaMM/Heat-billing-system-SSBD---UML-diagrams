@@ -13,13 +13,16 @@
   actor Użytkownik
 
   U -> Strona: Naciśnij przycisk "Wyświetl listę użytkowników"
+  group << transaction>> RO, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   Strona -> AccountService: Wczytaj listę kont użytkowników
   AccountService --> Strona: Wczytano listę kont użytkowników
+  end
   U -> Strona: Wybierz konto użytkownika
   Strona -> StronaUżytkownika: Wczytaj szczegóły konta użytkownika
+  group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   StronaUżytkownika -> AccountService: Wczytaj szczegóły konta użytkownika
   AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
-
+  end
   U -> StronaUżytkownika: Naciśnij przycisk "Dodaj poziom dostępu"
   StronaUżytkownika -> FormularzPrzyznawaniaPoziomuDostępu: Załaduj formularz edycji dodania poziomu dostępu
 

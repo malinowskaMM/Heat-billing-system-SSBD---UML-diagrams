@@ -7,9 +7,11 @@
     actor UżytkownikZablokowany as UZ
 
   U -> StronaUżytkowników: Naciśnij przycisk "Wyświetl liste użytkowników"
+  group << transaction>> RO, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   StronaUżytkowników -> AccountService: Wczytaj listę kont użytkowników
     activate AccountService
   AccountService --> StronaUżytkowników: Wczytano listę kont użytkowników
+  end
   StronaUżytkowników -> FormularzBlokowaniaUżytkownika: Załaduj formularz blokowania wybranego użytkownika
   group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli account
   FormularzBlokowaniaUżytkownika -> AccountService: Załaduj dane do formularza blokowania użytkownika

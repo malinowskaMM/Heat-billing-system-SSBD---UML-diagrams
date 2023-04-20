@@ -8,41 +8,50 @@ entity Account
 
 U -> Strona: Naciśnij przycisk "Resetuj hasło użytkownika"
 Strona -> AccountService: Resetuj hasło użytkownika
+  group <<transaction>> RW, READ COMMITTED, zakres:\n- wykonanie zapytania do tabeli account
   activate AccountService
   AccountService -> Account: Sprawdź wartości pól isActive oraz isEnable
-  activate Account
+activate Account
  alt isActive przyjmuje wartość false lub isEnable przyjmuje wartość false lub oba przyjmują wartość false
   Account --> AccountService: Zwrócono wartości pól isActive oraz isEnable
   AccountService --> Strona: Przenieś do Strona z informacją o braku możliwości restartu hasła z powodu zablokowania użytkownika lub braku aktywacji konta użytkownika
-  AccountService --> 
   else isActive przyjmuje wartość true oraz isEnable przyjmuje wartość true
   Account --> AccountService: Zwrócono wartości pól isActive oraz isEnable
-group inicjonowane na podstawie przycisku "Wyślij link resetujący hasło użytkownika"
 AccountService --> U: Wyślij wiadomość pocztową w linkiem do resetu hasła użytkownika
 AccountService --> Strona: Przenieś do Strona z informacją o wysłaniu wiadomosci pocztowej z linkiem do resetu hasła użytkownika
+end
+end
+opt
 U -> StronaResetuHasła: Załaduj stronę resetu hasła
 StronaResetuHasła -> FormularzResetuHasła: Załaduj formularz resetu hasła
 FormularzResetuHasła --> StronaResetuHasła: Załadowano formularz resetu hasła
 U -> FormularzResetuHasła: Wypełnij formularz resetu hasła (nowe hasło, hasło potwierdzające)
-group <<transaction>> RW, READ COMMITTED, zakres:\n- wykonanie zapytania do tabeli account,\n- edycja rekordu tabeli account
-
+group <<transaction>> RW, READ COMMITTED, zakres:\n- edycja rekordu tabeli account
 FormularzResetuHasła -> AccountService: Zatwierdź formularz resetu hasła użytkownika
-alt wprowadzone dane są niepoprawne
-  opt nowe hasło nie jest zgodne z przyjętą polityką (hasło nie krótsze niż 8 znaków)
-AccountService --> FormularzResetuHasła: Nowe hasło nie jest zgodne z przyjętą polityką
-FormularzResetuHasła --> StronaResetuHasła: Pokaż ostrzeżenie o niezgodności hasła z polityką
 
-  else nowe hasło nie jest tożsame z hasłem potwierdzającym
+alt nowe hasło nie jest zgodne z polityką haseł
+AccountService --> FormularzResetuHasła: Nowe hasło nie jest zgodne z polityką
+FormularzResetuHasła --> StronaResetuHasła: Pokaż ostrzeżenie o niezgodności hasła z polityką
+else nowe hasło jest zgodne z polityką haseł
+AccountService --> FormularzResetuHasła: Nowe hasło jest zgodne z polityką
+end
+
+alt nowe hasło nie jest tożsame z hasłem potwierdzającym
 AccountService --> FormularzResetuHasła: Nowe hasło nie jest tożsame z hasłem potwierdzającym
 FormularzResetuHasła --> StronaResetuHasła: Pokaż ostrzeżenie o nietożsamości nowego hasła z hasłem potwierdzającym
+else nowe hasło jest tożsame z hasłem potwierdzającym
+AccountService --> FormularzResetuHasła: Nowe hasło jest tożsame z hasłem potwierdzającym
 end
+
+alt formularz jest wypełniony niepoprawnie
+AccountService --> FormularzResetuHasła: Formularz jest wypełniony niepoprawnie
+FormularzResetuHasła --> StronaResetuHasła: Pokaż ostrzeżenie o niepoprawnie wypełnionym formularzu 
   else wprowadzone dane są poprawne
 AccountService -> Account: Zmień pole password obiektu Account na podstawie skrótu nowego hasła
 Account --> AccountService: Wartość pola password obiektu Account została zmieniona
   AccountService --> StronaResetuHasła: Hasło użytkownika zostało zaktualizowane
   end
   end
-end
 end
 
 @enduml
