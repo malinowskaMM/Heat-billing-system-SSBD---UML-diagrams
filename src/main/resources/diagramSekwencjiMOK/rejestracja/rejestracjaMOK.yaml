@@ -4,6 +4,7 @@ participant Strona
 participant FormularzRejestracji
 participant FormularzPotwierdzeniaRejestracji
 control AccountService
+database AccountFacade
 entity Account
 entity LoginData
 entity PersonalData
@@ -82,7 +83,9 @@ FormularzRejestracji -> Strona: Pokaż ostrzeżenie o niepoprawnym wypełnieniu 
   else formularz jest wypełniony poprawnie
 group <<transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytań do tabel: account, login_data, personal_data, access_level_mapping\n- dodanie rekordu do tabeli account,\n- dodanie rekordu do tabeli login_data,\n- dodanie rekordu do tabeli personal_data,\n- dodanie rekordu do tabeli access_level_mapping
 FormularzRejestracji -> AccountService: Utwórz użytkownika
-AccountService -> Account: Utwórz obiekt Account
+AccountService -> AccountFacade: Utwórz obiekt Account
+  activate AccountFacade
+AccountFacade -> Account: Utwórz obiekt Account
 activate Account
 Account -> LoginData: Utwórz obiekt LoginData
 activate LoginData
@@ -93,7 +96,8 @@ Account -> AccessLevelMapping: Utwórz obiekt AccessLevelMapping
 AccessLevelMapping --> Account: Obiekt AccessLevelMapping został utworzony
 PersonalData --> Account: Obiekt PersonalData został utworzony
 LoginData --> Account: Obiekt LoginData został utworzony
-Account --> AccountService: Obiekt Account został utworzony
+Account --> AccountFacade: Obiekt Account został utworzony
+  AccountFacade --> AccountService: Obiekt Account został utworzony
 AccountService --> Gość: Wyślij wiadomość pocztową z linkiem potwierdzającym czynność rejestracji konta
 AccountService --> FormularzRejestracji: Użytkownik został utworzony
 FormularzRejestracji --> Strona: Przenieś na stronę informującą o konieczności aktywacji konta
@@ -109,8 +113,10 @@ AccountService --> FormularzPotwierdzeniaRejestracji: Stworzenie konta użytkown
 FormularzPotwierdzeniaRejestracji --> Strona: Pokaż ostrzeżenie o wcześniejszym potwierdzeniu stworzenia konta użytkownika
 else stworzenie konta użytkownika nie zostało wcześniej potwierdzone
 Account --> AccountService: Wartość pola isActive jest równa false
-AccountService -> Account: Zmień isActive na wartość true
-Account --> AccountService: Zmieniono isActive na wartość true
+AccountService -> AccountFacade: Zmień obiekt Account
+AccountFacade -> Account: Zmień isActive na wartość true
+Account --> AccountFacade: Zmieniono isActive na wartość true
+AccountFacade --> AccountService: Zmieniono obiekt Account
 AccountService --> FormularzPotwierdzeniaRejestracji: Konto użytkownika utworzone pomyślnie
 end
 end
