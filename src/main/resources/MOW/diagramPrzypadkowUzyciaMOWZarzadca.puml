@@ -12,9 +12,6 @@
     usecase "17. Modyfikowanie właściciela lokalu" as MOW17
     usecase "18. Modyfikowanie lokalu w budynku" as MOW18
     usecase "5. Modyfikowanie lokalu w budynku" as MOW5
-    usecase "24. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW24
-    usecase "21. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania części wspólnej" as MOW21
-    usecase "23. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW23
     usecase "12. Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW12
     usecase "7. Wyświetlenie wielkości zaliczek" as MOW7
     usecase "11. Wprowadzenie współczynnika modyfikacji wielkości zaliczki" as MOW11
@@ -39,10 +36,6 @@
 
   MOW2 ..> MOW7: <<include>>
   MOW3 <.. MOW2: <<extend>>
-
-  MOW7 ..> MOW24: <<include>>
-  MOW7 ..> MOW21: <<include>>
-  MOW7 ..> MOW23: <<include>>
 
   MOW6 ..> MOW5: <<include>>
   MOW5 <.. MOW9: <<extend>>
