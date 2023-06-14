@@ -3,66 +3,46 @@
     actor Zarządca as z
 
     rectangle MOW {
-    usecase "Dodanie budynku" as MOW3
-    usecase "Dodanie lokalu w budynku" as MOW4
-    usecase "Wprowadzenie wartości odczytu \n z węzła cieplnego" as MOW1
-    usecase "Wprowadzenie współczynnika podziału \n użycia  dostarczonego ciepła \n na ogrzanie lokali i wody" as MOW2
-    usecase "Modyfikacja lokalu w budynku" as MOW5
-    usecase "Wprowadzenie wartości \n kosztu ciepła dostarczonego \n do węzła ciepłowniczego" as MOW6
-    usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW12
-    usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania części wspólnej" as MOW12A
-    usecase "Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW13
-    usecase "Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW14
-    usecase "Wyświetlenie bilansu kosztu zużytego ciepła" as MOW16
-    usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie powierzchni lokalu \n względem wpłaconych zaliczek" as MOW8
-    usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie części wspólnej \n względem wpłaconych zaliczek" as MOW9
-    usecase "Wyświetlenie bilansu kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zaliczek" as MOW10
-    usecase "Wyświetlenie wielkości zaliczki" as MOW17
-    usecase "Wprowadź współczynnik modyfikacji wielkości zaliczki" as MOW18
-    usecase "Wyświetlanie listy budynków \n podłączonych do węzła" as MOW19
-    usecase "Wyświetlanie listy lokali w budynku" as MOW20
-    usecase "Wyświetlenie parametrów węzła" as MOW21
-    usecase "Wyświetlenie raportu" as MOW22
-    usecase "Wyświetlanie kosztu ogrzania \n 1 metra kwadratowego powierzchni" as MOW24
-    usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
-    usecase "Wyświetlenie raportów" as MOW26
-    usecase "Wyświetlenie jednostkowego kosztu ogrzania" as MOW27
-    usecase "Modyfikacja właściciela lokalu" as MOW28
+    usecase "16. Dodanie budynku" as MOW136
+    usecase "15. Dodanie lokalu w budynku" as MOW135
+    usecase "13. Wprowadzenie danych z faktury wraz\n z współczynnikiem podziału zużycia" as MOW13
+    usecase "5. Modyfikowanie lokalu w budynku" as MOW5
+    usecase "24. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW24
+    usecase "21. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania części wspólnej" as MOW21
+    usecase " 23. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW23
+    usecase "12. Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW12
+    usecase "7. Wyświetlenie wielkości zaliczek" as MOW7
+    usecase "11. Wprowadzenie współczynnika modyfikacji wielkości zaliczki" as MOW11
+    usecase "6. Wyświetlanie listy budynków \n podłączonych do węzła" as MOW6
+    usecase "5. Wyświetlanie listy lokali w budynku" as MOW5
+    usecase "4. Wyświetlenie parametrów węzła" as MOW4
+    usecase "2. Wyświetlenie raportu" as MOW2
+    usecase "3. Wyświetlenie raportów" as MOW3
+    usecase "1. Wyświetlenie jednostkowego kosztu ogrzania" as MOW1
     }
 
-  MOW19 <.. MOW3: <<extend>>
-  MOW20 <.. MOW4: <<extend>>
-  MOW20 <.. MOW5: <<extend>>
-  MOW21 <.. MOW1: <<extend>>
-  MOW21 <.. MOW2: <<extend>>
-  MOW21 <.. MOW6: <<extend>>
-  MOW5 <.. MOW14: <<extend>>
+  MOW6 <.. MOW136: <<extend>>
+  MOW5 <.. MOW135: <<extend>>
+  MOW4 <.. MOW13: <<extend>>
+  MOW5 <.. MOW12: <<extend>>
 
-  MOW22 ..> MOW16: <<include>>
-  MOW22 ..> MOW17: <<include>>
-  MOW26 <.. MOW22: <<extend>>
-  MOW27 ..> MOW24: <<include>>
-  MOW27 ..> MOW25: <<include>>
+  MOW2 ..> MOW7: <<include>>
+  MOW3 <.. MOW2: <<extend>>
 
-  MOW16 ..> MOW8: <<include>>
-  MOW16 ..> MOW9: <<include>>
-  MOW16 ..> MOW10: <<include>>
+  MOW7 ..> MOW24: <<include>>
+  MOW7 ..> MOW21: <<include>>
+  MOW7 ..> MOW23: <<include>>
 
-  MOW17 ..> MOW12: <<include>>
-  MOW17 ..> MOW12A: <<include>>
-  MOW17 ..> MOW13: <<include>>
-  MOW17 <.. MOW18: <<extend>>
-
-  MOW19 ..> MOW20: <<include>>
-  MOW4 <.. MOW28: <<extend>>
-  MOW5 <.. MOW28: <<extend>>
+  MOW6 ..> MOW5: <<include>>
+  MOW5 ..> MOW11: <<include>>
 
 
 
-    z -- MOW26
-    z -- MOW21
-    z -- MOW19
 
-    z -- MOW27
+    z -- MOW3
+    z -- MOW4
+    z -- MOW6
+
+    z -- MOW1
 
     @enduml
