@@ -4,12 +4,8 @@
     actor Gosc as g
     
     rectangle MOW {
-    usecase "Wyświetlanie kosztu ogrzania \n 1 metra kwadratowego powierzchni" as MOW24
-    usecase "Wyświetlanie kosztu ogrzania \n 1 metra szesciennego wody" as MOW25
-    usecase "Wyświetlenie raportu" as MOW26
+    usecase "1. Wyświetlenie raportu jednostkowego kosztu ogrzania" as MOW1
     }
-  MOW26 ..> MOW24: <<include>>
-  MOW26 ..> MOW25: <<include>>
 
-    g -- MOW26
+    g -- MOW1
     @enduml

@@ -3,33 +3,19 @@
         actor System as s
 
         rectangle MOW {
-        usecase "Obliczenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW12
-        usecase "Obliczenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW13
-        usecase "Obliczenie bilansu kosztu zużytego ciepła" as MOW16
-        usecase "Obliczenie bilansu kosztu zużytego \n ciepła na ogrzanie powierzchni lokalu \n względem wpłaconych zaliczek" as MOW8
-        usecase "Obliczenie bilansu kosztu zużytego \n ciepła na ogrzanie części wspólnej \n względem wpłaconych zaliczek" as MOW9
-        usecase "Obliczenie bilansu kosztu zużytego \n ciepła na ogrzanie wody \n względem wpłaconych zaliczek" as MOW10
-        usecase "Obliczenie wielkości zaliczki" as MOW17
-        usecase "Wygenerowanie rocznego raportu \n dotyczącego rozliczenia ciepła" as MOW18
-        usecase "Obliczenie wielkości zaliczki \n na poczet ogrzewania części wspólnej" as MOW19
-        usecase "Aktualizowanie raportu rocznego" as MOW20
+        usecase "24. Obliczenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW24
+        usecase "23. Obliczenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW23
+        usecase "19. Aktualizacja całkowitych kosztów w raportach rocznych" as MOW19
+        usecase "20. Wygenerowanie rocznego raportu \n dotyczącego rozliczenia ciepła" as MOW20
+        usecase "21. Obliczenie wielkości zaliczki \n na poczet ogrzewania części wspólnej" as MOW21
         }
 
-    MOW18 ..> MOW17: <<include>>
-    MOW18 ..> MOW16: <<include>>
+    MOW20 ..> MOW19: <<include>>
 
-    MOW16 ..> MOW8 : <<include>>
-    MOW16 ..> MOW9 : <<include>>
-    MOW16 ..> MOW10 : <<include>>
+    MOW19 ..> MOW24: <<include>>
+    MOW19 ..> MOW23: <<include>>
+    MOW19 ..> MOW21: <<include>>
 
-    MOW17 ..> MOW12: <<include>>
-    MOW17 ..> MOW13: <<include>>
-    MOW17 ..> MOW19: <<include>>
+        s -- MOW20
 
-    MOW18 <.. MOW20: <<extend>>
-    MOW20 ..> MOW17: <<include>>
-    MOW20 ..> MOW16: <<include>>
-
-        s -- MOW18
-
-        @enduml
+@enduml
