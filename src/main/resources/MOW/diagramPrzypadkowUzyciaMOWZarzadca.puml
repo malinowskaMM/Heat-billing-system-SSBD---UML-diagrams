@@ -1,10 +1,11 @@
   @startuml
     left to right direction
+
     actor Zarządca as z
 
     rectangle MOW {
-    usecase "16. Dodanie budynku" as MOW136
-    usecase "15. Dodanie lokalu w budynku" as MOW135
+    usecase "16. Dodanie budynku" as MOW16
+    usecase "15. Dodanie lokalu w budynku" as MOW15
     usecase "12. Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW12
     usecase "14. Wprowadzenie predykcji zużycia \n wodomierza ciepłej wody" as MOW14
     usecase "13. Wprowadzenie danych z faktury wraz\n z współczynnikiem podziału zużycia" as MOW13
@@ -24,11 +25,13 @@
     usecase "3. Wyświetlenie raportów" as MOW3
     usecase "1. Wyświetlenie jednostkowego kosztu ogrzania" as MOW1
     usecase "9. Wyświetlenie lokalu" as MOW9
+    usecase "22. Obliczenie miesięcznego rozliczenia dla lokalu" as MOW22
     }
 
-  MOW6 <.. MOW136: <<extend>>
+  MOW6 <.. MOW16: <<extend>>
   MOW4 <.. MOW13: <<extend>>
-  MOW5 <.. MOW135: <<extend>>
+  MOW13 ..> MOW22: <<include>>
+  MOW5 <.. MOW15: <<extend>>
   MOW9 <.. MOW12: <<extend>>
   MOW9 <.. MOW14: <<extend>>
   MOW9 <.. MOW17: <<extend>>
@@ -44,14 +47,10 @@
   MOW6 ..> MOW5: <<include>>
   MOW5 <.. MOW9: <<extend>>
   MOW5 ..> MOW11: <<include>>
+  MOW6 <.. MOW3: <<extend>>
 
-
-
-
-    z -- MOW3
     z -- MOW4
     z -- MOW6
-
     z -- MOW1
 
     @enduml
