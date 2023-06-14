@@ -1,6 +1,6 @@
 @startuml
 
-top to bottom direction
+left to right direction
 skinparam linetype ortho
 class MonthPayoff {
 - Long id
@@ -8,8 +8,8 @@ class MonthPayoff {
 - BigDecimal waterHeatingUnitCost
 - BigDecimal centralHeatingUnitCost
 - BigDecimal hotWaterConsumption
-- Place place
-- Owner owner
+}
+class Owner {
 }
 class Place {
 - Long id
@@ -18,21 +18,12 @@ class Place {
 - Boolean hotWaterConnection
 - Boolean centralHeatingConnection
 - BigDecimal predictedHotWaterConsumption
-- List<Advance> advances
-- Building building
-- Owner owner
-- List<HotWaterEntry> hotWaterEntries
-- List<MonthPayoff> monthPayoffs
-- List<AnnualBalance> annualBalances
 + String messageToSign()
 }
 class Building {
 - Long id
 - BigDecimal totalArea
 - BigDecimal communalAreaAggregate
-- Address address
-- List<Place> places
-- HeatDistributionCentre heatDistributionCentre
 + String messageToSign()
 }
 class Address {
@@ -42,12 +33,6 @@ class Address {
 - String city
 - String postalCode
 }
-class Owner {
-- String phoneNumber
-+ boolean equals(Object)
-+ int hashCode()
-+ String messageToSign()
-}
 class HotWaterAdvance {
 - BigDecimal hotWaterAdvanceValue
 }
@@ -55,8 +40,6 @@ class HotWaterEntry {
 - Long id
 - LocalDate date
 - BigDecimal entryValue
-- Place place
-- Manager manager
 + String messageToSign()
 }
 class PastQuarterHotWaterPayoff {
@@ -65,13 +48,9 @@ class PastQuarterHotWaterPayoff {
 - Integer daysNumberInQuarter
 }
 class Manager {
-- String license
-+ String messageToSign()
 }
 class HeatDistributionCentre {
 - Long id
-- List<Building> buildings
-- List<HeatDistributionCentrePayoff> heatDistributionCentrePayoffs
 }
 abstract class Advance {
 # Long id
@@ -84,8 +63,6 @@ class HeatDistributionCentrePayoff {
 - BigDecimal consumption
 - BigDecimal consumptionCost
 - BigDecimal heatingAreaFactor
-- HeatDistributionCentre heatDistributionCentre
-- Manager manager
 }
 class AnnualBalance {
 - Long id
@@ -119,5 +96,31 @@ class HeatingPlaceAndCommunalAreaAdvance {
   HeatDistributionCentre "1" -- "many" HeatDistributionCentrePayoff
   HeatDistributionCentre "1" o-- "many" Building
   Building "1" *-- "1" Address
+
+  note left of Manager
+    Manager, Owner is placed in MOK class diagram
+  end note
+
+  note right of HeatingPlaceAndCommunalAreaAdvance
+  advanceChangeFactor is inserted once per quarter
+  end note
+
+
+  note right of Building
+  communalAreaAggregate = totalArea - sum(Place.area)
+  end note
+
+  note left of Place
+  Place can have following types of connection:
+    - hot water connection,
+    - central heating connection,
+    - hot water connection and central heating connection,
+    - no connection.
+  end note
+    legend top
+    All classes in MOW extend AbstractEntity. Implementation of AbstractEntity Class is placed in MOK.
+    All classes use Lombok for constructors, getters and setters.
+    end legend
+
 
 @enduml
