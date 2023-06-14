@@ -22,7 +22,7 @@
     AccountService --> StronaUżytkownika: Wczytano szczegóły konta użytkownika
     end
     U -> StronaUżytkownika: Naciśnij przycisk "Usuń poziom dostępu"
-    StronaUżytkownika -> FormularzOdbieraniaPoziomuDostępu: Załaduj formularz edycji dodania poziomu dostępu
+    StronaUżytkownika -> FormularzOdbieraniaPoziomuDostępu: Załaduj formularz odebrania poziomu dostępu
 
     group << transaction>> RW, READ COMMITTED, zakres: \n- wykonanie zapytania do tabeli: access_level_mapping, admin, owner, manager,\n- usuwanie rekordu w tabeli access_level_mapping,\n- usuwanie rekordu w tabeli admin, ,\n- usuwanie rekordu w tabeli owner,\n- usuwanie rekordu w tabeli manager
     note over of U: Administracyjny poziom dostępu (tzw. administrator) odpowiada \nza przydzielanie i odbieranie poziomów dostępu: administrator, \nzarządca oraz właściciel. Użytkownik z administracyjnym \npoziomem dostępu nie może modyfikować własnego poziomu dostępu.

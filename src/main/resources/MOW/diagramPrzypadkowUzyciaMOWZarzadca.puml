@@ -5,11 +5,15 @@
     rectangle MOW {
     usecase "16. Dodanie budynku" as MOW136
     usecase "15. Dodanie lokalu w budynku" as MOW135
+    usecase "12. Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW12
+    usecase "14. Wprowadzenie predykcji zużycia \n wodomierza ciepłej wody" as MOW14
     usecase "13. Wprowadzenie danych z faktury wraz\n z współczynnikiem podziału zużycia" as MOW13
+    usecase "17. Modyfikowanie właściciela lokalu" as MOW17
+    usecase "18. Modyfikowanie lokalu w budynku" as MOW18
     usecase "5. Modyfikowanie lokalu w budynku" as MOW5
     usecase "24. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania powierzchni lokalu" as MOW24
     usecase "21. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania części wspólnej" as MOW21
-    usecase " 23. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW23
+    usecase "23. Wyświetlenie wielkości zaliczki \n na poczet ogrzewania wody" as MOW23
     usecase "12. Wprowadzenie rzeczywistego \n zużycia wodomierza ciepłej wody" as MOW12
     usecase "7. Wyświetlenie wielkości zaliczek" as MOW7
     usecase "11. Wprowadzenie współczynnika modyfikacji wielkości zaliczki" as MOW11
@@ -19,12 +23,16 @@
     usecase "2. Wyświetlenie raportu" as MOW2
     usecase "3. Wyświetlenie raportów" as MOW3
     usecase "1. Wyświetlenie jednostkowego kosztu ogrzania" as MOW1
+    usecase "9. Wyświetlenie lokalu" as MOW9
     }
 
   MOW6 <.. MOW136: <<extend>>
-  MOW5 <.. MOW135: <<extend>>
   MOW4 <.. MOW13: <<extend>>
-  MOW5 <.. MOW12: <<extend>>
+  MOW5 <.. MOW135: <<extend>>
+  MOW9 <.. MOW12: <<extend>>
+  MOW9 <.. MOW14: <<extend>>
+  MOW9 <.. MOW17: <<extend>>
+  MOW9 <.. MOW18: <<extend>>
 
   MOW2 ..> MOW7: <<include>>
   MOW3 <.. MOW2: <<extend>>
@@ -34,6 +42,7 @@
   MOW7 ..> MOW23: <<include>>
 
   MOW6 ..> MOW5: <<include>>
+  MOW5 <.. MOW9: <<extend>>
   MOW5 ..> MOW11: <<include>>
 
 
