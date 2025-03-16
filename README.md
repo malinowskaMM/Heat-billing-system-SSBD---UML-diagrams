@@ -1,7 +1,16 @@
-Pobrać w Intelij plugin 
+# Heat Billing System
 
-![image](https://user-images.githubusercontent.com/84037448/225863168-c0b23af2-3014-42eb-93c6-f32beea7f912.png)
+This project was developed as a part of the "Network Database Systems" course. The main objective of the project was to create a heat billing system for multiple buildings.
 
-W repozytorium dostępny jest przykąłdowy kod z którego generowany jesst diagram. Diagram musi zawierać się w @startuml i kończyć @enduml
+## Description
 
-Dokumentacja PlantUML https://plantuml.com/
+The repository includes all required UML diagrams essential for the system's technical implementation and for incorporation into its official technical documentation.
+
+## Participants of project
+
+- Hubert Królikowski
+- Jakub Kucharski
+- Magdalena Malinowska
+- Bartosz Miszczak
+- Radosław Moskal
+- Bartosz Zuchora
